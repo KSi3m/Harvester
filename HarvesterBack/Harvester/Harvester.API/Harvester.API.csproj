@@ -4,10 +4,14 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>1db9fb32-6f92-422e-ad29-a3a7df62f817</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+	 <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
+	 <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.8" />
+	 <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.8"/>
   </ItemGroup>
 
   <ItemGroup>
