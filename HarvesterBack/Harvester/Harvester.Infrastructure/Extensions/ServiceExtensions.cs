@@ -1,4 +1,6 @@
-﻿using Harvester.Infrastructure.Persistence;
+﻿using Harvester.Application.Interfaces.Repositories;
+using Harvester.Infrastructure.Persistence;
+using Harvester.Infrastructure.Repostories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +19,8 @@ namespace Harvester.Infrastructure.Extensions
             var connectionString = configuration.GetConnectionString("HarvesterDb");
 
             services.AddDbContext<HarvesterDbContext>(options => options.UseSqlServer(connectionString));
+
+            services.AddScoped<ICombineRepository,CombineRepository>();
         }
     }
 }

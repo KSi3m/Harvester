@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Harvester.Application.Interfaces.Services;
+using Harvester.Application.Services;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Harvester.Application.Extensions
+{
+    public static class ServiceExtensions
+    {
+        public static void AddApplication(this IServiceCollection services)
+        {
+            services.AddScoped<ICombineService, CombineService>();
+        }
+    }
+}
