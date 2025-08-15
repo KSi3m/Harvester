@@ -11,17 +11,17 @@ namespace Harvester.Domain.Models
         public int Id { get; set; }
 
         public int FieldId { get; set; }
-        public Field Field { get; set; }
+        public Field? Field { get; set; }
 
         public int CombineId { get; set; }
-        public Combine Combine { get; set; }
+        public Combine? Combine { get; set; }
 
         public DateTime OrderDate { get; set; }
         public DateTime ScheduledDate { get; set; }
-        public string Status { get; set; }
+        public OrderStatus Status { get; set; }
 
         public decimal PricePerHectare { get; set; }
         public decimal TotalPrice { get; set; }
-        public ICollection<Payment> Payments { get; set; }
+        public ICollection<Payment>? Payments { get; set; }
     }
 }

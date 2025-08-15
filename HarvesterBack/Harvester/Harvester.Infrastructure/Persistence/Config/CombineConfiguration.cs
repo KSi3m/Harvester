@@ -18,8 +18,26 @@ namespace Harvester.Infrastructure.Persistence.Config
             modelBuilder.HasKey(x => x.Id);
 
             modelBuilder
+                .Property(c => c.IsAvailable)
+            .HasDefaultValue(true);
+
+            modelBuilder
                 .Property(c => c.HeaderLength)
-            .HasPrecision(18, 2);
+            .HasPrecision(5, 2);
+
+            modelBuilder
+                .Property(c => c.BaseHaPerHour)
+            .HasPrecision(5, 2)
+            .HasDefaultValue(1);
+
+            modelBuilder
+                .Property(c => c.AvailableWorkHours)
+            .HasPrecision(4, 2);
+
+            modelBuilder
+                .Property(c => c.BaseEfficency)
+            .HasPrecision(4, 2)
+            .HasDefaultValue(0.75m);
 
             modelBuilder
               .Property(c => c.Model)
@@ -30,6 +48,11 @@ namespace Harvester.Infrastructure.Persistence.Config
                 .WithOne(o => o.Combine)
                 .HasForeignKey(o => o.CombineId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.HasData(
+            new Combine { Id = 1, Model = "John Deere X1", BaseHaPerHour = 2.5m, HeaderLength = 6m, IsAvailable = true, AvailableWorkHours = 11m, BaseEfficency = 0.75m },
+            new Combine { Id = 2, Model = "Case IH 8230", BaseHaPerHour = 3.0m, HeaderLength = 7m, IsAvailable = true, AvailableWorkHours = 11m, BaseEfficency = 0.75m }
+        );
         }
     }
 }
