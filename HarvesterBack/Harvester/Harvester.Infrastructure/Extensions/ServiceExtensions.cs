@@ -22,6 +22,7 @@ namespace Harvester.Infrastructure.Extensions
 
             services.AddScoped<ICombineRepository,CombineRepository>();
             services.AddScoped<IOrderRepository,OrderRepository>();
+            services.AddScoped<IFieldRepository,FieldRepository>();
         }
     }
 }
