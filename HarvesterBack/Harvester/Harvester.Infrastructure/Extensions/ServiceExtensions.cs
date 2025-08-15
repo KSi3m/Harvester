@@ -21,6 +21,7 @@ namespace Harvester.Infrastructure.Extensions
             services.AddDbContext<HarvesterDbContext>(options => options.UseSqlServer(connectionString));
 
             services.AddScoped<ICombineRepository,CombineRepository>();
+            services.AddScoped<IOrderRepository,OrderRepository>();
         }
     }
 }

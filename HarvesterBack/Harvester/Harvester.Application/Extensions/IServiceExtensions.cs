@@ -14,6 +14,7 @@ namespace Harvester.Application.Extensions
         public static void AddApplication(this IServiceCollection services)
         {
             services.AddScoped<ICombineService, CombineService>();
+            services.AddScoped<IOrderService, OrderService>();
         }
     }
 }
