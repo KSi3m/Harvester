@@ -1,5 +1,4 @@
 ﻿using Harvester.Application.Interfaces.Services;
-using Harvester.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
 

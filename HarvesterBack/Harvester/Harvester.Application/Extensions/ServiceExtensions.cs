@@ -16,6 +16,7 @@ namespace Harvester.Application.Extensions
             services.AddScoped<ICombineService, CombineService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IFieldService, FieldService>();
+            services.AddScoped<IOnGeoService, OnGeoService>();
         }
     }
 }
