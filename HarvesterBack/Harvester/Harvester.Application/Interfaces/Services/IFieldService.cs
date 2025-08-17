@@ -1,4 +1,5 @@
-﻿using Harvester.Domain.Models;
+﻿using Harvester.Application.Dtos;
+using Harvester.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,10 @@ namespace Harvester.Application.Interfaces.Services
 {
     public interface IFieldService
     {
-        Task<IEnumerable<Field>> GetAll();
-        Task<Field?> GetById(int id);
+        Task<IEnumerable<Field>> GetAllAsync();
+        Task<Field?> GetByIdAsync(int id);
+        Task CreateAsync(CreateFieldDto dto);
+        Task UpdateAsync(int id, CreateFieldDto dto);
+        Task DeleteAsync(int id);
     }
 }

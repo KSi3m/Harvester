@@ -1,4 +1,6 @@
-﻿using Harvester.Application.Interfaces.Repositories;
+﻿using Harvester.Application.Dtos;
+using Harvester.Application.Exceptions;
+using Harvester.Application.Interfaces.Repositories;
 using Harvester.Application.Interfaces.Services;
 using Harvester.Domain.Models;
 using System;
@@ -6,19 +8,54 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Harvester.Application.Services
 {
     public class FieldService(IFieldRepository fieldRepository) : IFieldService
     {
-        public async Task<IEnumerable<Field>> GetAll()
+        public async Task CreateAsync(CreateFieldDto dto)
         {
-            return await fieldRepository.GetAll();
+            var field = new Field()
+            {
+                Name = dto.Name,
+                AreaHectares = dto.AreaHectares,
+                TerrainCoeff = dto.TerrainCoeff,
+                ShapeCoeff = dto.ShapeCoeff,
+                CropType = dto.CropType,
+            };
+            await fieldRepository.CreateAsync(field);
         }
 
-        public async Task<Field?> GetById(int id)
+        public async Task DeleteAsync(int id)
         {
-            return await fieldRepository.GetById(id);
+            await fieldRepository.DeleteAsync(id);
+        }
+
+        public async Task<IEnumerable<Field>> GetAllAsync()
+        {
+            return await fieldRepository.GetAllAsync();
+        }
+
+        public async Task<Field?> GetByIdAsync(int id)
+        {
+            return await fieldRepository.GetByIdAsync(id);
+        }
+
+        public async Task UpdateAsync(int id, CreateFieldDto dto)
+        {
+            var field = await fieldRepository.GetByIdAsync(id);
+            if(field == null) {
+                throw new NotFoundException();
+            }
+
+            field.Name = dto.Name;
+            field.AreaHectares = dto.AreaHectares;
+            field.TerrainCoeff = dto.TerrainCoeff;
+            field.ShapeCoeff = dto.ShapeCoeff;
+            field.CropType = dto.CropType;
+
+            await fieldRepository.UpdateAsync(field);
         }
     }
 }
