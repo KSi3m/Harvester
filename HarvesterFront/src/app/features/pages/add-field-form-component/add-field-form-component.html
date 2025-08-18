@@ -1,0 +1,68 @@
+<p-card header="Add new field">
+  <form [formGroup]="form" class="p-fluid grid">
+ 
+    <div class="col-12 md:col-6">
+      <label for="name" class="block mb-2">Name</label>
+      <input
+        pInputText
+        id="name"
+        formControlName="name"
+        placeholder="name"
+      />
+    </div>
+
+ 
+    <div class="col-12 md:col-3">
+      <label for="areaHectares" class="block mb-2">Area (ha)</label>
+      <p-inputNumber
+        inputId="areaHectares"
+        formControlName="areaHectares"
+        placeholder=".."
+      >
+      </p-inputNumber>
+    </div>
+
+  
+    <div class="col-12 md:col-3">
+      <label for="cropType" class="block mb-2">Crop Type</label>
+      <p-select
+        [options]="cropOptions"
+        inputId="cropType"
+        formControlName="cropType"
+        [checkmark]="true"
+        optionLabel="label"
+        [showClear]="true"
+        placeholder="Select crop type"
+        class="w-full md:w-56"
+      />
+    </div>
+
+ 
+    <div class="col-12 md:col-3">
+      <label for="terrainCoeff" class="block mb-2">Terrain Coeff</label>
+      <p-inputNumber
+        inputId="terrainCoeff"
+        formControlName="terrainCoeff"
+        placeholder="1.00"
+      >
+      </p-inputNumber>
+    </div>
+
+  
+    <div class="col-12 md:col-3">
+      <label for="shapeCoeff" class="block mb-2">Shape Coeff</label>
+      <p-inputNumber
+        inputId="shapeCoeff"
+        formControlName="shapeCoeff"
+        placeholder="1.00"
+      >
+      </p-inputNumber>
+    </div>
+
+    <div class="col-12 flex gap-2 mt-3">
+      <button pButton type="submit" icon="pi pi-save" (click)="submit()">
+        Save
+      </button>
+    </div>
+  </form>
+</p-card>
