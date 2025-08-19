@@ -4,9 +4,10 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
+import { MessageModule } from 'primeng/message';
 import { SelectModule } from 'primeng/select';
 import { Field } from '../../../core/models/Field';
-import { FieldService } from '../../../core/services/field-service';
+import { FieldDto, FieldService } from '../../../core/services/field-service';
 
 @Component({
   selector: 'app-add-field-form-component',
@@ -17,6 +18,7 @@ import { FieldService } from '../../../core/services/field-service';
     InputNumberModule,
     SelectModule,
     ButtonModule,
+    MessageModule,
   ],
   templateUrl: './add-field-form-component.html',
   styleUrl: './add-field-form-component.scss',
@@ -24,18 +26,13 @@ import { FieldService } from '../../../core/services/field-service';
 export class AddFieldFormComponent implements OnInit {
   fieldService = inject(FieldService);
   fb = inject(FormBuilder);
+  isValid = false;
 
   form = this.fb.group({
     name: ['', [Validators.required, Validators.maxLength(100)]],
     areaHectares: [null, [Validators.required, Validators.min(0.01)]],
-    terrainCoeff: [
-      1,
-      [Validators.required, Validators.min(0), Validators.max(1)],
-    ],
-    shapeCoeff: [
-      1,
-      [Validators.required, Validators.min(0), Validators.max(1)],
-    ],
+    terrainCoeff: [null, [Validators.required]],
+    shapeCoeff: [null, [Validators.required]],
     cropType: [null, [Validators.required]],
   });
   fields: Field[] = [];
@@ -48,6 +45,20 @@ export class AddFieldFormComponent implements OnInit {
     { label: 'Rye', value: 'Rye' },
     { label: 'Triticale', value: 'Triticale' },
   ];
+  terrainOptions = [
+    { label: 'Steep', value: 0.75 },
+    { label: 'Undulating', value: 0.6 },
+    { label: 'Flat', value: 1.0 },
+  ];
+
+  shapeOptions = [
+    { label: 'Rectangle', value: 1.0 },
+    { label: 'Irregular', value: 0.6 },
+  ];
+
+  get f() {
+    return this.form.controls;
+  }
 
   ngOnInit(): void {
     this.fieldService.getFields().subscribe({
@@ -60,6 +71,26 @@ export class AddFieldFormComponent implements OnInit {
     });
   }
   submit() {
-    console.log('Submit');
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+    const payload: FieldDto = {
+      name: this.f['name'].value!,
+      areaHectares: Number(this.f['areaHectares'].value),
+      terrainCoeff: Number(this.f['terrainCoeff'].value),
+      shapeCoeff: Number(this.f['shapeCoeff'].value),
+      cropType: this.f['cropType'].value!,
+    };
+    this.isValid = true;
+    this.fieldService.createField(payload).subscribe({
+      next: () => {
+        this.form.reset();
+      },
+      error: (err) => {
+        console.error(err);
+      },
+      complete: () => (this.isValid = false),
+    });
   }
 }
