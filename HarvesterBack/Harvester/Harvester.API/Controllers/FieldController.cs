@@ -91,8 +91,20 @@ namespace Harvester.API.Controllers
         [HttpGet("{nameIdentifier}/area")]
         public async Task<IActionResult> GetArea(string nameIdentifier)
         {
-            var area = await onGeoService.GetDataAsync(nameIdentifier);
-            return Ok(area);
+            try
+            {
+                var area = await onGeoService.GetDataAsync(nameIdentifier);
+                return Ok(new { areaInHectares = area});
+            }
+            catch(PlotNotFoundOnOnGeoUtility ex)
+            {
+                return NotFound();
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
+
         }
     }
 }

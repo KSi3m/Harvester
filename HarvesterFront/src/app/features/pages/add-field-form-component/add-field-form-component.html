@@ -6,7 +6,7 @@
         pInputText
         id="name"
         formControlName="name"
-        placeholder="name"
+        placeholder="WWPPGG_R.XXXX.NDZ"
         [invalid]="f['name'].invalid && f['name'].touched"
       />
 
@@ -16,12 +16,16 @@
             Name is required
           } @else if (f["name"].errors?.["maxlength"]) {
             Name must be less than 100 characters
+          } @else if (f["name"].errors?.["invalidFieldId"]) {
+            Name must be in WWPPGG_R.XXXX.NDZ format. For more information
+            check:
+            https://rankomat.pl/nieruchomosci/numer-dzialki-ewidencyjnej-jak-czytac
           }
         </p-message>
       }
     </div>
 
-    <div class="inputs area-field" >
+    <div class="inputs area-field">
       <label for="areaHectares" class="block mb-2">Area (ha)</label>
       <p-inputNumber
         inputId="areaHectares"
@@ -38,8 +42,11 @@
         pButton
         type="button"
         icon="pi pi-plus"
+        [disabled]="f['name'].invalid"
         (click)="fillArea()"
-      >Fill area</button>
+      >
+        Get area
+      </button>
       @if (f["areaHectares"].invalid && f["areaHectares"].touched) {
         <p-message severity="error" variant="simple" size="small">
           @if (f["areaHectares"].errors?.["required"]) {
@@ -62,12 +69,11 @@
         optionValue="value"
         [showClear]="true"
         placeholder="Select crop type"
-        class="w-full md:w-56"
         [invalid]="f['cropType'].invalid && f['cropType'].touched"
       />
       @if (f["cropType"].invalid && f["cropType"].touched) {
         <p-message severity="error" variant="simple" size="small">
-          Name is required
+          Crop type is required
         </p-message>
       }
     </div>
@@ -83,7 +89,6 @@
         optionValue="value"
         [showClear]="true"
         placeholder="Select terrain type"
-        class="w-full md:w-56"
         [invalid]="f['terrainCoeff'].invalid && f['terrainCoeff'].touched"
       />
       @if (f["terrainCoeff"].invalid && f["terrainCoeff"].touched) {
@@ -104,7 +109,6 @@
         optionValue="value"
         [showClear]="true"
         placeholder="Select shape type"
-        class="w-full md:w-56"
         [invalid]="f['shapeCoeff'].invalid && f['shapeCoeff'].touched"
       />
       @if (f["shapeCoeff"].invalid && f["shapeCoeff"].touched) {

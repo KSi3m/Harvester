@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { Field } from '../../models/Field';
+import { AreaResponse } from '../../models/responses/area-response';
 
 export interface FieldDto {
   name: string;
@@ -23,8 +24,8 @@ export class FieldService {
     return this.http.get<Field[]>(`${this.url}/fields`);
   }
 
-  getAreaForField(id: string): Observable<number> {
-    return this.http.get<number>(`${this.url}/fields/${id}/area`);
+  getAreaForField(id: string): Observable<AreaResponse> {
+    return this.http.get<AreaResponse>(`${this.url}/fields/${id}/area`);
   }
 
   createField(dto: FieldDto): Observable<void> {

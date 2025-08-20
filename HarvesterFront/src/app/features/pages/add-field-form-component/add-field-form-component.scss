@@ -30,13 +30,13 @@ p-card {
   
 
   .p-inputnumber {
-    flex: 1; // input zajmuje resztę miejsca
+    flex: 1; 
     height: 2.5rem; 
     margin-top: 1rem;
   }
   button[pButton] {
-    height: 2.5rem; // dopasuj do wysokości inputa
-    padding: 0 2rem; // tylko poziome paddingi
+    height: 2.5rem; 
+    padding: 0 2rem; 
   }
 }
 

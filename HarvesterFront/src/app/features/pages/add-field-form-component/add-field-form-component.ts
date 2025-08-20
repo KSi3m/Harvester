@@ -12,11 +12,11 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { SelectModule } from 'primeng/select';
-import { Field } from '../../../core/models/Field';
 import {
   FieldDto,
   FieldService,
 } from '../../../core/services/fieldService/field-service';
+import { fieldIdentifierValidator } from '../../../shared/validators/field-validator';
 
 @Component({
   selector: 'app-add-field-form-component',
@@ -39,17 +39,6 @@ export class AddFieldFormComponent implements OnInit {
   isValid = false;
 
   form!: FormGroup;
-  /* name: [null, [Validators.required, Validators.maxLength(100)]],
-    areaHectares: [
-      null as number | null,
-      [Validators.required, Validators.min(0.01)],
-    ],
-    terrainCoeff: [null, [Validators.required]],
-    shapeCoeff: [null, [Validators.required]],
-    cropType: [null, [Validators.required]],
-  });*/
-
-  fields: Field[] = [];
   cropOptions = [
     { label: 'Corn', value: 'Corn' },
     { label: 'Wheat', value: 'Wheat' },
@@ -76,7 +65,14 @@ export class AddFieldFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      name: [null, [Validators.required, Validators.maxLength(100)]],
+      name: [
+        null,
+        [
+          Validators.required,
+          Validators.maxLength(100),
+          fieldIdentifierValidator(),
+        ],
+      ],
       areaHectares: [
         null as number | null,
         [Validators.required, Validators.min(0.01)],
@@ -130,11 +126,15 @@ export class AddFieldFormComponent implements OnInit {
     }
     this.fieldService.getAreaForField(identifier).subscribe({
       next: (res) => {
-        const value = Number(res);
+        const value = Number(res.areaInHectares);
         this.form!.get('areaHectares')?.setValue(value);
       },
-      error: (error) => {
-        console.log(error);
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed  failed!',
+        });
       },
     });
   }

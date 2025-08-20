@@ -1,4 +1,5 @@
-﻿using Harvester.Application.Interfaces.Services;
+﻿using Harvester.Application.Exceptions;
+using Harvester.Application.Interfaces.Services;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -47,10 +48,10 @@ namespace Harvester.Application.Services
 
                 firstItem.GetProperty("area").TryGetDecimal(out area);
 
-                return area;
+                return area/10000;
             }
-
-            return 0.0m;
+            throw new PlotNotFoundOnOnGeoUtility("Plot with given id number was not found");
+   
         }
     }
 }
