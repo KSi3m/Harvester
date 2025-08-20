@@ -1,29 +1,44 @@
 :host {
   display: flex;
-  justify-content: center;
-  align-items: flex-start; // albo center, jeśli chcesz idealnie na środku pionowo
+  justify-content: center; 
+  align-items: center; 
   min-height: 100vh;
-  background: #f5f6fa; // delikatne tło
+  background: #f5f6fa;
   padding: 2rem;
 }
 
 p-card {
   width: 100%;
-  max-width: 800px; // szerokość karty
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); // lekki cień
+  max-width: 800px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 1rem;
+  background: #fff;
 
   .p-card-header {
+    text-align: center;   
     font-size: 1.5rem;
     font-weight: 600;
-    text-align: center;
     padding: 1rem;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #eee;
     color: #2c3e50;
-    background: #ffffff;
-    border-top-left-radius: 1rem;
-    border-top-right-radius: 1rem;
   }
+
+  .inputs.area-field {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  
+
+  .p-inputnumber {
+    flex: 1; // input zajmuje resztę miejsca
+    height: 2.5rem; 
+    margin-top: 1rem;
+  }
+  button[pButton] {
+    height: 2.5rem; // dopasuj do wysokości inputa
+    padding: 0 2rem; // tylko poziome paddingi
+  }
+}
 
   form {
     padding: 1.5rem;
@@ -44,9 +59,16 @@ p-card {
     }
 
     button[pButton] {
+      display: block;
+      width: calc(100% - 2rem); 
+      margin: 1rem auto 0; 
       padding: 0.75rem 2rem;
       font-weight: 600;
       border-radius: 0.5rem;
+    }
+    .inputs {
+      padding-top: 0.4em; 
+      padding-bottom: 0.4em;
     }
   }
 }

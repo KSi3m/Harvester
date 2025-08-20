@@ -1,5 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -7,7 +13,10 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { SelectModule } from 'primeng/select';
 import { Field } from '../../../core/models/Field';
-import { FieldDto, FieldService } from '../../../core/services/field-service';
+import {
+  FieldDto,
+  FieldService,
+} from '../../../core/services/fieldService/field-service';
 
 @Component({
   selector: 'app-add-field-form-component',
@@ -25,16 +34,21 @@ import { FieldDto, FieldService } from '../../../core/services/field-service';
 })
 export class AddFieldFormComponent implements OnInit {
   fieldService = inject(FieldService);
+  messageService = inject(MessageService);
   fb = inject(FormBuilder);
   isValid = false;
 
-  form = this.fb.group({
-    name: ['', [Validators.required, Validators.maxLength(100)]],
-    areaHectares: [null, [Validators.required, Validators.min(0.01)]],
+  form!: FormGroup;
+  /* name: [null, [Validators.required, Validators.maxLength(100)]],
+    areaHectares: [
+      null as number | null,
+      [Validators.required, Validators.min(0.01)],
+    ],
     terrainCoeff: [null, [Validators.required]],
     shapeCoeff: [null, [Validators.required]],
     cropType: [null, [Validators.required]],
-  });
+  });*/
+
   fields: Field[] = [];
   cropOptions = [
     { label: 'Corn', value: 'Corn' },
@@ -57,22 +71,27 @@ export class AddFieldFormComponent implements OnInit {
   ];
 
   get f() {
-    return this.form.controls;
+    return this.form!.controls;
   }
 
   ngOnInit(): void {
-    this.fieldService.getFields().subscribe({
-      next: (res) => {
-        console.log(res);
-      },
-      error: (error) => {
-        console.log(error);
-      },
+    this.form = this.fb.group({
+      name: [null, [Validators.required, Validators.maxLength(100)]],
+      areaHectares: [
+        null as number | null,
+        [Validators.required, Validators.min(0.01)],
+      ],
+      terrainCoeff: [null, [Validators.required]],
+      shapeCoeff: [null, [Validators.required]],
+      cropType: [null, [Validators.required]],
+    });
+    this.form!.get('name')?.valueChanges.subscribe(() => {
+      this.form!.get('areaHectares')?.setValue(null, { emitEvent: false });
     });
   }
   submit() {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
+    if (this.form!.invalid) {
+      this.form!.markAllAsTouched();
       return;
     }
     const payload: FieldDto = {
@@ -85,12 +104,38 @@ export class AddFieldFormComponent implements OnInit {
     this.isValid = true;
     this.fieldService.createField(payload).subscribe({
       next: () => {
-        this.form.reset();
+        this.form!.reset();
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Operation completed!',
+        });
       },
       error: (err) => {
         console.error(err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Operation failed!',
+        });
       },
       complete: () => (this.isValid = false),
+    });
+  }
+  fillArea() {
+    const identifier = this.form!.get('name')?.value as unknown as string;
+    if (!identifier) {
+      this.f['name'].markAsTouched();
+      return;
+    }
+    this.fieldService.getAreaForField(identifier).subscribe({
+      next: (res) => {
+        const value = Number(res);
+        this.form!.get('areaHectares')?.setValue(value);
+      },
+      error: (error) => {
+        console.log(error);
+      },
     });
   }
 }

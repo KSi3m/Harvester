@@ -1,7 +1,7 @@
 <p-card header="Add new field">
   <form [formGroup]="form" class="p-fluid grid">
-    <div class="col-12 md:col-6">
-      <label for="name" class="block mb-2">Name</label>
+    <div class="inputs">
+      <label for="name" class="block mb-2"> Plot identification number</label>
       <input
         pInputText
         id="name"
@@ -21,7 +21,7 @@
       }
     </div>
 
-    <div class="col-12 md:col-3">
+    <div class="inputs area-field" >
       <label for="areaHectares" class="block mb-2">Area (ha)</label>
       <p-inputNumber
         inputId="areaHectares"
@@ -31,7 +31,15 @@
         [minFractionDigits]="2"
         [maxFractionDigits]="2"
         [invalid]="f['areaHectares'].invalid && f['areaHectares'].touched"
-      />
+        [disabled]="true"
+      ></p-inputNumber>
+
+      <button
+        pButton
+        type="button"
+        icon="pi pi-plus"
+        (click)="fillArea()"
+      >Fill area</button>
       @if (f["areaHectares"].invalid && f["areaHectares"].touched) {
         <p-message severity="error" variant="simple" size="small">
           @if (f["areaHectares"].errors?.["required"]) {
@@ -43,7 +51,7 @@
       }
     </div>
 
-    <div class="col-12 md:col-3">
+    <div class="inputs">
       <label for="cropType" class="block mb-2">Crop Type</label>
       <p-select
         [options]="cropOptions"
@@ -51,7 +59,7 @@
         formControlName="cropType"
         [checkmark]="true"
         optionLabel="label"
-         optionValue="value" 
+        optionValue="value"
         [showClear]="true"
         placeholder="Select crop type"
         class="w-full md:w-56"
@@ -64,7 +72,7 @@
       }
     </div>
 
-    <div class="col-12 md:col-3">
+    <div class="inputs">
       <label for="terrainCoeff" class="block mb-2">Terrain type</label>
       <p-select
         [options]="terrainOptions"
@@ -72,7 +80,7 @@
         formControlName="terrainCoeff"
         [checkmark]="true"
         optionLabel="label"
-        optionValue="value" 
+        optionValue="value"
         [showClear]="true"
         placeholder="Select terrain type"
         class="w-full md:w-56"
@@ -85,7 +93,7 @@
       }
     </div>
 
-    <div class="col-12 md:col-3">
+    <div class="inputs">
       <label for="shapeCoeff" class="block mb-2">Shape type</label>
       <p-select
         [options]="shapeOptions"
@@ -93,7 +101,7 @@
         formControlName="shapeCoeff"
         [checkmark]="true"
         optionLabel="label"
-        optionValue="value" 
+        optionValue="value"
         [showClear]="true"
         placeholder="Select shape type"
         class="w-full md:w-56"
@@ -106,8 +114,14 @@
       }
     </div>
 
-    <div class="col-12 flex gap-2 mt-3">
-      <button pButton type="submit" icon="pi pi-save" (click)="submit()" [disabled]="form.invalid">
+    <div>
+      <button
+        pButton
+        type="submit"
+        icon="pi pi-save"
+        (click)="submit()"
+        [disabled]="form.invalid"
+      >
         Save
       </button>
     </div>
