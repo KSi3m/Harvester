@@ -19,10 +19,8 @@ namespace Harvester.Infrastructure.Repostories
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(Field field)
         {
-            var field = await dbContext.Fields.FirstOrDefaultAsync(x=>x.Id == id);
-            if (field == null) throw new NotFoundException("Field doesn't exist");
             dbContext.Fields.Remove(field);
             await dbContext.SaveChangesAsync();
         }

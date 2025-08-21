@@ -50,7 +50,7 @@ namespace Harvester.Application.Services
 
                 return area/10000;
             }
-            throw new PlotNotFoundOnOnGeoUtility("Plot with given id number was not found");
+            throw new PlotNotFoundOnOnGeoUtilityException($"No area found for identifier {nameIdentifier}");
    
         }
     }

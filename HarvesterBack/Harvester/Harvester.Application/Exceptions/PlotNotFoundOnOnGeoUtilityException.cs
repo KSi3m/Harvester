@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Harvester.Application.Exceptions
 {
-    public class PlotNotFoundOnOnGeoUtility: Exception
+    public class PlotNotFoundOnOnGeoUtilityException: Exception
     {
-        public PlotNotFoundOnOnGeoUtility()
+        public PlotNotFoundOnOnGeoUtilityException()
         {
         }
 
-        public PlotNotFoundOnOnGeoUtility(string? message) : base(message)
+        public PlotNotFoundOnOnGeoUtilityException(string? message) : base(message)
         {
         }
     }

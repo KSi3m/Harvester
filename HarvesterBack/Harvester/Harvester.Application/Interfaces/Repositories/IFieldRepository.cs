@@ -14,6 +14,6 @@ namespace Harvester.Application.Interfaces.Repositories
         Task CreateAsync(Field field);
         Task UpdateAsync(Field field);
 
-        Task DeleteAsync(int id);
+        Task DeleteAsync(Field field);
     }
 }
