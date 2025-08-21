@@ -1,8 +1,10 @@
-﻿using Harvester.Application.Dtos;
+﻿using Harvester.API.Application.ErrorResponse;
+using Harvester.Application.Dtos;
 using Harvester.Application.Exceptions;
 using Harvester.Application.Interfaces.Services;
 using Humanizer;
 using Microsoft.AspNetCore.Mvc;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Harvester.API.Controllers
 {
@@ -21,7 +23,16 @@ namespace Harvester.API.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var field = await fieldService.GetByIdAsync(id);
-            if (field == null) return NotFound();
+            if (field == null)
+            {
+                var errorResponse = new ErrorResponse()
+                {
+                    Status = 404,
+                    Message = "Field not found",
+                    Details = $"No area found for identifier {id}"
+                };
+                return NotFound(errorResponse);
+            }
             return Ok(field);
         }
 
@@ -30,7 +41,18 @@ namespace Harvester.API.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                var errorResponse = new ErrorResponse()
+                {
+                    Status = 400,
+                    Message = "Validation Errors",
+                    Details = string.Join("; ",
+                        ModelState
+                            .Where(ms => ms.Value.Errors.Any())
+                            .SelectMany(ms => ms.Value.Errors.Select(e =>
+                                $"{ms.Key}: {e.ErrorMessage}"))
+                    )
+                };
+                return BadRequest(errorResponse);
             }
             try
             {
@@ -39,7 +61,13 @@ namespace Harvester.API.Controllers
             }
             catch
             {
-                return StatusCode(500);
+                var errorResponse = new ErrorResponse()
+                {
+                    Status = 500,
+                    Message = "Server error",
+                    Details = "Error occured"
+                };
+                return StatusCode(StatusCodes.Status500InternalServerError, errorResponse);
             }
         }
 
@@ -48,7 +76,18 @@ namespace Harvester.API.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                var errorResponse = new ErrorResponse()
+                {
+                    Status = 400,
+                    Message = "Validation Errors",
+                    Details = string.Join("; ",
+                        ModelState
+                            .Where(ms => ms.Value.Errors.Any())
+                            .SelectMany(ms => ms.Value.Errors.Select(e =>
+                                $"{ms.Key}: {e.ErrorMessage}"))
+                    )
+                };
+                return BadRequest(errorResponse);
             }
             try
             {
@@ -57,11 +96,23 @@ namespace Harvester.API.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound();
+                var errorResponse = new ErrorResponse()
+                {
+                    Status = 404,
+                    Message = "Field not found",
+                    Details = $"No area found for identifier {id}"
+                };
+                return NotFound(errorResponse);
             }
             catch
             {
-                return StatusCode(500);
+                var errorResponse = new ErrorResponse()
+                {
+                    Status = 500,
+                    Message = "Server error",
+                    Details = "Error occured"
+                };
+                return StatusCode(StatusCodes.Status500InternalServerError, errorResponse);
             }
         }
 
@@ -70,7 +121,18 @@ namespace Harvester.API.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                var errorResponse = new ErrorResponse()
+                {
+                    Status = 400,
+                    Message = "Validation Errors",
+                    Details = string.Join("; ",
+                      ModelState
+                          .Where(ms => ms.Value.Errors.Any())
+                          .SelectMany(ms => ms.Value.Errors.Select(e =>
+                              $"{ms.Key}: {e.ErrorMessage}"))
+                  )
+                };
+                return BadRequest(errorResponse);
             }
             try
             {
@@ -79,11 +141,23 @@ namespace Harvester.API.Controllers
             }
             catch(NotFoundException ex)
             {
-                return NotFound();
+                var errorResponse = new ErrorResponse()
+                {
+                    Status = 404,
+                    Message = "Field not found",
+                    Details = $"No area found for identifier {id}"
+                };
+                return NotFound(errorResponse);
             }
             catch
             {
-                return StatusCode(500);
+                var errorResponse = new ErrorResponse()
+                {
+                    Status = 500,
+                    Message = "Server error",
+                    Details = "Error occured"
+                };
+                return StatusCode(StatusCodes.Status500InternalServerError, errorResponse);
             }
         }
 
@@ -98,11 +172,23 @@ namespace Harvester.API.Controllers
             }
             catch(PlotNotFoundOnOnGeoUtility ex)
             {
-                return NotFound();
+                var errorResponse = new ErrorResponse()
+                {
+                    Status = 404,
+                    Message = "Plot was not found",
+                    Details = $"No area found for identifier {nameIdentifier}"
+                };
+                return NotFound(errorResponse);
             }
             catch
             {
-                return StatusCode(500);
+                var errorResponse = new ErrorResponse()
+                {
+                    Status = 500,
+                    Message = "Server error",
+                    Details = "Error occured"
+                };
+                return StatusCode(StatusCodes.Status500InternalServerError, errorResponse);
             }
 
         }

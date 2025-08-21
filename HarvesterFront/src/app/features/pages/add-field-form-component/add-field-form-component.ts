@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -12,6 +13,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { SelectModule } from 'primeng/select';
+import { ErrorResponse } from '../../../core/models/responses/error-response';
 import {
   FieldDto,
   FieldService,
@@ -107,12 +109,13 @@ export class AddFieldFormComponent implements OnInit {
           detail: 'Operation completed!',
         });
       },
-      error: (err) => {
-        console.error(err);
+      error: (error: HttpErrorResponse) => {
+        const err = error.error as ErrorResponse;
+
         this.messageService.add({
           severity: 'error',
-          summary: 'Error',
-          detail: 'Operation failed!',
+          summary: err.message,
+          detail: err.details,
         });
       },
       complete: () => (this.isValid = false),
@@ -129,11 +132,13 @@ export class AddFieldFormComponent implements OnInit {
         const value = Number(res.areaInHectares);
         this.form!.get('areaHectares')?.setValue(value);
       },
-      error: () => {
+      error: (error: HttpErrorResponse) => {
+        const err = error.error as ErrorResponse;
+
         this.messageService.add({
           severity: 'error',
-          summary: 'Error',
-          detail: 'Failed  failed!',
+          summary: err.message,
+          detail: err.details,
         });
       },
     });

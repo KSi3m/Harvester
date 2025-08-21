@@ -25,7 +25,8 @@ export class FieldService {
   }
 
   getAreaForField(id: string): Observable<AreaResponse> {
-    return this.http.get<AreaResponse>(`${this.url}/fields/${id}/area`);
+    const encodedId = encodeURIComponent(id);
+    return this.http.get<AreaResponse>(`${this.url}/fields/${encodedId}/area`);
   }
 
   createField(dto: FieldDto): Observable<void> {
