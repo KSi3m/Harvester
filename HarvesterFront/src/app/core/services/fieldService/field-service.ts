@@ -4,14 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { Field } from '../../models/Field';
 import { AreaResponse } from '../../models/responses/area-response';
-
-export interface FieldDto {
-  name: string;
-  areaHectares: number;
-  terrainCoeff: number;
-  shapeCoeff: number;
-  cropType: string;
-}
+import { FieldDto } from '../../models/dtos/FieldDto';
 
 @Injectable({
   providedIn: 'root',
