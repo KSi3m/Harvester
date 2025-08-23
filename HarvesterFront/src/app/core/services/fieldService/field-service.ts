@@ -2,9 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
+import { FieldDto } from '../../models/dtos/FieldDto';
 import { Field } from '../../models/Field';
 import { AreaResponse } from '../../models/responses/area-response';
-import { FieldDto } from '../../models/dtos/FieldDto';
 
 @Injectable({
   providedIn: 'root',

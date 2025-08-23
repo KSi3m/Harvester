@@ -13,14 +13,16 @@ namespace Harvester.API.Middlewares
             CancellationToken cancellationToken)
         {
 
-            var errorResponse = new ErrorResponse()
+            var errorResponse = new ProblemDetails
             {
+                Title = "Server error",
+                Detail = exception.Message,
                 Status = StatusCodes.Status500InternalServerError,
-                Message = "Server error",
-                Details = "Error occured"
+                Type = "https://httpstatuses.com/500",
+                Instance = httpContext.Request.Path
             };
 
-            httpContext.Response.StatusCode = errorResponse.Status;
+            httpContext.Response.StatusCode = errorResponse.Status.Value;
 
             await httpContext.Response
                 .WriteAsJsonAsync(errorResponse, cancellationToken);

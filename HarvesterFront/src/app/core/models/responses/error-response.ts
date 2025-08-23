@@ -1,5 +1,7 @@
 export interface ErrorResponse {
+  title: string;
+  detail: string;
   status: number;
-  message: string;
-  details: string;
+  type: string;
+  instance: string;
 }

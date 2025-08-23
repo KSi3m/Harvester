@@ -17,14 +17,16 @@ namespace Harvester.API.Middlewares
                 return false;
             }
 
-            var errorResponse = new ErrorResponse()
+            var errorResponse = new ProblemDetails
             {
+                Title = "Not found",
+                Detail = notFoundException.Message,
                 Status = StatusCodes.Status404NotFound,
-                Message = "Not Found",
-                Details = notFoundException.Message
+                Type = "https://httpstatuses.com/404",
+                Instance = httpContext.Request.Path
             };
 
-            httpContext.Response.StatusCode = errorResponse.Status;
+            httpContext.Response.StatusCode = errorResponse.Status.Value;
 
             await httpContext.Response
                 .WriteAsJsonAsync(errorResponse, cancellationToken);

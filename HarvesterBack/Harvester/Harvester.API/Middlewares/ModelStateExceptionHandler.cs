@@ -1,6 +1,7 @@
 ﻿using Harvester.API.Application.ErrorResponse;
 using Harvester.Application.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Harvester.API.Middlewares
 {
@@ -16,14 +17,16 @@ namespace Harvester.API.Middlewares
                 return false;
             }
 
-            var errorResponse = new ErrorResponse()
+            var errorResponse = new ProblemDetails
             {
+                Title = "Bad request",
+                Detail = modelStateException.Message,
                 Status = StatusCodes.Status400BadRequest,
-                Message = "Not Found",
-                Details = modelStateException.Message
+                Type = "https://httpstatuses.com/400",
+                Instance = httpContext.Request.Path
             };
 
-            httpContext.Response.StatusCode = errorResponse.Status;
+            httpContext.Response.StatusCode = errorResponse.Status.Value;
 
             await httpContext.Response
                 .WriteAsJsonAsync(errorResponse, cancellationToken);
