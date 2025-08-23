@@ -1,4 +1,4 @@
-﻿using Harvester.API.Application.ErrorResponse;
+﻿using Harvester.API.Filters;
 using Harvester.Application.Dtos;
 using Harvester.Application.Exceptions;
 using Harvester.Application.Interfaces.Services;
@@ -48,6 +48,7 @@ namespace Harvester.API.Controllers
         }
 
         [HttpGet("{nameIdentifier}/area")]
+        [TypeFilter(typeof(AreaRouteParameterFilter))]
         public async Task<IActionResult> GetArea(string nameIdentifier)
         {
             var area = await onGeoService.GetDataAsync(nameIdentifier);

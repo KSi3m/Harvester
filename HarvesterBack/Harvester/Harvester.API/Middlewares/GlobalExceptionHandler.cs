@@ -1,5 +1,4 @@
-﻿using Harvester.API.Application.ErrorResponse;
-using Microsoft.AspNetCore.Diagnostics;
+﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Harvester.API.Middlewares

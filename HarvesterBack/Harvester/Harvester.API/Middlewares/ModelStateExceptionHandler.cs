@@ -1,5 +1,4 @@
-﻿using Harvester.API.Application.ErrorResponse;
-using Harvester.Application.Exceptions;
+﻿using Harvester.Application.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
