@@ -1,9 +1,12 @@
-﻿using Harvester.Application.Interfaces.Repositories;
+﻿using Harvester.Application.Dtos;
+using Harvester.Application.Exceptions;
+using Harvester.Application.Interfaces.Repositories;
 using Harvester.Application.Interfaces.Services;
 using Harvester.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,14 +14,57 @@ namespace Harvester.Application.Services
 {
     public class CombineService(ICombineRepository repository) : ICombineService
     {
-        public async Task<IEnumerable<Combine>> GetAll()
+        public async Task CreateAsync(CreateCombineDto dto)
         {
-            return await repository.GetAll();
+            var combine = new Combine
+            {
+                Model = dto.Model,
+                BaseHaPerHour = dto.BaseHaPerHour,
+                HeaderLength = dto.HeaderLength,
+                IsAvailable = dto.IsAvailable,
+                AvailableWorkHours = dto.AvailableWorkHours,
+                BaseEfficency = dto.BaseEfficency,
+            };
+            await repository.CreateAsync(combine);
         }
 
-        public async Task<Combine?> GetById(int id)
+        public async Task DeleteAsync(int id)
         {
-            return await repository.GetById(id);
+            var combine = await repository.GetByIdAsync(id);
+            if(combine == null)
+            {
+                throw new NotFoundException("Combine doesn't exist");
+            }
+            await repository.DeleteAsync(combine);
+        }
+
+        public async Task<IEnumerable<Combine>> GetAllAsync()
+        {
+            return await repository.GetAllAsync();
+        }
+
+        public async Task<Combine?> GetByIdAsync(int id)
+        {
+            return await repository.GetByIdAsync(id);
+        }
+
+        public async Task UpdateAsync(int id, CreateCombineDto dto)
+        {
+            var combine = await repository.GetByIdAsync(id);
+
+            if (combine == null)
+            {
+                throw new NotFoundException("Combine doesn't exist");
+            }
+
+            combine.Model = dto.Model;
+            combine.BaseHaPerHour = dto.BaseHaPerHour;
+            combine.HeaderLength = dto.HeaderLength;
+            combine.IsAvailable = dto.IsAvailable;
+            combine.AvailableWorkHours = dto.AvailableWorkHours;
+            combine.BaseEfficency = dto.BaseEfficency;
+
+            await repository.UpdateAsync(combine);
         }
     }
 }

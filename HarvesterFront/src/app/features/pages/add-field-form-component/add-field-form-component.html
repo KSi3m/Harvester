@@ -1,0 +1,133 @@
+<p-card header="Add new field">
+  <form [formGroup]="form" class="p-fluid grid">
+    <div class="inputs">
+      <label for="name" class="block mb-2"> Plot identification number</label>
+      <input
+        pInputText
+        id="name"
+        formControlName="name"
+        placeholder="WWPPGG_R.XXXX.NDZ"
+        [invalid]="f['name'].invalid && f['name'].touched"
+      />
+
+      @if (f["name"].invalid && f["name"].touched) {
+        <p-message severity="error" variant="simple" size="small">
+          @if (f["name"].errors?.["required"]) {
+            Name is required
+          } @else if (f["name"].errors?.["maxlength"]) {
+            Name must be less than 100 characters
+          } @else if (f["name"].errors?.["invalidFieldId"]) {
+            Name must be in WWPPGG_R.XXXX.NDZ format. For more information
+            check:
+            https://rankomat.pl/nieruchomosci/numer-dzialki-ewidencyjnej-jak-czytac
+          }
+        </p-message>
+      }
+    </div>
+
+    <div class="inputs area-field">
+      <label for="areaHectares" class="block mb-2">Area (ha)</label>
+      <p-inputNumber
+        inputId="areaHectares"
+        formControlName="areaHectares"
+        placeholder="..."
+        [mode]="'decimal'"
+        [minFractionDigits]="2"
+        [maxFractionDigits]="2"
+        [invalid]="f['areaHectares'].invalid && f['areaHectares'].touched"
+        [disabled]="true"
+      ></p-inputNumber>
+
+      <button
+        pButton
+        type="button"
+        icon="pi pi-plus"
+        [disabled]="f['name'].invalid"
+        (click)="fillArea()"
+      >
+        Get area
+      </button>
+      @if (f["areaHectares"].invalid && f["areaHectares"].touched) {
+        <p-message severity="error" variant="simple" size="small">
+          @if (f["areaHectares"].errors?.["required"]) {
+            Area in hectares is required
+          } @else if (f["areaHectares"].errors?.["min"]) {
+            Area must be greater than 0.01
+          }
+        </p-message>
+      }
+    </div>
+
+    <div class="inputs">
+      <label for="cropType" class="block mb-2">Crop Type</label>
+      <p-select
+        [options]="cropOptions"
+        inputId="cropType"
+        formControlName="cropType"
+        [checkmark]="true"
+        optionLabel="label"
+        optionValue="value"
+        [showClear]="true"
+        placeholder="Select crop type"
+        [invalid]="f['cropType'].invalid && f['cropType'].touched"
+      />
+      @if (f["cropType"].invalid && f["cropType"].touched) {
+        <p-message severity="error" variant="simple" size="small">
+          Crop type is required
+        </p-message>
+      }
+    </div>
+
+    <div class="inputs">
+      <label for="terrainCoeff" class="block mb-2">Terrain type</label>
+      <p-select
+        [options]="terrainOptions"
+        inputId="terrainCoeff"
+        formControlName="terrainCoeff"
+        [checkmark]="true"
+        optionLabel="label"
+        optionValue="value"
+        [showClear]="true"
+        placeholder="Select terrain type"
+        [invalid]="f['terrainCoeff'].invalid && f['terrainCoeff'].touched"
+      />
+      @if (f["terrainCoeff"].invalid && f["terrainCoeff"].touched) {
+        <p-message severity="error" variant="simple" size="small">
+          Terrain type is required
+        </p-message>
+      }
+    </div>
+
+    <div class="inputs">
+      <label for="shapeCoeff" class="block mb-2">Shape type</label>
+      <p-select
+        [options]="shapeOptions"
+        inputId="shapeCoeff"
+        formControlName="shapeCoeff"
+        [checkmark]="true"
+        optionLabel="label"
+        optionValue="value"
+        [showClear]="true"
+        placeholder="Select shape type"
+        [invalid]="f['shapeCoeff'].invalid && f['shapeCoeff'].touched"
+      />
+      @if (f["shapeCoeff"].invalid && f["shapeCoeff"].touched) {
+        <p-message severity="error" variant="simple" size="small">
+          Shape type is required
+        </p-message>
+      }
+    </div>
+
+    <div>
+      <button
+        pButton
+        type="submit"
+        icon="pi pi-save"
+        (click)="submit()"
+        [disabled]="form.invalid"
+      >
+        Save
+      </button>
+    </div>
+  </form>
+</p-card>

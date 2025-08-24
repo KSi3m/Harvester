@@ -29,7 +29,12 @@ namespace Harvester.Application.Services
 
         public async Task DeleteAsync(int id)
         {
-            await fieldRepository.DeleteAsync(id);
+            var field = await fieldRepository.GetByIdAsync(id);
+            if (field == null)
+            {
+                throw new NotFoundException("Field doesn't exist");
+            }
+            await fieldRepository.DeleteAsync(field);
         }
 
         public async Task<IEnumerable<Field>> GetAllAsync()
@@ -39,14 +44,21 @@ namespace Harvester.Application.Services
 
         public async Task<Field?> GetByIdAsync(int id)
         {
-            return await fieldRepository.GetByIdAsync(id);
+            var field = await fieldRepository.GetByIdAsync(id);
+            if (field == null)
+            {
+                throw new NotFoundException("Field doesn't exist");
+            }
+            return field;
         }
 
         public async Task UpdateAsync(int id, CreateFieldDto dto)
         {
             var field = await fieldRepository.GetByIdAsync(id);
-            if(field == null) {
-                throw new NotFoundException();
+
+            if (field == null)
+            {
+                throw new NotFoundException("Field doesn't exist");
             }
 
             field.Name = dto.Name;

@@ -1,8 +1,10 @@
-﻿using Harvester.Application.Dtos;
+﻿using Harvester.API.Filters;
+using Harvester.Application.Dtos;
 using Harvester.Application.Exceptions;
 using Harvester.Application.Interfaces.Services;
 using Humanizer;
 using Microsoft.AspNetCore.Mvc;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Harvester.API.Controllers
 {
@@ -21,78 +23,36 @@ namespace Harvester.API.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var field = await fieldService.GetByIdAsync(id);
-            if (field == null) return NotFound();
             return Ok(field);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(CreateFieldDto dto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            try
-            {
-                await fieldService.CreateAsync(dto);
-                return StatusCode(201);
-            }
-            catch
-            {
-                return StatusCode(500);
-            }
+            await fieldService.CreateAsync(dto);
+            return StatusCode(201);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, CreateFieldDto dto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            try
-            {
-                await fieldService.UpdateAsync(id,dto);
-                return StatusCode(204);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound();
-            }
-            catch
-            {
-                return StatusCode(500);
-            }
+            await fieldService.UpdateAsync(id,dto);
+            return StatusCode(204);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            try
-            {
-                await fieldService.DeleteAsync(id);
-                return StatusCode(204);
-            }
-            catch(NotFoundException ex)
-            {
-                return NotFound();
-            }
-            catch
-            {
-                return StatusCode(500);
-            }
+            await fieldService.DeleteAsync(id);
+            return StatusCode(204);
         }
 
-
         [HttpGet("{nameIdentifier}/area")]
+        [TypeFilter(typeof(AreaRouteParameterFilter))]
         public async Task<IActionResult> GetArea(string nameIdentifier)
         {
             var area = await onGeoService.GetDataAsync(nameIdentifier);
-            return Ok(area);
+            return Ok(new { areaInHectares = area });
         }
     }
 }

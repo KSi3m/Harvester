@@ -1,4 +1,5 @@
-﻿using Harvester.Domain.Models;
+﻿using Harvester.Application.Dtos;
+using Harvester.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,10 @@ namespace Harvester.Application.Interfaces.Services
 {
     public interface ICombineService
     {
-        Task<IEnumerable<Combine>> GetAll();
-        Task<Combine?> GetById(int id);
+        Task<IEnumerable<Combine>> GetAllAsync();
+        Task<Combine?> GetByIdAsync(int id);
+        Task CreateAsync(CreateCombineDto dto);
+        Task UpdateAsync(int id, CreateCombineDto dto);
+        Task DeleteAsync(int id);
     }
 }
