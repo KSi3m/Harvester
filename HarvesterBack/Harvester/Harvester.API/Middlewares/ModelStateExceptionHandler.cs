@@ -18,7 +18,7 @@ namespace Harvester.API.Middlewares
 
             var errorResponse = new ProblemDetails
             {
-                Title = "Bad request",
+                Title = "Validation error",
                 Detail = modelStateException.Message,
                 Status = StatusCodes.Status400BadRequest,
                 Type = "https://httpstatuses.com/400",
