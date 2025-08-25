@@ -2,6 +2,7 @@
 using Harvester.Application.Exceptions;
 using Harvester.Application.Interfaces.Repositories;
 using Harvester.Application.Interfaces.Services;
+using Harvester.Application.Mappings;
 using Harvester.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -38,14 +39,20 @@ namespace Harvester.Application.Services
             await repository.DeleteAsync(combine);
         }
 
-        public async Task<IEnumerable<Combine>> GetAllAsync()
+        public async Task<IEnumerable<CombineDto>> GetAllAsync()
         {
-            return await repository.GetAllAsync();
+            var combines = await repository.GetAllAsync();
+            return CombineMappings.MapCombinesToCombineDtos(combines);
         }
 
-        public async Task<Combine?> GetByIdAsync(int id)
+        public async Task<CombineDto> GetByIdAsync(int id)
         {
-            return await repository.GetByIdAsync(id);
+            var combine = await repository.GetByIdAsync(id);
+            if (combine == null)
+            {
+                throw new NotFoundException("Combine doesn't exist");
+            }
+            return CombineMappings.MapCombineToCombineDto(combine);
         }
 
         public async Task UpdateAsync(int id, CreateCombineDto dto)

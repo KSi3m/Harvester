@@ -2,6 +2,7 @@
 using Harvester.Application.Exceptions;
 using Harvester.Application.Interfaces.Repositories;
 using Harvester.Application.Interfaces.Services;
+using Harvester.Application.Mappings;
 using Harvester.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -37,19 +38,21 @@ namespace Harvester.Application.Services
             await fieldRepository.DeleteAsync(field);
         }
 
-        public async Task<IEnumerable<Field>> GetAllAsync()
+        public async Task<IEnumerable<FieldDto>> GetAllAsync()
         {
-            return await fieldRepository.GetAllAsync();
+            var fields = await fieldRepository.GetAllAsync();
+            return FieldMappings.MapFieldsToFieldDtos(fields);
         }
 
-        public async Task<Field?> GetByIdAsync(int id)
+        public async Task<FieldDto> GetByIdAsync(int id)
         {
             var field = await fieldRepository.GetByIdAsync(id);
             if (field == null)
             {
                 throw new NotFoundException("Field doesn't exist");
             }
-            return field;
+
+            return FieldMappings.MapFieldtoFieldDto(field);
         }
 
         public async Task UpdateAsync(int id, CreateFieldDto dto)
