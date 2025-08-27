@@ -1,4 +1,5 @@
-﻿using Harvester.Application.Interfaces.Repositories;
+﻿using Harvester.Application.Dtos;
+using Harvester.Application.Interfaces.Repositories;
 using Harvester.Application.Interfaces.Services;
 using Harvester.Domain.Models;
 using System;
@@ -9,8 +10,16 @@ using System.Threading.Tasks;
 
 namespace Harvester.Application.Services
 {
-    public class OrderService(IOrderRepository repository) : IOrderService
+    public class OrderService(IOrderRepository repository, ICombineService combineService) : IOrderService
     {
+        public async Task CreateAsync(CreateOrderDto dto)
+        {
+            if(await combineService.CheckAvailability(dto.CombineId))
+            {
+
+            }
+        }
+
         public async Task<IEnumerable<Order>> GetAll()
         {
             return await repository.GetAll();

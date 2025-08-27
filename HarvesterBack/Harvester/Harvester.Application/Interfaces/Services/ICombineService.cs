@@ -15,5 +15,7 @@ namespace Harvester.Application.Interfaces.Services
         Task CreateAsync(CreateCombineDto dto);
         Task UpdateAsync(int id, CreateCombineDto dto);
         Task DeleteAsync(int id);
+
+        Task<bool> CheckAvailability(int id);
     }
 }
