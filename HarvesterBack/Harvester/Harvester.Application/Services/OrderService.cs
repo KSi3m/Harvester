@@ -10,13 +10,41 @@ using System.Threading.Tasks;
 
 namespace Harvester.Application.Services
 {
-    public class OrderService(IOrderRepository repository, ICombineService combineService) : IOrderService
+    public class OrderService(IOrderRepository repository, 
+        ICombineService combineService,
+        IFieldService fieldService
+        ) : IOrderService
     {
         public async Task CreateAsync(CreateOrderDto dto)
         {
-            if(await combineService.CheckAvailability(dto.CombineId))
-            {
+            var combine = await combineService.GetByIdAsync(dto.CombineId);
+            var field = await fieldService.GetByIdAsync(dto.FieldId);
 
+            //var travelTime = 15;
+
+
+            var estimatedTime = (((field.AreaHectares / combine.BaseHaPerHour) / (field.ShapeCoeff * field.TerrainCoeff)) * 60); //+ travelTime;
+
+            var info = new OrderInformationForCheck
+            {
+                FieldId = dto.FieldId,
+                CombineId = dto.CombineId,
+                OrderDate = dto.OrderDate,
+                EstimatedTime = (int)estimatedTime,
+            };
+            
+            if (await combineService.CheckAvailability(info))
+            {
+                var newOrder = new Order
+                {
+                    FieldId = dto.FieldId,
+                    CombineId = dto.CombineId,
+                    OrderDate = dto.OrderDate,
+                    Status = OrderStatus.ACCEPTED, //po dodaniu panelu kombajnisty zmienić na pending
+                    EstimatedTime = (int)estimatedTime,
+
+                };
+                await repository.CreateAsync(newOrder);
             }
         }
 

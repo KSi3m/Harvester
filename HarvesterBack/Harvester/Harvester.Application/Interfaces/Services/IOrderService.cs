@@ -14,5 +14,6 @@ namespace Harvester.Application.Interfaces.Services
         Task<Order?> GetById(int id);
 
         Task CreateAsync(CreateOrderDto dto);
+
     }
 }

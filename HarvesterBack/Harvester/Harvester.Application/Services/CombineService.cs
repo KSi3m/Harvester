@@ -15,9 +15,9 @@ namespace Harvester.Application.Services
 {
     public class CombineService(ICombineRepository repository) : ICombineService
     {
-        public async Task<bool> CheckAvailability(int id)
+        public async Task<bool> CheckAvailability(OrderInformationForCheck dto)
         {
-            return true;
+            return await repository.CheckAvailability(dto);
         }
 
         public async Task CreateAsync(CreateCombineDto dto)

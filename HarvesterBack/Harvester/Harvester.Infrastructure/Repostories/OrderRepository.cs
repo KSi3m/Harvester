@@ -12,6 +12,12 @@ namespace Harvester.Infrastructure.Repostories
 {
     public class OrderRepository(HarvesterDbContext dbContext) : IOrderRepository
     {
+        public async Task CreateAsync(Order order)
+        {
+            await dbContext.Orders.AddAsync(order);
+            await dbContext.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<Order>> GetAll()
         {
             return await dbContext.Orders.AsNoTracking().ToListAsync();
