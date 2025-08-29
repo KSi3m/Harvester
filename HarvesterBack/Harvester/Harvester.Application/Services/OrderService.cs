@@ -12,28 +12,34 @@ namespace Harvester.Application.Services
 {
     public class OrderService(IOrderRepository repository, 
         ICombineService combineService,
-        IFieldService fieldService
+        IFieldService fieldService,
+        ICombineRepository combineRepository,
+        IFieldRepository fieldRepository
+
         ) : IOrderService
     {
         public async Task CreateAsync(CreateOrderDto dto)
         {
-            var combine = await combineService.GetByIdAsync(dto.CombineId);
-            var field = await fieldService.GetByIdAsync(dto.FieldId);
-
+            /*var combine = await combineService.GetByIdAsync(dto.CombineId);
+            var field = await fieldService.GetByIdAsync(dto.FieldId);*/
+            var combine = await combineRepository.GetByIdAsync(dto.CombineId);
+            var field = await fieldRepository.GetByIdAsync(dto.FieldId);
+            //dostawić checki nullowe 
             //var travelTime = 15;
-
+            
 
             var estimatedTime = (((field.AreaHectares / combine.BaseHaPerHour) / (field.ShapeCoeff * field.TerrainCoeff)) * 60); //+ travelTime;
 
-            var info = new OrderInformationForCheck
+            var info = new OrderInformationForCheckAvailDto
             {
-                FieldId = dto.FieldId,
-                CombineId = dto.CombineId,
+                Field = field,
+                Combine = combine,
                 OrderDate = dto.OrderDate,
                 EstimatedTime = (int)estimatedTime,
             };
-            
-            if (await combineService.CheckAvailability(info))
+
+            var res = await combineService.CheckAvailability(info);
+            if (res.Success)
             {
                 var newOrder = new Order
                 {

@@ -19,5 +19,7 @@ namespace Harvester.Domain.Models
         public string CropType { get; set; }
 
         public ICollection<Order>? Orders { get; set; }
+
+      
     }
 }

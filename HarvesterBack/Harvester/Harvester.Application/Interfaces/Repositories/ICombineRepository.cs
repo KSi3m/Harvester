@@ -16,6 +16,6 @@ namespace Harvester.Application.Interfaces.Repositories
         Task UpdateAsync(Combine combine);
 
         Task DeleteAsync(Combine combine);
-        Task<bool> CheckAvailability(OrderInformationForCheck dto);
+        //Task<bool> CheckAvailability(OrderInformationForCheckAvailDto dto);
     }
 }
