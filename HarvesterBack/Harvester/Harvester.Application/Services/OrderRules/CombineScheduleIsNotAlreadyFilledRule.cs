@@ -13,8 +13,8 @@ namespace Harvester.Application.Services.OrderRules
     {
         public async Task<CheckRuleForOrderResponseDto> CheckRule(OrderInformationForCheckAvailDto dto)
         {
-            var orders = dto.Combine!.Orders!.Where(x => x.OrderDate.Day == dto.OrderDate.Day && x.Status == OrderStatus.ACCEPTED);
-            
+            var orders = dto.Combine!.Orders!.Where(x => DateOnly.FromDateTime(x.ScheduledDate) == dto.OrderDate && x.Status == OrderStatus.ACCEPTED);
+
             var alreadyAcceptedMinutes = orders.Sum(x => x.EstimatedTime) + (orders.Count() * 15);
             if (alreadyAcceptedMinutes + dto.EstimatedTime > dto.Combine.AvailableWorkHours * 60)
             {

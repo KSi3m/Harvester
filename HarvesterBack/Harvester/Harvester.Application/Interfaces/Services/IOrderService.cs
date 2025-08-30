@@ -13,7 +13,7 @@ namespace Harvester.Application.Interfaces.Services
         Task<IEnumerable<Order>> GetAll();
         Task<Order?> GetById(int id);
 
-        Task CreateAsync(CreateOrderDto dto);
+        Task<CheckRuleForOrderResponseDto> CreateAsync(CreateOrderDto dto);
 
     }
 }

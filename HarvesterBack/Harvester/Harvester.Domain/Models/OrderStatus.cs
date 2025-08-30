@@ -8,6 +8,6 @@ namespace Harvester.Domain.Models
 {
     public enum OrderStatus
     {
-        ACCEPTED,REJECTED,PENDING,AWAITING_CHANGE
+        ACCEPTED,REJECTED,PENDING,AWAITING_CHANGE,FINISHED
     }
 }

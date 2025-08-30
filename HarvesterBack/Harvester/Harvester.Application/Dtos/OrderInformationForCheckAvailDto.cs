@@ -15,7 +15,7 @@ namespace Harvester.Application.Dtos
        // public int CombineId { get; set; }
         public Combine? Combine { get; set; }
 
-        public DateTime OrderDate { get; set; }
+        public DateOnly OrderDate { get; set; }
 
         public int EstimatedTime { get; set; }
     }

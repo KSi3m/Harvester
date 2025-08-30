@@ -29,8 +29,12 @@ namespace Harvester.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateOrderDto dto)
         {
-            await orderService.CreateAsync(dto);
-            return StatusCode(201);
+            var res = await orderService.CreateAsync(dto);
+            if(res.Success)
+            {
+                return StatusCode(201, res);
+            }
+            return StatusCode(422, res);
         }
     }
 }
