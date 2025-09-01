@@ -1,4 +1,5 @@
-﻿using Harvester.Application.Interfaces.Repositories;
+﻿using Harvester.Application.Dtos;
+using Harvester.Application.Interfaces.Repositories;
 using Harvester.Domain.Models;
 using Harvester.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,7 @@ namespace Harvester.Infrastructure.Repostories
 
         public async Task<Combine?> GetByIdAsync(int id)
         {
-            return await dbContext.Combines.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            return await dbContext.Combines.AsNoTracking().Include(x => x.Orders).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task CreateAsync(Combine combine)
@@ -39,5 +40,7 @@ namespace Harvester.Infrastructure.Repostories
             dbContext.Update(combine);
             await dbContext.SaveChangesAsync();
         }
+
+      
     }
 }

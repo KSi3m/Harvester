@@ -1,4 +1,5 @@
-﻿using Harvester.Domain.Models;
+﻿using Harvester.Application.Dtos;
+using Harvester.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,8 @@ namespace Harvester.Application.Interfaces.Services
     {
         Task<IEnumerable<Order>> GetAll();
         Task<Order?> GetById(int id);
+
+        Task<CheckRuleForOrderResponseDto> CreateAsync(CreateOrderDto dto);
+
     }
 }

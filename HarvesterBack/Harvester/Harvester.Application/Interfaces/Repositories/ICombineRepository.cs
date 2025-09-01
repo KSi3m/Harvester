@@ -1,4 +1,5 @@
-﻿using Harvester.Domain.Models;
+﻿using Harvester.Application.Dtos;
+using Harvester.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,6 @@ namespace Harvester.Application.Interfaces.Repositories
         Task UpdateAsync(Combine combine);
 
         Task DeleteAsync(Combine combine);
+        //Task<bool> CheckAvailability(OrderInformationForCheckAvailDto dto);
     }
 }

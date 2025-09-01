@@ -1,7 +1,9 @@
 ﻿using Harvester.Application.Dtos;
 using Harvester.Application.Exceptions;
+using Harvester.Application.Interfaces.OrderRules;
 using Harvester.Application.Interfaces.Repositories;
 using Harvester.Application.Interfaces.Services;
+using Harvester.Application.Mappings;
 using Harvester.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -12,8 +14,18 @@ using System.Threading.Tasks;
 
 namespace Harvester.Application.Services
 {
-    public class CombineService(ICombineRepository repository) : ICombineService
+    public class CombineService(ICombineRepository combineRepository, IEnumerable<IOrderRule> checkRules) : ICombineService
     {
+        public async Task<CheckRuleForOrderResponseDto> CheckAvailability(OrderInformationForCheckAvailDto dto)
+        {
+            foreach(var rule in checkRules)
+            {
+                var res = await rule.CheckRule(dto);
+                if (!res.Success) return res;
+            }
+            return new CheckRuleForOrderResponseDto { Success = true };
+        }
+
         public async Task CreateAsync(CreateCombineDto dto)
         {
             var combine = new Combine
@@ -25,32 +37,38 @@ namespace Harvester.Application.Services
                 AvailableWorkHours = dto.AvailableWorkHours,
                 BaseEfficency = dto.BaseEfficency,
             };
-            await repository.CreateAsync(combine);
+            await combineRepository.CreateAsync(combine);
         }
 
         public async Task DeleteAsync(int id)
         {
-            var combine = await repository.GetByIdAsync(id);
+            var combine = await combineRepository.GetByIdAsync(id);
             if(combine == null)
             {
                 throw new NotFoundException("Combine doesn't exist");
             }
-            await repository.DeleteAsync(combine);
+            await combineRepository.DeleteAsync(combine);
         }
 
-        public async Task<IEnumerable<Combine>> GetAllAsync()
+        public async Task<IEnumerable<CombineDto>> GetAllAsync()
         {
-            return await repository.GetAllAsync();
+            var combines = await combineRepository.GetAllAsync();
+            return CombineMappings.MapCombinesToCombineDtos(combines);
         }
 
-        public async Task<Combine?> GetByIdAsync(int id)
+        public async Task<CombineDto> GetByIdAsync(int id)
         {
-            return await repository.GetByIdAsync(id);
+            var combine = await combineRepository.GetByIdAsync(id);
+            if (combine == null)
+            {
+                throw new NotFoundException("Combine doesn't exist");
+            }
+            return CombineMappings.MapCombineToCombineDto(combine);
         }
 
         public async Task UpdateAsync(int id, CreateCombineDto dto)
         {
-            var combine = await repository.GetByIdAsync(id);
+            var combine = await combineRepository.GetByIdAsync(id);
 
             if (combine == null)
             {
@@ -64,7 +82,7 @@ namespace Harvester.Application.Services
             combine.AvailableWorkHours = dto.AvailableWorkHours;
             combine.BaseEfficency = dto.BaseEfficency;
 
-            await repository.UpdateAsync(combine);
+            await combineRepository.UpdateAsync(combine);
         }
     }
 }

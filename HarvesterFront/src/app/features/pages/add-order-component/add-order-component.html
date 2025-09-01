@@ -1,0 +1,73 @@
+<p-card header="Add new field">
+  <form [formGroup]="form" class="p-fluid grid">
+    <p-select
+      formControlName="selectedCombine"
+      [options]="combines"
+      optionLabel="model"
+      optionValue="id"
+      placeholder="Select a combine"
+    >
+      <ng-template let-combine pTemplate="options">
+        <div class="custom-option">
+          <div class="main-text">{{ combine.model }}</div>
+          <div class="sub-text">{{ combine.baseHaPerHour }} ha/h</div>
+        </div>
+      </ng-template>
+
+      <ng-template let-combine pTemplate="selectedItem">
+        <div class="custom-option">
+          <div class="main-text">{{ combine.model }}</div>
+          <div class="sub-text">{{ combine.baseHaPerHour }} ha/h</div>
+        </div>
+      </ng-template>
+    </p-select>
+
+    <p-select
+      [options]="fields"
+      formControlName="selectedField"
+      optionLabel="name"
+      optionValue="id"
+      [filter]="true"
+      filterBy="name"
+      [showClear]="true"
+      placeholder="Select a Field"
+    >
+      <ng-template #selectedItem let-selectedOption>
+        <div class="custom-option">
+          <div class="main-text">{{ selectedOption.name }}</div>
+          <div class="sub-text">{{ selectedOption.areaHectares }} ha</div>
+        </div>
+      </ng-template>
+      <ng-template let-field #item>
+        <div class="custom-option">
+          <div class="main-text">{{ field.name }}</div>
+          <div class="sub-text">{{ field.areaHectares }} ha</div>
+        </div>
+      </ng-template>
+    </p-select>
+
+    <p-datepicker
+      formControlName="selectedDate"
+      [iconDisplay]="'input'"
+      [showIcon]="true"
+      inputId="icondisplay"
+      [minDate]="minDate"
+      [maxDate]="maxDate"
+      [readonlyInput]="true"
+    />
+
+    <div>
+      <button
+        pButton
+        type="submit"
+        icon="pi pi-save"
+        (click)="onSubmit()"
+        [disabled]="form.invalid"
+      >
+        Save
+      </button>
+    </div>
+
+    
+  </form>
+</p-card>

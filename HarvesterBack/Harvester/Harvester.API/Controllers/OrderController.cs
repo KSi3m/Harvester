@@ -1,4 +1,5 @@
-﻿using Harvester.Application.Interfaces.Services;
+﻿using Harvester.Application.Dtos;
+using Harvester.Application.Interfaces.Services;
 using Harvester.Application.Services;
 using Harvester.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +24,17 @@ namespace Harvester.API.Controllers
             var order = await orderService.GetById(id);
             if (order == null) return NotFound();
             return Ok(order);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateOrderDto dto)
+        {
+            var res = await orderService.CreateAsync(dto);
+            if(res.Success)
+            {
+                return StatusCode(201, res);
+            }
+            return StatusCode(422, res);
         }
     }
 }

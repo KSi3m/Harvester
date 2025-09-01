@@ -11,5 +11,6 @@ namespace Harvester.Application.Interfaces.Repositories
     {
         Task<IEnumerable<Order>> GetAll();
         Task<Order?> GetById(int id);
+        Task CreateAsync(Order order);
     }
 }

@@ -20,6 +20,8 @@ namespace Harvester.Domain.Models
         public DateTime ScheduledDate { get; set; }
         public OrderStatus Status { get; set; }
 
+        public int EstimatedTime { get; set; }
+
         public decimal PricePerHectare { get; set; }
         public decimal TotalPrice { get; set; }
         public ICollection<Payment>? Payments { get; set; }

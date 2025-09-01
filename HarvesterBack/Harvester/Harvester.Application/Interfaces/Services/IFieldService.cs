@@ -10,8 +10,8 @@ namespace Harvester.Application.Interfaces.Services
 {
     public interface IFieldService
     {
-        Task<IEnumerable<Field>> GetAllAsync();
-        Task<Field?> GetByIdAsync(int id);
+        Task<IEnumerable<FieldDto>> GetAllAsync();
+        Task<FieldDto> GetByIdAsync(int id);
         Task CreateAsync(CreateFieldDto dto);
         Task UpdateAsync(int id, CreateFieldDto dto);
         Task DeleteAsync(int id);
