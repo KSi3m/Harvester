@@ -1,5 +1,8 @@
+import { StrawProcessingMethod } from '../enums/StrawProcessingMethod';
+
 export interface CreateOrderDto {
-  FieldId: number;
-  CombineId: number;
-  OrderDate: Date;
+  fieldId: number;
+  combineId: number;
+  orderDate: Date;
+  strawProcessingMethod: StrawProcessingMethod;
 }

@@ -12,7 +12,7 @@ export class OrderService {
   http: HttpClient = inject(HttpClient);
   url = environment.apiUrl;
 
-  createField(dto: CreateOrderDto): Observable<CreateOrderResponse> {
+  createOrder(dto: CreateOrderDto): Observable<CreateOrderResponse> {
     return this.http.post<CreateOrderResponse>(`${this.url}/orders`, dto);
   }
 }
