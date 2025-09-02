@@ -34,6 +34,8 @@ namespace Harvester.Application.Services
                 BaseHaPerHour = dto.BaseHaPerHour,
                 HeaderLength = dto.HeaderLength,
                 IsAvailable = dto.IsAvailable,
+                PricePerHectare = dto.PricePerHectare,
+                HasStrawChopper = dto.HasStrawChopper,
                 AvailableWorkHours = dto.AvailableWorkHours,
                 BaseEfficency = dto.BaseEfficency,
             };

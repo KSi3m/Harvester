@@ -30,6 +30,18 @@ namespace Harvester.Application.Validators
                 .GreaterThan(1m)
                      .WithMessage("HeaderLength must be greater than 1 meter");
 
+            RuleFor(x => x.PricePerHectare)
+                .NotEmpty()
+                    .WithMessage("PricePerHectare must not be empty")
+                .GreaterThan(0)
+                     .WithMessage("PricePerHectare must be greater than 0 pln per ha")
+                .LessThan(5000)
+                     .WithMessage("PricePerHectare must be lees than 5000 pln per ha");
+
+            RuleFor(x => x.HasStrawChopper)
+                .NotEmpty()
+                    .WithMessage("Availability of straw chopper must be set");
+
             RuleFor(x => x.IsAvailable)
                 .NotEmpty()
                     .WithMessage("Combine availability must be set");

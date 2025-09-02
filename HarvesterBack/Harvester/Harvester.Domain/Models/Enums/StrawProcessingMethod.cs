@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Harvester.Domain.Models
+namespace Harvester.Domain.Models.Enums
 {
-    public enum OrderStatus
+    public enum StrawProcessingMethod
     {
-        ACCEPTED,REJECTED,PENDING,AWAITING_CHANGE,FINISHED
+        CHOP, LEAVE
     }
 }

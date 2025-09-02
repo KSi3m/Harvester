@@ -3,6 +3,7 @@ using Harvester.Application.Exceptions;
 using Harvester.Application.Interfaces.Repositories;
 using Harvester.Application.Interfaces.Services;
 using Harvester.Domain.Models;
+using Harvester.Domain.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,6 +40,8 @@ namespace Harvester.Application.Services
             var res = await combineService.CheckAvailability(info);
             if (res.Success)
             {
+                var priceForStrawProcessing = dto.StrawProcessingMethod == StrawProcessingMethod.CHOP ?  50 : 0;
+                var estimatedPrice = field.AreaHectares * (combine.PricePerHectare + priceForStrawProcessing);
                 var newOrder = new Order
                 {
                     FieldId = dto.FieldId,
@@ -47,7 +50,8 @@ namespace Harvester.Application.Services
                     ScheduledDate = dto.OrderDate, //po dodaniu panelu przy akceptacji kombajnista bedzie wybierał date
                     Status = OrderStatus.ACCEPTED, //po dodaniu panelu kombajnisty zmienić na pending
                     EstimatedTime = (int)estimatedTime,
-
+                    StrawProcessingMethod = dto.StrawProcessingMethod,
+                    EstimatedPrice = estimatedPrice
                 };
                 await repository.CreateAsync(newOrder);
             }
