@@ -1,4 +1,4 @@
-import { StrawProcessingMethod } from '../enums/StrawProcessingMethod';
+import { StrawProcessingMethod } from '../enums/straw-processing-method';
 
 export interface CreateOrderDto {
   fieldId: number;

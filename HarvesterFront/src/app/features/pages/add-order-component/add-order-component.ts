@@ -16,15 +16,15 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { SelectModule } from 'primeng/select';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { Combine } from '../../../core/models/Combine';
-import { CreateOrderDto } from '../../../core/models/dtos/CreateOrderDto';
-import { FieldDto } from '../../../core/models/dtos/FieldDto';
-import { StrawProcessingMethod } from '../../../core/models/enums/StrawProcessingMethod';
+import { CreateOrderDto } from '../../../core/models/dtos/create-order-dto';
+import { FieldDto } from '../../../core/models/dtos/field-dto';
+import { StrawProcessingMethod } from '../../../core/models/enums/straw-processing-method';
 import { Field } from '../../../core/models/Field';
 import { CreateOrderResponse } from '../../../core/models/responses/create-order-response';
 import { CombineService } from '../../../core/services/combineService/combine-service';
 import { FieldService } from '../../../core/services/fieldService/field-service';
 import { OrderService } from '../../../core/services/orderService/order-service';
-import { dateNotInPastValidator } from '../../../shared/validators/dateNotInPastValidator';
+import { dateNotInPastValidator } from '../../../shared/validators/date-not-in-past-validator';
 
 @Component({
   selector: 'app-add-order-component',

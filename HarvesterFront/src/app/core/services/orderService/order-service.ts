@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { CreateOrderDto } from '../../models/dtos/CreateOrderDto';
+import { CreateOrderDto } from '../../models/dtos/create-order-dto';
 import { CreateOrderResponse } from '../../models/responses/create-order-response';
 
 @Injectable({

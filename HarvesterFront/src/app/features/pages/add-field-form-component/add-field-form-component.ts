@@ -13,10 +13,10 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { SelectModule } from 'primeng/select';
-import { FieldDto } from '../../../core/models/dtos/FieldDto';
+import { FieldDto } from '../../../core/models/dtos/field-dto';
 import { ErrorResponse } from '../../../core/models/responses/error-response';
 import { FieldService } from '../../../core/services/fieldService/field-service';
-import { fieldIdentifierValidator } from '../../../shared/validators/fieldValidator';
+import { fieldIdentifierValidator } from '../../../shared/validators/field-identifier-validator';
 
 @Component({
   selector: 'app-add-field-form-component',
