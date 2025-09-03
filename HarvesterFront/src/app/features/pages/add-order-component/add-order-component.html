@@ -12,14 +12,20 @@
       <ng-template let-combine pTemplate="options">
         <div class="custom-option">
           <div class="main-text">{{ combine.model }}</div>
-          <div class="sub-text">{{ combine.baseHaPerHour }} ha/h</div>
+          <div class="sub-text">
+            {{ combine.baseHaPerHour }} ha/h || Price per ha:
+            {{ combine.pricePerHectare }}
+          </div>
         </div>
       </ng-template>
 
       <ng-template let-combine pTemplate="selectedItem">
         <div class="custom-option">
           <div class="main-text">{{ combine.model }}</div>
-          <div class="sub-text">{{ combine.baseHaPerHour }} ha/h</div>
+          <div class="sub-text">
+            {{ combine.baseHaPerHour }} ha/h || Price per ha:
+            {{ combine.pricePerHectare }}
+          </div>
         </div>
       </ng-template>
     </p-select>
@@ -92,9 +98,9 @@
       optionLabel="label"
       optionValue="value"
       aria-labelledby="basic"
-      unselectable = "true"
+      unselectable="true"
     />
-
+    <div class="k">Estimated price: {{ this.estimatedPrice }}</div>
 
     <div>
       <button

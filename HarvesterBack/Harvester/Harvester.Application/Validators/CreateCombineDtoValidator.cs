@@ -39,7 +39,7 @@ namespace Harvester.Application.Validators
                      .WithMessage("PricePerHectare must be lees than 5000 pln per ha");
 
             RuleFor(x => x.HasStrawChopper)
-                .NotEmpty()
+                .NotNull()
                     .WithMessage("Availability of straw chopper must be set");
 
             RuleFor(x => x.IsAvailable)

@@ -8,6 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { DatePickerModule } from 'primeng/datepicker';
 import { MessageModule } from 'primeng/message';
@@ -16,6 +17,8 @@ import { SelectModule } from 'primeng/select';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { Combine } from '../../../core/models/Combine';
 import { CreateOrderDto } from '../../../core/models/dtos/CreateOrderDto';
+import { FieldDto } from '../../../core/models/dtos/FieldDto';
+import { StrawProcessingMethod } from '../../../core/models/enums/StrawProcessingMethod';
 import { Field } from '../../../core/models/Field';
 import { CreateOrderResponse } from '../../../core/models/responses/create-order-response';
 import { CombineService } from '../../../core/services/combineService/combine-service';
@@ -28,6 +31,7 @@ import { dateNotInPastValidator } from '../../../shared/validators/dateNotInPast
   imports: [
     SelectModule,
     ReactiveFormsModule,
+    ButtonModule,
     MultiSelectModule,
     CardModule,
     DatePickerModule,
@@ -44,6 +48,7 @@ export class AddOrderComponent implements OnInit {
   messageService = inject(MessageService);
   fb = inject(FormBuilder);
   form!: FormGroup;
+  estimatedPrice = 0;
 
   combines: Combine[] = [];
   fields: Field[] = [];
@@ -52,8 +57,8 @@ export class AddOrderComponent implements OnInit {
   maxDate: Date = new Date(new Date().getFullYear(), 11, 31);
 
   strawMethods = [
-    { label: 'Chop straw', value: 'CHOP' },
-    { label: 'Leave straw in windrows', value: 'LEAVE' },
+    { label: 'Chop straw', value: 'CHOP', disabled: false },
+    { label: 'Leave straw in windrows', value: 'LEAVE', disabled: false },
   ];
 
   ngOnInit(): void {
@@ -83,6 +88,58 @@ export class AddOrderComponent implements OnInit {
       selectedDate: [null, [Validators.required, dateNotInPastValidator()]],
       selectedStrawMethod: [null, [Validators.required]],
     });
+
+    this.form.valueChanges.subscribe((formValue) => {
+      const {
+        selectedCombine,
+        selectedField,
+        selectedDate,
+        selectedStrawMethod,
+      } = formValue;
+
+      if (!selectedCombine || !selectedField || !selectedStrawMethod) {
+        this.estimatedPrice = 0;
+        return;
+      }
+
+      const combine = this.combines.find((c) => c.id === selectedCombine);
+      const field = this.fields.find((c) => c.id === selectedField);
+      if (!combine || !field) {
+        this.estimatedPrice = 0;
+        return;
+      }
+
+      this.strawMethods = this.strawMethods.map((opt) => {
+        if (opt.value === 'CHOP') {
+          return { ...opt, disabled: !combine?.hasStrawChopper };
+        }
+        return opt;
+      });
+      if (
+        !combine?.hasStrawChopper &&
+        this.form.value.selectedStrawMethod === 'CHOP'
+      ) {
+        this.form.patchValue({ selectedStrawMethod: null });
+      }
+
+      this.estimatedPrice = this.calculatePrice(
+        combine,
+        field,
+        selectedStrawMethod,
+      );
+    });
+  }
+  calculatePrice(
+    combine: Combine,
+    field: FieldDto,
+    selectedStrawMethod: string,
+  ): number {
+    const priceForStrawMethod =
+      selectedStrawMethod === StrawProcessingMethod.Chop ? 50 : 0;
+    const total =
+      field.areaHectares * (combine.pricePerHectare + priceForStrawMethod);
+
+    return total;
   }
   get f() {
     return this.form!.controls;

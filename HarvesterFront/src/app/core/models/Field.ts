@@ -1,8 +1,8 @@
 export interface Field {
-  Id: number;
-  Name: string;
-  AreaHectares: number;
-  TerrainCoeff: number;
-  ShapeCoeff: number;
-  CropType: string;
+  id: number;
+  name: string;
+  areaHectares: number;
+  terrainCoeff: number;
+  shapeCoeff: number;
+  cropType: string;
 }

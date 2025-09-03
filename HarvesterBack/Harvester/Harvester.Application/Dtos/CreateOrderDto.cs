@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Harvester.Application.Dtos
 {
-    [JsonConverter(typeof(JsonStringEnumConverter))]
+   
     public class CreateOrderDto
     {
         public int FieldId { get; set; }
@@ -20,6 +20,7 @@ namespace Harvester.Application.Dtos
         [DataType(DataType.Date)]
         public DateTime OrderDate { get; set; }
 
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public StrawProcessingMethod StrawProcessingMethod { get; set; }
     }
 }
