@@ -23,7 +23,7 @@ export class App {
     {
       label: 'Orders',
       icon: 'pi pi-star',
-      //routerLink: '/',
+      routerLink: '/orders',
       items: [
         {
           label: 'Add new order',

@@ -2,6 +2,7 @@
 using Harvester.Application.Exceptions;
 using Harvester.Application.Interfaces.Repositories;
 using Harvester.Application.Interfaces.Services;
+using Harvester.Application.Mappings;
 using Harvester.Domain.Models;
 using Harvester.Domain.Models.Enums;
 using System;
@@ -58,9 +59,10 @@ namespace Harvester.Application.Services
             return res;
         }
 
-        public async Task<IEnumerable<Order>> GetAll()
+        public async Task<IEnumerable<OrderDto>> GetAll()
         {
-            return await repository.GetAll();
+            var ordersDto = OrderMapppings.MapOrdersToOrderDtos(await repository.GetAll());
+            return ordersDto;
         }
 
         public async Task<Order?> GetById(int id)
