@@ -32,11 +32,11 @@ export class App {
         },
       ],
     },
-    /*{
+    {
       label: 'Combines',
       icon: 'pi pi-home',
-      routerLink: '/',
-    },*/
+      routerLink: '/combines',
+    },
     {
       label: 'Add field',
       icon: 'pi pi-expand',

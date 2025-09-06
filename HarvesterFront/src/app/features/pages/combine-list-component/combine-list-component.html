@@ -1,0 +1,28 @@
+<!-- HTML -->
+<div class="combines-list">
+  @for (combine of combines; track combine.id) {
+    <p-card class="combine-card">
+      <div class="combine-row">
+        <div class="combine-details">
+          <div class="combine-header">
+            <span class="model">{{ combine.model }}</span>
+          </div>
+
+          <div class="combine-info">
+            <div><strong>BaseHaPerHour:</strong> {{ combine.baseHaPerHour }} ha/h</div>
+            <div><strong>Header Length:</strong> {{ combine.headerLength }} meters</div>
+            <div><strong>Has Straw Chopper:</strong> {{ combine.hasStrawChopper }}</div>
+            <div><strong>Price per Hectare:</strong> {{ combine.pricePerHectare }} PLN</div>
+            <div><strong>Available Work Hours:</strong> {{ combine.availableWorkHours }} hours</div>
+          </div>
+        </div>
+
+        <div class="combine-image" aria-hidden="true">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Corn_combine_harvest_with_grain_cart-4.jpg/1200px-Corn_combine_harvest_with_grain_cart-4.jpg" alt="Combine image">
+        </div>
+      </div>
+    </p-card>
+  } @empty {
+    <p-card class="empty-card">There are no items.</p-card>
+  }
+</div>

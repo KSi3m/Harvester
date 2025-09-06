@@ -1,0 +1,52 @@
+.combines-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  gap: 1rem;
+  padding: 1rem;
+  background: #f5f6fa;
+}
+
+.combine-card {
+  width: 100%;
+  max-width: 900px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+}
+
+.combine-row {
+  display: flex;
+  gap: 1rem;
+  align-items: stretch; 
+  padding: 1rem;
+}
+
+.combine-details {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.combine-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+}
+
+.combine-image {
+  flex: 0 0 220px;
+  display: flex;
+}
+
+.combine-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; 
+  border-radius: 6px;
+}
+
