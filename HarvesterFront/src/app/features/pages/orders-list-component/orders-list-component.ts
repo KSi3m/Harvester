@@ -11,7 +11,7 @@ import { CardModule } from 'primeng/card';
 })
 export class OrdersListComponent implements OnInit {
   ordersService = inject(OrderService);
-  orders: Order[] = [];
+  orders: Order[] | null = null;
 
   ngOnInit() {
     this.ordersService.getAllOrders().subscribe({
@@ -20,6 +20,7 @@ export class OrdersListComponent implements OnInit {
       },
       error: (err) => {
         console.log(err);
+        this.orders = [];
       },
     });
   }

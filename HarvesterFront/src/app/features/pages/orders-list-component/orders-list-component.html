@@ -1,27 +1,43 @@
-<div class="orders-list">
-  @for (order of orders; track order.id) {
-    <p-card class="order-card">
-      <div class="order-header">
-        <span class="order-id">#{{ order.id }}</span>
-        <span class="order-status status-{{ order.status }}">
-          {{ order.status }}
-        </span>
-      </div>
+@defer (when orders !== null) {
+  <div class="orders-list">
+    @for (order of orders; track order.id) {
+      <p-card class="order-card">
+        <div class="order-header">
+          <span class="order-id">#{{ order.id }}</span>
+          <span class="order-status status-{{ order.status }}">
+            {{ order.status }}
+          </span>
+        </div>
 
-      <div class="order-details">
-        <div><strong>Field:</strong> {{ order.fieldId }}</div>
-        <div><strong>Combine:</strong> {{ order.combineId }}</div>
-        <div><strong>Order date:</strong> {{ order.orderDate }}</div>
-        <div><strong>Scheduled:</strong> {{ order.scheduledDate }}</div>
-        <div><strong>Straw processing:</strong> {{ order.strawProcessingMethod }}</div>
-        <div><strong>Estimated Price:</strong> {{ order.estimatedPrice }}</div>
-        <!-- <div><strong>Total Price:</strong> {{ order.totalPrice }}</div> -->
+        <div class="order-details">
+          <div><strong>Field:</strong> {{ order.fieldId }}</div>
+          <div><strong>Combine:</strong> {{ order.combineId }}</div>
+          <div><strong>Order date:</strong> {{ order.orderDate }}</div>
+          <div><strong>Scheduled:</strong> {{ order.scheduledDate }}</div>
+          <div>
+            <strong>Straw processing:</strong> {{ order.strawProcessingMethod }}
+          </div>
+          <div>
+            <strong>Estimated Price:</strong> {{ order.estimatedPrice }}
+          </div>
+          <!-- <div><strong>Total Price:</strong> {{ order.totalPrice }}</div> -->
+        </div>
+      </p-card>
+    } @empty {
+      <div class="empty-container">
+        <p-card class="empty-card"> There are no items. </p-card>
       </div>
-    </p-card>
-  } @empty {
+    }
+  </div>
+} @loading (minimum 1s) {
+  <div class="empty-container">
     <p-card class="empty-card">
-      There are no items.
-    </p-card>
-  }
-</div>
-
+      Loading items.
+      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i
+    ></p-card>
+  </div>
+} @placeholder {
+  <div class="empty-container">
+    <!--<p-card class="empty-card"> There are no itemss. </p-card> -->
+  </div>
+}

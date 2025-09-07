@@ -11,7 +11,7 @@ import { CombineService } from '../../../core/services/combineService/combine-se
 })
 export class CombineListComponent implements OnInit {
   combineService = inject(CombineService);
-  combines: Combine[] = [];
+  combines: Combine[] | null = null;
 
   ngOnInit() {
     this.combineService.getCombines().subscribe({
@@ -20,6 +20,7 @@ export class CombineListComponent implements OnInit {
       },
       error: (err) => {
         console.log(err);
+        this.combines = [];
       },
     });
   }
