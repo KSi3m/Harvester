@@ -20,7 +20,7 @@ namespace Harvester.Infrastructure.Repostories
 
         public async Task<IEnumerable<Order>> GetAll()
         {
-            return await dbContext.Orders.AsNoTracking().ToListAsync();
+            return await dbContext.Orders.Include(x=>x.Combine).Include(x=>x.Field).AsNoTracking().ToListAsync();
         }
 
         public async Task<Order?> GetById(int id)

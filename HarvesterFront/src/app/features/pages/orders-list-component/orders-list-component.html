@@ -10,15 +10,15 @@
         </div>
 
         <div class="order-details">
-          <div><strong>Field:</strong> {{ order.fieldId }}</div>
-          <div><strong>Combine:</strong> {{ order.combineId }}</div>
+          <div><strong>Field:</strong> {{ order.field.name }}</div>
+          <div><strong>Combine:</strong> {{ order.combine.model }}</div>
           <div><strong>Order date:</strong> {{ order.orderDate }}</div>
           <div><strong>Scheduled:</strong> {{ order.scheduledDate }}</div>
           <div>
             <strong>Straw processing:</strong> {{ order.strawProcessingMethod }}
           </div>
           <div>
-            <strong>Estimated Price:</strong> {{ order.estimatedPrice }}
+            <strong>Estimated Price:</strong> {{ order.estimatedPrice }} PLN
           </div>
           <!-- <div><strong>Total Price:</strong> {{ order.totalPrice }}</div> -->
         </div>

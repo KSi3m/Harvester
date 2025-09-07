@@ -16,8 +16,8 @@ namespace Harvester.Application.Mappings
             var orderDto = new OrderDto
             {
                 Id = order.Id,
-                FieldId = order.FieldId,
-                CombineId = order.CombineId,
+                Field = FieldMappings.MapFieldtoFieldDto(order.Field),
+                Combine = CombineMappings.MapCombineToCombineDto(order.Combine),
                 OrderDate = order.OrderDate,
                 ScheduledDate = order.ScheduledDate,
                 Status = order.Status,

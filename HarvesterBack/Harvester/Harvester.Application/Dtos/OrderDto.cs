@@ -11,8 +11,8 @@ namespace Harvester.Application.Dtos
     public class OrderDto
     {
         public int Id { get; set; }
-        public int FieldId { get; set; }
-        public int CombineId { get; set; }
+        public FieldDto Field { get; set; }
+        public CombineDto Combine { get; set; }
         public DateTime OrderDate { get; set; }
         public DateTime ScheduledDate { get; set; }
         [JsonConverter(typeof(JsonStringEnumConverter))]

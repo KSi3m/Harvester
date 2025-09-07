@@ -65,9 +65,10 @@ namespace Harvester.Application.Services
             return ordersDto;
         }
 
-        public async Task<Order?> GetById(int id)
+        public async Task<OrderDto?> GetById(int id)
         {
-            return await repository.GetById(id);
+            var orderDto = OrderMapppings.MapOrdertoOrderDto(await repository.GetById(id));
+            return orderDto;
         }
     }
 }
