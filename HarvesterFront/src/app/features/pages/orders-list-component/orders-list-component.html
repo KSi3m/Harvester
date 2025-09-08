@@ -10,14 +10,26 @@
         </div>
 
         <div class="order-details">
-          <div><strong>Field:</strong> {{ order.field.name }}</div>
-          <div><strong>Combine:</strong> {{ order.combine.model }}</div>
-          <div><strong>Order date:</strong> {{ order.orderDate | dateFormatPipe }}</div>
-          <div><strong>Scheduled:</strong> {{ order.scheduledDate | dateFormatPipe}}</div>
           <div>
-            <strong>Straw processing:</strong>  @if(order.strawProcessingMethod === 'CHOP') {
-                Straw is going to be chopped
-            }@else {
+            <strong>Field:</strong> {{ order.field.name }}
+            <p-button (click)="showDialog()" label="Show" />
+            <p-dialog class="modal" header="Test" [modal]="true" [(visible)]="visible" (onShow)="onDialogShow(order.id)">
+              <div id="map-{{ order.id }}" style="height: 400px; width: 400px"></div>
+            </p-dialog>
+          </div>
+          <div><strong>Combine:</strong> {{ order.combine.model }}</div>
+          <div>
+            <strong>Order date:</strong> {{ order.orderDate | dateFormatPipe }}
+          </div>
+          <div>
+            <strong>Scheduled:</strong>
+            {{ order.scheduledDate | dateFormatPipe }}
+          </div>
+          <div>
+            <strong>Straw processing:</strong>
+            @if (order.strawProcessingMethod === "CHOP") {
+              Straw is going to be chopped
+            } @else {
               Straw is going to be left on the field intact
             }
           </div>

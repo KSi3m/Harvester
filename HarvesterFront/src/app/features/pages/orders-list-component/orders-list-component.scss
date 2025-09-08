@@ -1,7 +1,8 @@
+@import "leaflet/dist/leaflet.css";
 :host {
   background: #f5f6fa;
   min-height: 100vh;
-  display: grid; 
+  display: grid;
 }
 .orders-list {
   display: grid;
@@ -81,6 +82,14 @@
   font-size: 1rem;
   color: #666;
   padding: 2rem;
-  max-width: 600px; 
+  max-width: 600px;
   width: 100%;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-content {
+  overflow: hidden;
+}
+#map {
+  width: 400px;
+  height: 400px;
 }
