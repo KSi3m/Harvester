@@ -1,4 +1,5 @@
 ﻿using Harvester.Domain.Models;
+using NetTopologySuite.Operation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +15,13 @@ namespace Harvester.Application.Mappings
             var fieldDto = new FieldDto
             {
                 Id = field.Id,
-                Name = field.Name,
+                Name = field.IdentifierName,
                 AreaHectares = field.AreaHectares,
                 TerrainCoeff = field.TerrainCoeff,
                 ShapeCoeff = field.ShapeCoeff,
-                CropType = field.CropType
+                CropType = field.CropType,
+                Boundary = GeoJSONMappings.MapMultiPolygonToDto(field.Boundary),
+                CenterPoint = GeoJSONMappings.MapPointToPointDto(field.CenterPoint)
             };
             return fieldDto;
         }

@@ -67,15 +67,33 @@ export class OrdersListComponent implements OnInit {
 
     if (!this.maps[orderId]) {
       const map = L.map(`map-${orderId}`, {
-        center: [50.0647, 19.945],
+        center: [50.870508516, 22.435692269],
         zoom: 14,
       });
-
+      /* coordinates":[[[[22.435275112,50.869216386],[22.436489883,50.871800645],[22.436133243,50.871860415],[22.434861495,50.869136603],[22.435275112,50.869216386]]]]},"area":7907.223388543238,"details":{"id":"060501_2.0001.459","number":"459","sheet":null,"card":null},"address":{"teryt":"0605012","precinct":"ALEKSANDRÓWKA","precinctNumber":"0001","cadastralUnit":"Batorz - gmina wiejska","province":"powiat janowski","state":"lubelskie"},"globalId":"njeoapckntgddgyixnsmnvgfwg"}]*/
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors',
       }).addTo(map);
 
-      L.marker([50.0647, 19.945]).addTo(map);
+      const polygon = L.polygon(
+        [
+          [50.869216386, 22.435275112],
+          [50.871800645, 22.436489883],
+          [50.871860415, 22.436133243],
+          [50.869136603, 22.434861495],
+          [50.869216386, 22.435275112],
+        ],
+        {
+          color: 'green',
+          weight: 3,
+          fillColor: 'lime',
+          fillOpacity: 0.4,
+        },
+      ).addTo(map);
+
+      polygon.bindPopup('Pole nr 1');
+
+      L.marker([50.870508516, 22.435692269]).addTo(map);
 
       this.maps[orderId] = map;
     } else {

@@ -51,8 +51,8 @@ namespace Harvester.API.Controllers
         [TypeFilter(typeof(AreaRouteParameterFilter))]
         public async Task<IActionResult> GetArea(string nameIdentifier)
         {
-            var area = await onGeoService.GetDataAsync(nameIdentifier);
-            return Ok(new { areaInHectares = area });
+            var response = await onGeoService.GetDataAsync(nameIdentifier);
+            return Ok(response);
         }
     }
 }

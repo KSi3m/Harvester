@@ -28,6 +28,19 @@ namespace Harvester.Infrastructure.Persistence.Config
             .HasPrecision(5, 2);
 
             modelBuilder
+              .Property(f => f.CommonName)
+              .HasMaxLength(200)
+              .IsRequired(false);
+
+            modelBuilder
+                .Property(f => f.CenterPoint)
+            .HasColumnType("geometry");
+
+            modelBuilder
+               .Property(f => f.Boundary)
+           .HasColumnType("geometry");
+
+            modelBuilder
                 .Property(c => c.TerrainCoeff)
             .HasPrecision(4, 2)
             .HasDefaultValue(1m);
@@ -38,17 +51,17 @@ namespace Harvester.Infrastructure.Persistence.Config
             .HasDefaultValue(1m);
 
             modelBuilder
-                .Property(f => f.Name)
+                .Property(f => f.IdentifierName)
                 .HasMaxLength(200)
-            .IsRequired(false);
+            .IsRequired(true);
 
             modelBuilder
                 .Property(f => f.CropType)
                 .HasMaxLength(200);
 
             modelBuilder.HasData(
-            new Field { Id = 1, Name = "Pole A", AreaHectares = 10.5m, TerrainCoeff = 1.0m, ShapeCoeff = 1.0m, CropType = "Wheat" },
-            new Field { Id = 2, Name = "Pole B", AreaHectares = 8.2m, TerrainCoeff = 0.9m, ShapeCoeff = 1.0m, CropType = "Corn" }
+            new Field { Id = 1, IdentifierName = "Pole A", AreaHectares = 10.5m, TerrainCoeff = 1.0m, ShapeCoeff = 1.0m, CropType = "Wheat" },
+            new Field { Id = 2, IdentifierName = "Pole B", AreaHectares = 8.2m, TerrainCoeff = 0.9m, ShapeCoeff = 1.0m, CropType = "Corn" }
             );
 
         }

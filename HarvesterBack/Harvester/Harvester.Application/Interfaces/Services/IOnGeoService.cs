@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Harvester.Application.Dtos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace Harvester.Application.Interfaces.Services
 {
     public interface IOnGeoService
     {
-        Task<decimal> GetDataAsync(string nameIdentifier);
+        Task<GeoServiceGetFieldDataResponse> GetDataAsync(string nameIdentifier);
     }
 }

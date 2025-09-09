@@ -7,7 +7,7 @@ namespace Harvester.Application.Validators
     {
         public CreateFieldDtoValidator()
         {
-            RuleFor(x => x.Name)
+            RuleFor(x => x.IdentifierName)
                 .NotEmpty()
                     .WithMessage("Name must not be empty")
                 .Matches(@"^\d{6}_\d\.\d{4}\.\d+(\/\d+)?$")

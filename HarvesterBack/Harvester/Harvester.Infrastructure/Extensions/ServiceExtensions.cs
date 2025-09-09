@@ -21,7 +21,7 @@ namespace Harvester.Infrastructure.Extensions
         {
             var connectionString = configuration.GetConnectionString("HarvesterDb");
 
-            services.AddDbContext<HarvesterDbContext>(options => options.UseSqlServer(connectionString));
+            services.AddDbContext<HarvesterDbContext>(options => options.UseSqlServer(connectionString, x => x.UseNetTopologySuite()));
 
             if (string.IsNullOrEmpty(configuration["OnGeoApi:BaseUrl"]))
                 throw new Exception("OnGeoApi:BaseUrl is null!");

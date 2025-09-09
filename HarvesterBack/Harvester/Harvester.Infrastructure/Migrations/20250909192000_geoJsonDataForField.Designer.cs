@@ -4,6 +4,7 @@ using Harvester.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
@@ -12,9 +13,11 @@ using NetTopologySuite.Geometries;
 namespace Harvester.Infrastructure.Migrations
 {
     [DbContext(typeof(HarvesterDbContext))]
-    partial class HarvesterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250909192000_geoJsonDataForField")]
+    partial class geoJsonDataForField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
