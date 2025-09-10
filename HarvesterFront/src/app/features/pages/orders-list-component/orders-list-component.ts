@@ -1,5 +1,4 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { LeafletDirective } from '@bluehalo/ngx-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -12,13 +11,7 @@ import * as L from 'leaflet';
 
 @Component({
   selector: 'app-orders-list-component',
-  imports: [
-    CardModule,
-    DateFormatPipe,
-    DialogModule,
-    ButtonModule,
-    LeafletDirective,
-  ],
+  imports: [CardModule, DateFormatPipe, DialogModule, ButtonModule],
   templateUrl: './orders-list-component.html',
   styleUrl: './orders-list-component.scss',
 })
@@ -28,72 +21,43 @@ export class OrdersListComponent implements OnInit {
   visible = false;
   private map!: L.Map;
   maps: Record<number, L.Map> = {};
-  /*options: L.MapOptions = {
-    layers: [
-      /*L.tileLayer(
-        'https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.png',
-        {
-          subdomains: 'abcd',
-          minZoom: 1,
-          maxZoom: 16,
-        },
-      ),
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 18,
-        attribution: 'Map data © OpenStreetMap contributors',
-      }),
-      //L.circle([46.95, -122], { radius: 5000 }),
-    ],
-    zoom: 5,
-    center: [46.879966, -121.726909],
-  };*/
 
   onMapReady(map: L.Map) {
     this.map = map;
   }
-
-  /* onDialogShow() {
-    // bardzo ważne - dajemy małe opóźnienie, aby dialog miał czas się wyrenderować
-    setTimeout(() => {
-      if (this.map) {
-        this.map.invalidateSize(true);
-      }
-    }, 1000);
-  }*/
 
   onDialogShow(orderId: number) {
     const mapContainer = document.getElementById(`map-${orderId}`);
     if (!mapContainer) return;
 
     if (!this.maps[orderId]) {
+      const order = this.orders?.find((x) => x.id == orderId) as Order;
       const map = L.map(`map-${orderId}`, {
-        center: [50.870508516, 22.435692269],
+        center: [
+          order.field.centerPoint.coordinates[1],
+          order.field.centerPoint.coordinates[0],
+        ],
         zoom: 14,
       });
-      /* coordinates":[[[[22.435275112,50.869216386],[22.436489883,50.871800645],[22.436133243,50.871860415],[22.434861495,50.869136603],[22.435275112,50.869216386]]]]},"area":7907.223388543238,"details":{"id":"060501_2.0001.459","number":"459","sheet":null,"card":null},"address":{"teryt":"0605012","precinct":"ALEKSANDRÓWKA","precinctNumber":"0001","cadastralUnit":"Batorz - gmina wiejska","province":"powiat janowski","state":"lubelskie"},"globalId":"njeoapckntgddgyixnsmnvgfwg"}]*/
+
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors',
       }).addTo(map);
 
-      const polygon = L.polygon(
-        [
-          [50.869216386, 22.435275112],
-          [50.871800645, 22.436489883],
-          [50.871860415, 22.436133243],
-          [50.869136603, 22.434861495],
-          [50.869216386, 22.435275112],
-        ],
-        {
-          color: 'green',
-          weight: 3,
-          fillColor: 'lime',
-          fillOpacity: 0.4,
-        },
-      ).addTo(map);
+      const latLngs = order.field.boundary.coordinates.map((polygon) =>
+        polygon.map((ring) =>
+          ring.map(([lng, lat]) => [lat, lng] as [number, number]),
+        ),
+      );
 
-      polygon.bindPopup('Pole nr 1');
+      const polygon = L.polygon(latLngs);
+      polygon.addTo(map);
+      polygon.bindPopup(order.field.identifierName);
 
-      L.marker([50.870508516, 22.435692269]).addTo(map);
+      L.marker([
+        order.field.centerPoint.coordinates[1],
+        order.field.centerPoint.coordinates[0],
+      ]).addTo(map);
 
       this.maps[orderId] = map;
     } else {

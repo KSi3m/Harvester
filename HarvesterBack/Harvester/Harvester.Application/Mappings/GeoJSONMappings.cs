@@ -10,8 +10,6 @@ namespace Harvester.Application.Mappings
 {
     public static class GeoJSONMappings
     {
-
-
         public static GeoPointDto MapPointToPointDto(Point point)
         {
             if (point == null) return null;
@@ -57,25 +55,36 @@ namespace Harvester.Application.Mappings
 
         public static Point MapGeoPointDtoToPoint(GeoPointDto dto)
         {
-            if (dto == null) return null;
-            return new Point(dto.Coordinates[0], dto.Coordinates[1])
-            {
-                SRID = 4326
-            };
+            if (dto == null || dto.Coordinates == null || dto.Coordinates.Length < 2)
+                return null;
+
+            var factory = new GeometryFactory(
+                new PrecisionModel(PrecisionModels.Floating), 
+                4326 
+            );
+
+            return factory.CreatePoint(new Coordinate(dto.Coordinates[0], dto.Coordinates[1]));
         }
         public static MultiPolygon MapMultiPolygonDtoToMultiPolygon(GeoMultiPolygonDto dto)
         {
-            if (dto == null) return null;
+            if (dto == null || dto.Coordinates == null || dto.Coordinates.Length == 0)
+                return null;
+
+            var factory = new GeometryFactory(
+                new PrecisionModel(PrecisionModels.Floating), 
+                4326
+            );
+
             var polygons = dto.Coordinates.Select(poly =>
             {
                 var rings = poly.Select(ring =>
-                    new LinearRing(ring.Select(p => new Coordinate(p[0], p[1])).ToArray())
+                    factory.CreateLinearRing(ring.Select(p => new Coordinate(p[0], p[1])).ToArray())
                 ).ToArray();
 
-                return new Polygon(rings[0], rings.Skip(1).ToArray());
+                return factory.CreatePolygon(rings.First(), rings.Skip(1).ToArray());
             }).ToArray();
 
-            return new MultiPolygon(polygons) { SRID = 4326 };
+            return factory.CreateMultiPolygon(polygons);
         }
     }
 }

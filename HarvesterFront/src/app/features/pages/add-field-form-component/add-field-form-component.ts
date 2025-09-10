@@ -91,11 +91,30 @@ export class AddFieldFormComponent implements OnInit {
       return;
     }
     const payload: FieldDto = {
-      name: this.f['name'].value!,
+      identifierName: this.f['name'].value!,
+      commonName: '',
       areaHectares: Number(this.f['areaHectares'].value),
       terrainCoeff: Number(this.f['terrainCoeff'].value),
       shapeCoeff: Number(this.f['shapeCoeff'].value),
       cropType: this.f['cropType'].value!,
+      centerPoint: {
+        type: 'Point',
+        coordinates: [22.436133243, 50.871860415],
+      },
+      boundary: {
+        type: 'MultiPolygon',
+        coordinates: [
+          [
+            [
+              [22.435275112, 50.869216386],
+              [22.436489883, 50.871800645],
+              [22.436133243, 50.871860415],
+              [22.434861495, 50.869136603],
+              [22.435275112, 50.869216386],
+            ],
+          ],
+        ],
+      },
     };
     this.isValid = true;
     this.fieldService.createField(payload).subscribe({

@@ -1,6 +1,7 @@
 ﻿using Harvester.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using NetTopologySuite.Geometries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,9 +37,11 @@ namespace Harvester.Infrastructure.Persistence.Config
                 .Property(f => f.CenterPoint)
             .HasColumnType("geometry");
 
+
             modelBuilder
                .Property(f => f.Boundary)
            .HasColumnType("geometry");
+           
 
             modelBuilder
                 .Property(c => c.TerrainCoeff)
