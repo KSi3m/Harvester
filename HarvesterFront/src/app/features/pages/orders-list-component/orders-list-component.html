@@ -11,9 +11,9 @@
 
         <div class="order-details">
           <div>
-            <strong>Field:</strong> {{ order.field.name }}
+            <strong>Field:</strong> {{ order.field.identifierName }}
             <p-button (click)="showDialog()" label="Show" />
-            <p-dialog class="modal" header="Test" [modal]="true" [(visible)]="visible" (onShow)="onDialogShow(order.id)">
+            <p-dialog header="Test" [modal]="true" [(visible)]="visible" (onShow)="onDialogShow(order.id)">
               <div id="map-{{ order.id }}" style="height: 400px; width: 400px"></div>
             </p-dialog>
           </div>

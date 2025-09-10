@@ -1,4 +1,4 @@
-@import "leaflet/dist/leaflet.css";
+//@import "leaflet/dist/leaflet.css";
 :host {
   background: #f5f6fa;
   min-height: 100vh;
@@ -86,10 +86,10 @@
   width: 100%;
 }
 
-:host ::ng-deep .p-dialog .p-dialog-content {
+/*:host ::ng-deep .p-dialog .p-dialog-content {
   overflow: hidden;
-}
-#map {
+}*/
+/*#map {
   width: 400px;
   height: 400px;
-}
+}*/

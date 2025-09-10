@@ -43,10 +43,24 @@
         type="button"
         icon="pi pi-plus"
         [disabled]="f['name'].invalid"
-        (click)="fillArea()"
+        (click)="showDialog()"
       >
-        Get area
+        Get data for field
       </button>
+
+      <p-dialog header="Test" [modal]="true" [(visible)]="modalVisible" (onHide)="onDialogHide()" (onShow)="onDialogShow()">
+        <p>Is this the right field?</p>      
+        <div id="map-" style="height: 400px; width: 400px"></div>
+              <button
+        pButton
+        type="submit"
+        [disabled]="f['name'].invalid"
+        (click)="setGeoJsonData()"
+      >
+        Save data
+      </button>
+      </p-dialog>
+
       @if (f["areaHectares"].invalid && f["areaHectares"].touched) {
         <p-message severity="error" variant="simple" size="small">
           @if (f["areaHectares"].errors?.["required"]) {
