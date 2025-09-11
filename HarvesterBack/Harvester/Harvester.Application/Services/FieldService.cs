@@ -19,16 +19,7 @@ namespace Harvester.Application.Services
     {
         public async Task CreateAsync(CreateFieldDto dto)
         {
-            var field = new Field()
-            {
-                IdentifierName = dto.IdentifierName,
-                AreaHectares = dto.AreaHectares,
-                TerrainCoeff = dto.TerrainCoeff,
-                ShapeCoeff = dto.ShapeCoeff,
-                CropType = dto.CropType,
-                CenterPoint = GeoJSONMappings.MapGeoPointDtoToPoint(dto.CenterPoint),
-                Boundary = GeoJSONMappings.MapMultiPolygonDtoToMultiPolygon(dto.Boundary),
-            };
+            var field = FieldMappings.MapCreateFieldDtoToField(dto);
             await fieldRepository.CreateAsync(field);
         }
 
@@ -69,6 +60,7 @@ namespace Harvester.Application.Services
             }
 
             field.IdentifierName = dto.IdentifierName;
+            field.CommonName = dto.CommonName;
             field.AreaHectares = dto.AreaHectares;
             field.TerrainCoeff = dto.TerrainCoeff;
             field.ShapeCoeff = dto.ShapeCoeff;

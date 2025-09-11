@@ -9,8 +9,10 @@ namespace Harvester.Application.Interfaces.Repositories
 {
     public interface IOrderRepository
     {
-        Task<IEnumerable<Order>> GetAll();
-        Task<Order?> GetById(int id);
+        Task<IEnumerable<Order>> GetAllAsync();
+        Task<Order?> GetByIdAsync(int id);
         Task CreateAsync(Order order);
+        Task UpdateAsync(Order order);
+        Task DeleteAsync(Order order);
     }
 }
