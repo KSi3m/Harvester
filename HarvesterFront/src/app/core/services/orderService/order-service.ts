@@ -20,4 +20,8 @@ export class OrderService {
   getAllOrders(): Observable<Order[]> {
     return this.http.get<Order[]>(`${this.url}/orders`);
   }
+
+  deleteOrder(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.url}/orders/${id}`);
+  }
 }

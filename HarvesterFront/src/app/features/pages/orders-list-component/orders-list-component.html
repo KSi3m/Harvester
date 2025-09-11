@@ -12,8 +12,8 @@
         <div class="order-details">
           <div>
             <strong>Field:</strong> {{ order.field.identifierName }}
-            <p-button (click)="showDialog()" label="Show" />
-            <p-dialog header="Test" [modal]="true" [(visible)]="visible" (onShow)="onDialogShow(order.id)">
+            <p-button (click)="showDialog(order.id)" label="Show" />
+            <p-dialog header="Test" [modal]="true" [(visible)]="visibles[order.id]" (onHide)="onDialogHide(order)" (onShow)="onDialogShow(order.id)">
               <div id="map-{{ order.id }}" style="height: 400px; width: 400px"></div>
             </p-dialog>
           </div>
@@ -38,6 +38,7 @@
           </div>
           <!-- <div><strong>Total Price:</strong> {{ order.totalPrice }}</div> -->
         </div>
+        <p-button (click)="deleteOrder(order.id)" severity="danger" label="Delete" />
       </p-card>
     } @empty {
       <div class="empty-container">

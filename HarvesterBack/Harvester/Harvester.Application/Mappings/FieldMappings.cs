@@ -16,7 +16,8 @@ namespace Harvester.Application.Mappings
             var fieldDto = new FieldDto
             {
                 Id = field.Id,
-                Name = field.IdentifierName,
+                IdentifierName = field.IdentifierName,
+                CommonName = field.CommonName,
                 AreaHectares = field.AreaHectares,
                 TerrainCoeff = field.TerrainCoeff,
                 ShapeCoeff = field.ShapeCoeff,

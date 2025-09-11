@@ -20,8 +20,8 @@ export class OrdersListComponent implements OnInit {
   orders: Order[] | null = null;
   visible = false;
   private map!: L.Map;
-  maps: Record<number, L.Map> = {};
-
+  maps: Record<number, L.Map | null> = {};
+  visibles: Record<number, boolean> = {};
   onMapReady(map: L.Map) {
     this.map = map;
   }
@@ -61,7 +61,7 @@ export class OrdersListComponent implements OnInit {
 
       this.maps[orderId] = map;
     } else {
-      setTimeout(() => this.maps[orderId].invalidateSize(), 200);
+      setTimeout(() => this.maps[orderId]!.invalidateSize(), 200);
     }
   }
 
@@ -69,6 +69,14 @@ export class OrdersListComponent implements OnInit {
     this.ordersService.getAllOrders().subscribe({
       next: (res) => {
         this.orders = res;
+
+        this.maps = {};
+        this.visibles = {};
+
+        for (const order of this.orders) {
+          this.maps[order.id] = null;
+          this.visibles[order.id] = false;
+        }
       },
       error: (err) => {
         console.log(err);
@@ -77,7 +85,25 @@ export class OrdersListComponent implements OnInit {
     });
   }
 
-  showDialog() {
-    this.visible = true;
+  showDialog(id: number) {
+    this.visibles[id] = true;
+  }
+  onDialogHide(order: Order) {
+    this.visibles[order.id] = false;
+    if (this.maps[order.id]) {
+      this.maps[order.id]!.remove();
+      this.maps[order.id] = null;
+    }
+  }
+
+  deleteOrder(id: number) {
+    this.ordersService.deleteOrder(id).subscribe({
+      next: () => {
+        this.orders = this.orders?.filter((x) => x.id !== id) as Order[];
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
   }
 }
