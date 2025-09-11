@@ -49,7 +49,7 @@ namespace Harvester.API.Controllers
 
         [HttpGet("{nameIdentifier}/geoJsonData")]
         [TypeFilter(typeof(AreaRouteParameterFilter))]
-        public async Task<IActionResult> GetArea(string nameIdentifier)
+        public async Task<IActionResult> GetGeoJsonData(string nameIdentifier)
         {
             var response = await onGeoService.GetDataAsync(nameIdentifier);
             return Ok(response);

@@ -18,8 +18,8 @@ namespace Harvester.Application.Dtos
         public decimal ShapeCoeff { get; set; } = 1.0m;
         public string CropType { get; set; }
 
-        public GeoPointDto? CenterPoint { get; set; } = default!;
+        public GeoPointDto CenterPoint { get; set; } = default!;
 
-        public GeoMultiPolygonDto? Boundary { get; set; } = default!;
+        public GeoMultiPolygonDto Boundary { get; set; } = default!;
     }
 }

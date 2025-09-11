@@ -75,7 +75,7 @@ export class AddFieldFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      name: [
+      identifierName: [
         null,
         [
           Validators.required,
@@ -83,6 +83,7 @@ export class AddFieldFormComponent implements OnInit {
           fieldIdentifierValidator(),
         ],
       ],
+      commonName: [null, [Validators.maxLength(100)]],
       areaHectares: [
         null as number | null,
         [Validators.required, Validators.min(0.01)],
@@ -93,7 +94,7 @@ export class AddFieldFormComponent implements OnInit {
       centerPoint: [null],
       boundary: [null],
     });
-    this.form!.get('name')?.valueChanges.subscribe(() => {
+    this.form!.get('identifierName')?.valueChanges.subscribe(() => {
       this.form!.get('areaHectares')?.setValue(null, { emitEvent: false });
       this.form!.get('centerPoint')?.setValue(null, { emitEvent: false });
       this.form!.get('boundary')?.setValue(null, { emitEvent: false });
@@ -107,8 +108,8 @@ export class AddFieldFormComponent implements OnInit {
     }
 
     const payload: FieldDto = {
-      identifierName: this.f['name'].value!,
-      commonName: '',
+      identifierName: this.f['identifierName'].value!,
+      commonName: this.f['commonName'].value!,
       areaHectares: Number(this.f['areaHectares'].value),
       terrainCoeff: Number(this.f['terrainCoeff'].value),
       shapeCoeff: Number(this.f['shapeCoeff'].value),
@@ -116,7 +117,7 @@ export class AddFieldFormComponent implements OnInit {
       centerPoint: this.f['centerPoint'].value!,
       boundary: this.f['boundary'].value!,
     };
-    console.log(payload);
+    //console.log(payload);
 
     this.isValid = true;
     this.fieldService.createField(payload).subscribe({
@@ -142,12 +143,12 @@ export class AddFieldFormComponent implements OnInit {
   }
 
   onDialogShow() {
-    const mapContainer = document.getElementById(`map-`);
+    const mapContainer = document.getElementById(`map`);
     if (!mapContainer) return;
     const centerPoint = this.tempResponse!.centerPoint;
     const boundary = this.tempResponse!.boundary;
     if (!this.map) {
-      const map = L.map(`map-`, {
+      const map = L.map(`map`, {
         center: [centerPoint.coordinates[1], centerPoint.coordinates[0]],
         zoom: 14,
       });
@@ -164,7 +165,6 @@ export class AddFieldFormComponent implements OnInit {
 
       const polygon = L.polygon(latLngs);
       polygon.addTo(map);
-      //polygon.bindPopup(order.field.identifierName);
 
       L.marker([centerPoint.coordinates[1], centerPoint.coordinates[0]]).addTo(
         map,
@@ -197,9 +197,10 @@ export class AddFieldFormComponent implements OnInit {
   }
 
   fillArea() {
-    const identifier = this.form!.get('name')?.value as unknown as string;
+    const identifier = this.form!.get('identifierName')
+      ?.value as unknown as string;
     if (!identifier) {
-      this.f['name'].markAsTouched();
+      this.f['identifierName'].markAsTouched();
       return;
     }
     if (this.tempResponse) {

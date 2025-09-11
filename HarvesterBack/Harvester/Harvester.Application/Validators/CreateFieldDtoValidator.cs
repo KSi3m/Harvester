@@ -13,8 +13,13 @@ namespace Harvester.Application.Validators
                 .Matches(@"^\d{6}_\d\.\d{4}\.\d+(\/\d+)?$")
                     .WithMessage("Code format is invalid")
                 .MaximumLength(100)
-                    .WithMessage("Name must have less than 100 characters");
+                    .WithMessage("IdentifierName must have less than 100 characters");
 
+            RuleFor(x => x.CommonName)
+                .MaximumLength(100)
+                .When(x => !string.IsNullOrEmpty(x.CommonName))
+                    .WithMessage("CommonName must have less than 100 characters");
+          
             RuleFor(x => x.AreaHectares)
                 .NotEmpty()
                     .WithMessage("AreaHectares must not be empty")
@@ -29,6 +34,16 @@ namespace Harvester.Application.Validators
 
             RuleFor(x => x.CropType).NotEmpty()
                 .WithMessage("Crop type must not be empty");
+
+            RuleFor(x => x.CenterPoint)
+                .NotNull()
+                    .WithMessage("CenterPoint must not be empty")
+                .SetValidator(new GeoPointDtoValidator()!);
+     
+            RuleFor(x => x.Boundary)
+                .NotNull()
+                     .WithMessage("Boundary must not be empty")
+                .SetValidator(new GeoMultiPolygonDtoValidator()!);
         }
     }
 }

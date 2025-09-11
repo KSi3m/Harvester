@@ -20,6 +20,6 @@ namespace Harvester.Application.Dtos
         [JsonPropertyName("type")]
         public string Type { get; set; } = "MultiPolygon";
         [JsonPropertyName("coordinates")]
-        public double[][][][] Coordinates { get; set; } = Array.Empty<double[][][]>();
+        public double[][][][] Coordinates { get; set; }
     }
 }

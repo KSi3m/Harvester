@@ -1,22 +1,22 @@
 <p-card header="Add new field">
   <form [formGroup]="form" class="p-fluid grid">
     <div class="inputs">
-      <label for="name" class="block mb-2"> Plot identification number</label>
+      <label for="identifierName" class="block mb-2"> Plot identification number <span class="text-red-500">*</span></label>
       <input
         pInputText
-        id="name"
-        formControlName="name"
+        id="identifierName"
+        formControlName="identifierName"
         placeholder="WWPPGG_R.XXXX.NDZ"
-        [invalid]="f['name'].invalid && f['name'].touched"
+        [invalid]="f['identifierName'].invalid && f['identifierName'].touched"
       />
 
-      @if (f["name"].invalid && f["name"].touched) {
+      @if (f["identifierName"].invalid && f["identifierName"].touched) {
         <p-message severity="error" variant="simple" size="small">
-          @if (f["name"].errors?.["required"]) {
+          @if (f["identifierName"].errors?.["required"]) {
             Name is required
-          } @else if (f["name"].errors?.["maxlength"]) {
+          } @else if (f["identifierName"].errors?.["maxlength"]) {
             Name must be less than 100 characters
-          } @else if (f["name"].errors?.["invalidFieldId"]) {
+          } @else if (f["identifierName"].errors?.["invalidFieldId"]) {
             Name must be in WWPPGG_R.XXXX.NDZ format. For more information
             check:
             https://rankomat.pl/nieruchomosci/numer-dzialki-ewidencyjnej-jak-czytac
@@ -26,7 +26,7 @@
     </div>
 
     <div class="inputs area-field">
-      <label for="areaHectares" class="block mb-2">Area (ha)</label>
+      <label for="areaHectares" class="block mb-2">Area (ha) <span class="text-red-500">*</span></label>
       <p-inputNumber
         inputId="areaHectares"
         formControlName="areaHectares"
@@ -42,7 +42,7 @@
         pButton
         type="button"
         icon="pi pi-plus"
-        [disabled]="f['name'].invalid"
+        [disabled]="f['identifierName'].invalid"
         (click)="showDialog()"
       >
         Get data for field
@@ -50,11 +50,11 @@
 
       <p-dialog header="Test" [modal]="true" [(visible)]="modalVisible" (onHide)="onDialogHide()" (onShow)="onDialogShow()">
         <p>Is this the right field?</p>      
-        <div id="map-" style="height: 400px; width: 400px"></div>
+        <div id="map" style="height: 400px; width: 400px"></div>
               <button
         pButton
-        type="submit"
-        [disabled]="f['name'].invalid"
+        type="button"
+        [disabled]="f['identifierName'].invalid"
         (click)="setGeoJsonData()"
       >
         Save data
@@ -73,7 +73,26 @@
     </div>
 
     <div class="inputs">
-      <label for="cropType" class="block mb-2">Crop Type</label>
+      <label for="commonName" class="block mb-2"> Common Name </label>
+      <input
+        pInputText
+        id="commonName"
+        formControlName="commonName"
+        placeholder="Insert common name"
+        [invalid]="f['commonName'].invalid && f['commonName'].touched"
+      />
+
+      @if (f["commonName"].invalid && f["commonName"].touched) {
+        <p-message severity="error" variant="simple" size="small">
+          @if (f["commonName"].errors?.["maxlength"]) {
+            CommonName must be less than 100 characters
+          } 
+        </p-message>
+      }
+    </div>
+
+    <div class="inputs">
+      <label for="cropType" class="block mb-2">Crop Type <span class="text-red-500">*</span></label>
       <p-select
         [options]="cropOptions"
         inputId="cropType"
@@ -93,7 +112,7 @@
     </div>
 
     <div class="inputs">
-      <label for="terrainCoeff" class="block mb-2">Terrain type</label>
+      <label for="terrainCoeff" class="block mb-2">Terrain type <span class="text-red-500">*</span></label>
       <p-select
         [options]="terrainOptions"
         inputId="terrainCoeff"
@@ -113,7 +132,7 @@
     </div>
 
     <div class="inputs">
-      <label for="shapeCoeff" class="block mb-2">Shape type</label>
+      <label for="shapeCoeff" class="block mb-2">Shape type <span class="text-red-500">*</span></label>
       <p-select
         [options]="shapeOptions"
         inputId="shapeCoeff"
