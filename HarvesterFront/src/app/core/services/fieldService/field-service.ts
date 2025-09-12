@@ -17,6 +17,10 @@ export class FieldService {
     return this.http.get<Field[]>(`${this.url}/fields`);
   }
 
+  getFieldById(id: number): Observable<Field> {
+    return this.http.get<Field>(`${this.url}/fields/${id}`);
+  }
+
   getGeoJsonDataForField(id: string): Observable<GeoJsonDataForFieldResponse> {
     const encodedId = encodeURIComponent(id);
     return this.http.get<GeoJsonDataForFieldResponse>(
@@ -26,5 +30,9 @@ export class FieldService {
 
   createField(dto: FieldDto): Observable<void> {
     return this.http.post<void>(`${this.url}/fields`, dto);
+  }
+
+  updateField(id: number, dto: FieldDto): Observable<void> {
+    return this.http.put<void>(`${this.url}/fields/${id}`, dto);
   }
 }

@@ -6,6 +6,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import * as L from 'leaflet';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -41,7 +42,10 @@ import { fieldIdentifierValidator } from '../../../shared/validators/field-ident
 export class AddFieldFormComponent implements OnInit {
   fieldService = inject(FieldService);
   messageService = inject(MessageService);
+  activatedRoute = inject(ActivatedRoute);
   fb = inject(FormBuilder);
+  idFromRoute!: number;
+  isEditing = false;
   isValid = false;
   private map!: L.Map | null;
 
@@ -94,6 +98,35 @@ export class AddFieldFormComponent implements OnInit {
       centerPoint: [null],
       boundary: [null],
     });
+
+    this.activatedRoute.paramMap.subscribe((res) => {
+      const id = res.get('id');
+      if (id != null) {
+        this.isEditing = true;
+        this.idFromRoute = Number(id);
+        this.fieldService.getFieldById(this.idFromRoute).subscribe({
+          next: (res) => {
+            if (res != null) {
+              this.form.patchValue({
+                identifierName: res.identifierName,
+                commonName: res.commonName,
+                areaHectares: res.areaHectares,
+                terrainCoeff: res.terrainCoeff,
+                shapeCoeff: res.shapeCoeff,
+                cropType: res.cropType,
+                centerPoint: res.centerPoint,
+                boundary: res.boundary,
+              });
+            }
+          },
+          error: (err) => {
+            console.log(err);
+            //this.route.navigate(['/'])
+          },
+        });
+      }
+    });
+
     this.form!.get('identifierName')?.valueChanges.subscribe(() => {
       this.form!.get('areaHectares')?.setValue(null, { emitEvent: false });
       this.form!.get('centerPoint')?.setValue(null, { emitEvent: false });
@@ -120,26 +153,49 @@ export class AddFieldFormComponent implements OnInit {
     //console.log(payload);
 
     this.isValid = true;
-    this.fieldService.createField(payload).subscribe({
-      next: () => {
-        this.form!.reset();
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Operation completed!',
-        });
-      },
-      error: (error: HttpErrorResponse) => {
-        const err = error.error as ErrorResponse;
+    if (this.isEditing) {
+      this.fieldService.updateField(this.idFromRoute, payload).subscribe({
+        next: () => {
+          this.form!.reset();
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Operation completed!',
+          });
+        },
+        error: (error: HttpErrorResponse) => {
+          const err = error.error as ErrorResponse;
 
-        this.messageService.add({
-          severity: 'error',
-          summary: err.title,
-          detail: err.detail,
-        });
-      },
-      complete: () => (this.isValid = false),
-    });
+          this.messageService.add({
+            severity: 'error',
+            summary: err.title,
+            detail: err.detail,
+          });
+        },
+        complete: () => (this.isValid = false),
+      });
+    } else {
+      this.fieldService.createField(payload).subscribe({
+        next: () => {
+          this.form!.reset();
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Operation completed!',
+          });
+        },
+        error: (error: HttpErrorResponse) => {
+          const err = error.error as ErrorResponse;
+
+          this.messageService.add({
+            severity: 'error',
+            summary: err.title,
+            detail: err.detail,
+          });
+        },
+        complete: () => (this.isValid = false),
+      });
+    }
   }
 
   onDialogShow() {
