@@ -7,6 +7,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -50,6 +51,12 @@ export class AddOrderComponent implements OnInit {
   form!: FormGroup;
   estimatedPrice = 0;
 
+  activatedRoute = inject(ActivatedRoute);
+  idFromRoute!: number;
+  isEditing = false;
+  formReady = false;
+  isDataLoading = false;
+
   combines: Combine[] = [];
   fields: Field[] = [];
 
@@ -62,6 +69,7 @@ export class AddOrderComponent implements OnInit {
   ];
 
   ngOnInit(): void {
+    this.formReady = false;
     this.combineService.getCombines().subscribe({
       next: (res) => {
         this.combines = res;
@@ -87,6 +95,36 @@ export class AddOrderComponent implements OnInit {
       selectedField: [null, [Validators.required]],
       selectedDate: [null, [Validators.required, dateNotInPastValidator()]],
       selectedStrawMethod: [null, [Validators.required]],
+    });
+
+    this.activatedRoute.paramMap.subscribe((res) => {
+      this.formReady = false;
+      const id = res.get('id');
+      if (id != null) {
+        this.isEditing = true;
+        this.idFromRoute = Number(id);
+        this.orderService.getOrderById(this.idFromRoute).subscribe({
+          next: (res) => {
+            if (res != null) {
+              this.form.patchValue({
+                selectedCombine: res.combine.id,
+                selectedField: res.field.id,
+                selectedDate: new Date(res.scheduledDate),
+                selectedStrawMethod: res.strawProcessingMethod,
+              });
+            }
+            this.formReady = true;
+          },
+          error: (err) => {
+            console.log(err);
+            //this.formReady = true;
+            //this.route.navigate(['/'])
+          },
+        });
+      } else {
+        this.isEditing = false;
+        this.formReady = true; // nowy formularz od razu
+      }
     });
 
     this.form.valueChanges.subscribe((formValue) => {
@@ -159,39 +197,76 @@ export class AddOrderComponent implements OnInit {
       strawProcessingMethod: this.f['selectedStrawMethod'].value,
     };
 
-    this.orderService.createOrder(payload).subscribe({
-      next: (res: CreateOrderResponse) => {
-        if (res.success) {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Order added!',
-          });
-          this.form!.reset();
-        } else {
-          this.messageService.add({
-            severity: 'error',
-            summary: res.ruleName,
-            detail: res.details,
-          });
-        }
-      },
-      error: (error: HttpErrorResponse) => {
-        if (error.status === 422) {
-          const err = error.error as CreateOrderResponse;
-          this.messageService.add({
-            severity: 'error',
-            summary: err.ruleName || 'Validation Error',
-            detail: err.details || 'Check your input',
-          });
-        } else {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: error.message || 'Server error',
-          });
-        }
-      },
-    });
+    if (this.isEditing) {
+      this.orderService.updateOrder(this.idFromRoute, payload).subscribe({
+        next: (res: CreateOrderResponse) => {
+          if (res.success) {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Order edited succesfully!',
+            });
+            this.form!.reset();
+          } else {
+            this.messageService.add({
+              severity: 'error',
+              summary: res.ruleName,
+              detail: res.details,
+            });
+          }
+        },
+        error: (error: HttpErrorResponse) => {
+          if (error.status === 422) {
+            const err = error.error as CreateOrderResponse;
+            this.messageService.add({
+              severity: 'error',
+              summary: err.ruleName || 'Validation Error',
+              detail: err.details || 'Check your input',
+            });
+          } else {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: error.message || 'Server error',
+            });
+          }
+        },
+      });
+    } else {
+      this.orderService.createOrder(payload).subscribe({
+        next: (res: CreateOrderResponse) => {
+          if (res.success) {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Order added!',
+            });
+            this.form!.reset();
+          } else {
+            this.messageService.add({
+              severity: 'error',
+              summary: res.ruleName,
+              detail: res.details,
+            });
+          }
+        },
+        error: (error: HttpErrorResponse) => {
+          if (error.status === 422) {
+            const err = error.error as CreateOrderResponse;
+            this.messageService.add({
+              severity: 'error',
+              summary: err.ruleName || 'Validation Error',
+              detail: err.details || 'Check your input',
+            });
+          } else {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: error.message || 'Server error',
+            });
+          }
+        },
+      });
+    }
   }
 }

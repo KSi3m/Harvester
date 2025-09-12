@@ -7,6 +7,11 @@ import { OrdersListComponent } from './features/pages/orders-list-component/orde
 export const routes: Routes = [
   { path: 'fields/add', component: AddFieldFormComponent },
   { path: 'fields/:id/edit', component: AddFieldFormComponent },
+  {
+    path: 'orders/:id/edit',
+    component: AddOrderComponent,
+    runGuardsAndResolvers: 'always',
+  },
   { path: 'orders/add', component: AddOrderComponent },
   { path: 'orders', component: OrdersListComponent },
   { path: 'combines', component: CombineListComponent },

@@ -6,6 +6,7 @@ import { DialogModule } from 'primeng/dialog';
 import { Order } from '../../../core/models/Order';
 import { OrderService } from '../../../core/services/orderService/order-service';
 import { DateFormatPipe } from '../../../shared/pipes/dateFormat/date-format-pipe';
+import { Router } from '@angular/router';
 //import { latLng, map, marker, tileLayer } from 'leaflet';
 import * as L from 'leaflet';
 
@@ -22,6 +23,8 @@ export class OrdersListComponent implements OnInit {
   private map!: L.Map;
   maps: Record<number, L.Map | null> = {};
   visibles: Record<number, boolean> = {};
+  router = inject(Router);
+
   onMapReady(map: L.Map) {
     this.map = map;
   }
@@ -105,5 +108,8 @@ export class OrdersListComponent implements OnInit {
         console.log(err);
       },
     });
+  }
+  updateOrder(id: number) {
+    this.router.navigate(['/orders', id, 'edit']);
   }
 }

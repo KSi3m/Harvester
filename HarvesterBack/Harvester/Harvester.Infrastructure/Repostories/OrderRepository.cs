@@ -31,7 +31,7 @@ namespace Harvester.Infrastructure.Repostories
 
         public async Task<Order?> GetByIdAsync(int id)
         {
-            return await dbContext.Orders.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            return await dbContext.Orders.AsNoTracking().Include(x => x.Combine).Include(x => x.Field).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task UpdateAsync(Order order)

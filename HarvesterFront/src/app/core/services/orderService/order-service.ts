@@ -21,6 +21,16 @@ export class OrderService {
     return this.http.get<Order[]>(`${this.url}/orders`);
   }
 
+  getOrderById(id: number): Observable<Order> {
+    return this.http.get<Order>(`${this.url}/orders/${id}`);
+  }
+  updateOrder(
+    id: number,
+    dto: CreateOrderDto,
+  ): Observable<CreateOrderResponse> {
+    return this.http.put<CreateOrderResponse>(`${this.url}/orders/${id}`, dto);
+  }
+
   deleteOrder(id: number): Observable<void> {
     return this.http.delete<void>(`${this.url}/orders/${id}`);
   }

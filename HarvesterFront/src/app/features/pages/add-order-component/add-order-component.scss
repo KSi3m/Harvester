@@ -1,13 +1,13 @@
-@use  '../../../shared/styles/shared-styles.scss' as shared;
+@use "../../../shared/styles/shared-styles.scss" as shared;
 
 :host {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: #f5f6fa;
-    padding: 2rem;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #f5f6fa;
+  padding: 2rem;
+}
 
 @include shared.card-form-styles;
 p-card {
@@ -68,6 +68,10 @@ p-card {
     .inputs {
       padding-top: 0.4em;
       padding-bottom: 0.4em;
+    }
+    .text-red-500 {
+      color: rgba(255, 0, 0, 0.596);
+      font-weight: bold;
     }
   }
 }
