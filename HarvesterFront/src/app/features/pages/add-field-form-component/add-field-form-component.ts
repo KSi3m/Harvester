@@ -44,15 +44,18 @@ export class AddFieldFormComponent implements OnInit {
   messageService = inject(MessageService);
   activatedRoute = inject(ActivatedRoute);
   fb = inject(FormBuilder);
+  form!: FormGroup;
+
   idFromRoute!: number;
   isEditing = false;
   isValid = false;
+  formReady = false;
+  modalVisible = false;
+  hasError = false;
   private map!: L.Map | null;
 
   tempResponse: GeoJsonDataForFieldResponse | null = null;
 
-  modalVisible = false;
-  form!: FormGroup;
   cropOptions = [
     { label: 'Corn', value: 'Corn' },
     { label: 'Wheat', value: 'Wheat' },
@@ -100,6 +103,7 @@ export class AddFieldFormComponent implements OnInit {
     });
 
     this.activatedRoute.paramMap.subscribe((res) => {
+      this.formReady = false;
       const id = res.get('id');
       if (id != null) {
         this.isEditing = true;
@@ -118,12 +122,18 @@ export class AddFieldFormComponent implements OnInit {
                 boundary: res.boundary,
               });
             }
+            this.formReady = true;
           },
           error: (err) => {
             console.log(err);
+            this.formReady = false;
+            this.hasError = true;
             //this.route.navigate(['/'])
           },
         });
+      } else {
+        this.isEditing = false;
+        this.formReady = true;
       }
     });
 

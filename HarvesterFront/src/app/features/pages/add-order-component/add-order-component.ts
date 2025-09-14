@@ -55,7 +55,7 @@ export class AddOrderComponent implements OnInit {
   idFromRoute!: number;
   isEditing = false;
   formReady = false;
-  isDataLoading = false;
+  hasError = false;
 
   combines: Combine[] = [];
   fields: Field[] = [];
@@ -69,7 +69,6 @@ export class AddOrderComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    this.formReady = false;
     this.combineService.getCombines().subscribe({
       next: (res) => {
         this.combines = res;
@@ -117,13 +116,14 @@ export class AddOrderComponent implements OnInit {
           },
           error: (err) => {
             console.log(err);
-            //this.formReady = true;
+            this.hasError = true;
+            this.formReady = false;
             //this.route.navigate(['/'])
           },
         });
       } else {
         this.isEditing = false;
-        this.formReady = true; // nowy formularz od razu
+        this.formReady = true;
       }
     });
 

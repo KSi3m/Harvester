@@ -1,3 +1,4 @@
+@defer (when formReady) {
 <p-card [header]="isEditing ? `Editing Field with id: #${idFromRoute}` : 'Add new field'">
   <form [formGroup]="form" class="p-fluid grid">
     <div class="inputs">
@@ -164,3 +165,23 @@
     </div>
   </form>
 </p-card>
+} @loading (minimum 1s) {
+  <div class="empty-container">
+    <p-card class="empty-card">
+      Loading field
+      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i
+    ></p-card>
+  </div>
+} @placeholder {
+  <div class="empty-container">
+    <p-card class="empty-card">
+      @if(hasError)
+      {
+          <p>Failed to load field</p>
+      }
+      @else{
+        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+      }
+      </p-card>
+  </div>
+} 

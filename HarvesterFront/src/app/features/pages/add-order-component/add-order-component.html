@@ -130,14 +130,19 @@
 } @loading (minimum 1s) {
   <div class="empty-container">
     <p-card class="empty-card">
-      Loading items.
-      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i
-    ></p-card>
-  </div>}
-  @placeholder {
-  <div class="empty-container">
-    <p-card class="empty-card">
+      Loading order.
       <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i
     ></p-card>
   </div>
-}
+} @placeholder {
+  <div class="empty-container">
+    <p-card class="empty-card">
+       @if(hasError)
+      {
+          <p>Failed to load field</p>
+      }
+      @else{
+        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+      }</p-card>
+  </div>
+} 
