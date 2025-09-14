@@ -1,5 +1,6 @@
 @defer (when combines !== null) {
   <div class="combines-list">
+    <p-confirmdialog />
     @for (combine of combines; track combine.id) {
       <p-card class="combine-card">
         <div class="combine-row">
@@ -38,6 +39,17 @@
             />
           </div>
         </div>
+
+        <p-button
+          (click)="confirmDelete(combine.id)"
+          severity="danger"
+          label="Delete"
+        />
+        <p-button
+          (click)="updateCombine(combine.id)"
+          severity="info"
+          label="Edit"
+        />
       </p-card>
     } @empty {
       <div class="empty-container">
@@ -52,10 +64,9 @@
       <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i
     ></p-card>
   </div>
-}
- @placeholder {
+} @placeholder {
   <div class="empty-container">
-     <p-card class="empty-card">
+    <p-card class="empty-card">
       <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i
     ></p-card>
   </div>

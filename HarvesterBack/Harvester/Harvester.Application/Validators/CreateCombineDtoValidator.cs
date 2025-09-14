@@ -43,14 +43,17 @@ namespace Harvester.Application.Validators
                     .WithMessage("Availability of straw chopper must be set");
 
             RuleFor(x => x.IsAvailable)
-                .NotEmpty()
+                .NotNull()
                     .WithMessage("Combine availability must be set");
 
             RuleFor(x => x.AvailableWorkHours)
                 .NotEmpty()
                     .WithMessage("AvailableWorkHours must not be empty")
-                .GreaterThan(1m)
-                     .WithMessage("AvailableWorkHours must be greater than 1");
+                .GreaterThan(1)
+                     .WithMessage("AvailableWorkHours must be greater than 1")
+                .LessThanOrEqualTo(24)
+                     .WithMessage("AvailableWorkHours must be less than or equal 24");
+
 
             RuleFor(x => x.BaseEfficency)
                .NotEmpty()
@@ -58,7 +61,7 @@ namespace Harvester.Application.Validators
                .GreaterThan(0.01m)
                     .WithMessage("BaseEfficency must be greater than 0.01")
                 .LessThanOrEqualTo(1m)
-                    .WithMessage("BaseEfficency must be less than 1");
+                    .WithMessage("BaseEfficency must be less than  or equal 1");
         }
     }
 }

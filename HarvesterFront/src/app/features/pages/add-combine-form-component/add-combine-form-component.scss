@@ -1,0 +1,57 @@
+@use "../../../shared/styles/shared-styles.scss" as shared;
+
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #f5f6fa;
+  padding: 2rem;
+}
+@include shared.card-form-styles;
+p-card {
+  .p-inputnumber {
+    flex: 1;
+    height: 2.5rem;
+    margin-top: 1rem;
+  }
+  button[pButton] {
+    height: 2.5rem;
+    padding: 0 2rem;
+  }
+}
+
+form {
+  padding: 1.5rem;
+
+  label {
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+    display: block;
+    color: #34495e;
+  }
+
+  .p-inputtext,
+  .p-inputnumber {
+    width: 100% !important;
+    border-radius: 0.5rem;
+  }
+
+  button[pButton] {
+    display: block;
+    width: calc(100% - 2rem);
+    margin: 1rem auto 0;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+  }
+  .inputs {
+    padding-top: 0.4em;
+    padding-bottom: 0.4em;
+  }
+}
+
+.text-red-500 {
+  color: rgba(255, 0, 0, 0.596);
+  font-weight: bold;
+}

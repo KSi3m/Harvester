@@ -36,6 +36,13 @@ export class App {
       label: 'Combines',
       icon: 'pi pi-home',
       routerLink: '/combines',
+      items: [
+        {
+          label: 'Add new combine',
+          icon: 'pi pi-plus',
+          routerLink: '/combines/add',
+        },
+      ],
     },
     {
       label: 'Add field',

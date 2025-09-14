@@ -1,0 +1,211 @@
+@defer (when formReady) {
+  <p-card
+    [header]="
+      isEditing ? `Editing Combine with id: #${idFromRoute}` : 'Add new combine'
+    "
+  >
+    <form [formGroup]="form" class="p-fluid grid">
+      <div class="inputs">
+        <label for="model" class="block mb-2">
+          Model <span class="text-red-500">*</span></label
+        >
+        <input
+          pInputText
+          id="model"
+          formControlName="model"
+          placeholder="Insert model here"
+          [invalid]="f['model'].invalid && f['model'].touched"
+        />
+
+        @if (f["model"].invalid && f["model"].touched) {
+          <p-message severity="error" variant="simple" size="small">
+            @if (f["model"].errors?.["required"]) {
+              Model is required
+            } @else if (f["model"].errors?.["maxlength"]) {
+              Name must be less than 100 characters
+            }
+          </p-message>
+        }
+      </div>
+
+      <div class="inputs">
+        <label for="baseHaPerHour" class="block mb-2"
+          >BaseHaPerHour (ha/h) <span class="text-red-500">*</span></label
+        >
+        <p-inputNumber
+          inputId="baseHaPerHour"
+          formControlName="baseHaPerHour"
+          placeholder="Insert base hectares per hour"
+          [mode]="'decimal'"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="2"
+          [invalid]="f['baseHaPerHour'].invalid && f['baseHaPerHour'].touched"
+        ></p-inputNumber>
+
+        @if (f["baseHaPerHour"].invalid && f["baseHaPerHour"].touched) {
+          <p-message severity="error" variant="simple" size="small">
+            @if (f["baseHaPerHour"].errors?.["required"]) {
+              BaseHaPerHour in hectares is required
+            } @else if (f["baseHaPerHour"].errors?.["min"]) {
+              BaseHaPerHour must be greater than 0.01
+            }
+          </p-message>
+        }
+      </div>
+
+      <div class="inputs">
+        <label for="headerLength" class="block mb-2"
+          >HeaderLength (m)<span class="text-red-500">*</span></label
+        >
+        <p-inputNumber
+          inputId="headerLength"
+          formControlName="headerLength"
+          placeholder="Insert header length im meters"
+          [mode]="'decimal'"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="2"
+          [invalid]="f['headerLength'].invalid && f['headerLength'].touched"
+
+        ></p-inputNumber>
+
+        @if (f["headerLength"].invalid && f["headerLength"].touched) {
+          <p-message severity="error" variant="simple" size="small">
+            @if (f["headerLength"].errors?.["required"]) {
+              HeaderLength in hectares is required
+            } @else if (f["headerLength"].errors?.["min"]) {
+              HeaderLength must be greater than 0.01
+            }
+          </p-message>
+        }
+      </div>
+
+      <div class="inputs">
+        <label for="pricePerHectare" class="block mb-2"
+          >Price per hectare <span class="text-red-500">*</span></label
+        >
+        <p-inputNumber
+          inputId="pricePerHectare"
+          formControlName="pricePerHectare"
+          placeholder="Insert Price per hectare"
+          [mode]="'decimal'"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="2"
+          [invalid]="
+            f['pricePerHectare'].invalid && f['pricePerHectare'].touched
+          "
+        ></p-inputNumber>
+
+        @if (f["pricePerHectare"].invalid && f["pricePerHectare"].touched) {
+          <p-message severity="error" variant="simple" size="small">
+            @if (f["pricePerHectare"].errors?.["required"]) {
+              PricePerHectare in hectares is required
+            } @else if (f["pricePerHectare"].errors?.["min"]) {
+              PricePerHectare must be greater than 0
+            } @else if (f["pricePerHectare"].errors?.["max"]) {
+              PricePerHectare must be lesser than 5000
+            }
+          </p-message>
+        }
+      </div>
+
+      @if (isEditing) {
+        <div class="inputs">
+          <label for="isAvailable" class="block mb-2">Is Available </label>
+          <p-toggleswitch name="isAvailable" formControlName="isAvailable" />
+        </div>
+      }
+      <div class="inputs">
+        <label for="hasStrawChopper" class="block mb-2"
+          >Has Straw Chopper <span class="text-red-500">*</span>
+        </label>
+        <p-toggleswitch
+          name="hasStrawChopper"
+          formControlName="hasStrawChopper"
+        />
+      </div>
+
+      <div class="inputs">
+        <label for="availableWorkHours" class="block mb-2"
+          >Available work hours <span class="text-red-500">*</span></label
+        >
+        <p-inputNumber
+          inputId="availableWorkHours"
+          formControlName="availableWorkHours"
+          placeholder="Insert available work hours here"
+          [invalid]="
+            f['availableWorkHours'].invalid && f['availableWorkHours'].touched
+          "
+        ></p-inputNumber>
+
+        @if (
+          f["availableWorkHours"].invalid && f["availableWorkHours"].touched
+        ) {
+          <p-message severity="error" variant="simple" size="small">
+            @if (f["availableWorkHours"].errors?.["required"]) {
+              Available work hours is required
+            } @else if (f["availableWorkHours"].errors?.["min"]) {
+              Available work hours must be greater than 1 hour
+            } @else if (f["availableWorkHours"].errors?.["max"]) {
+              Available work hours must be lesser than 24 hours
+            }
+          </p-message>
+        }
+      </div>
+      @if (isEditing) {
+        <div class="inputs">
+          <label for="baseEfficency" class="block mb-2"
+            >BaseEfficency<span class="text-red-500">*</span></label
+          >
+          <p-inputNumber
+            inputId="baseEfficency"
+            formControlName="baseEfficency"
+            placeholder="..."
+            [mode]="'decimal'"
+            [minFractionDigits]="2"
+            [maxFractionDigits]="2"
+            [invalid]="f['baseEfficency'].invalid && f['baseEfficency'].touched"
+
+          ></p-inputNumber>
+
+          @if (f["baseEfficency"].invalid && f["baseEfficency"].touched) {
+            <p-message severity="error" variant="simple" size="small">
+              @if (f["baseEfficency"].errors?.["max"]) {
+                Base Efficency  must be lesser than 1
+              } @else if (f["baseEfficency"].errors?.["min"]) {
+                Base Efficency must be greater than 0
+              }
+            </p-message>
+          }
+        </div>
+      }
+      <div>
+        <button
+          pButton
+          type="submit"
+          icon="pi pi-save"
+          (click)="submit()"
+          [disabled]="form.invalid"
+        >
+          Save
+        </button>
+      </div>
+    </form>
+  </p-card>
+} @loading (minimum 1s) {
+  <div class="empty-container">
+    <p-card class="empty-card">
+      Loading combine
+      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i
+    ></p-card>
+  </div>
+} @placeholder {
+  <div class="empty-container">
+    <p-card class="empty-card">
+      @if (hasError) {
+        <p>Failed to load combine</p>
+      } @else {
+        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+      }
+    </p-card>
+  </div>
+}
