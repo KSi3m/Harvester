@@ -1,0 +1,63 @@
+@defer (when orders !== null) {
+  <div class="orders-list">
+    @for (order of orders; track order.id) {
+      <p-card class="order-card">
+        <div class="order-header">
+          <span class="order-id">#{{ order.id }}</span>
+          <span class="order-status status-{{ order.status }}">
+            {{ order.status }}
+          </span>
+        </div>
+
+        <div class="order-details">
+          <div>
+            <strong>Field:</strong> {{ order.field.identifierName }}
+            <p-button (click)="showDialog(order.id)" label="Show" />
+            <p-dialog header="Test" [modal]="true" [(visible)]="visibles[order.id]" (onHide)="onDialogHide(order)" (onShow)="onDialogShow(order.id)">
+              <div id="map-{{ order.id }}" style="height: 400px; width: 400px"></div>
+            </p-dialog>
+          </div>
+          <div><strong>Combine:</strong> {{ order.combine.model }}</div>
+          <div>
+            <strong>Order date:</strong> {{ order.orderDate | dateFormatPipe }}
+          </div>
+          <div>
+            <strong>Scheduled:</strong>
+            {{ order.scheduledDate | dateFormatPipe }}
+          </div>
+          <div>
+            <strong>Straw processing:</strong>
+            @if (order.strawProcessingMethod === "CHOP") {
+              Straw is going to be chopped
+            } @else {
+              Straw is going to be left on the field intact
+            }
+          </div>
+          <div>
+            <strong>Estimated Price:</strong> {{ order.estimatedPrice }} PLN
+          </div>
+          <!-- <div><strong>Total Price:</strong> {{ order.totalPrice }}</div> -->
+        </div>
+        <p-button (click)="deleteOrder(order.id)" severity="danger" label="Delete" />
+        <p-button (click)="updateOrder(order.id)" severity="info" label="Edit" />
+      </p-card>
+    } @empty {
+      <div class="empty-container">
+        <p-card class="empty-card"> There are no items. </p-card>
+      </div>
+    }
+  </div>
+} @loading (minimum 1s) {
+  <div class="empty-container">
+    <p-card class="empty-card">
+      Loading items.
+      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i
+    ></p-card>
+  </div>
+} @placeholder {
+  <div class="empty-container">
+    <p-card class="empty-card">
+      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i
+    ></p-card>
+  </div>
+}

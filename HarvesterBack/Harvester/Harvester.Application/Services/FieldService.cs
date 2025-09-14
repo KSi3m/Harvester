@@ -4,6 +4,8 @@ using Harvester.Application.Interfaces.Repositories;
 using Harvester.Application.Interfaces.Services;
 using Harvester.Application.Mappings;
 using Harvester.Domain.Models;
+using NetTopologySuite.Geometries;
+using NetTopologySuite.Operation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,14 +19,7 @@ namespace Harvester.Application.Services
     {
         public async Task CreateAsync(CreateFieldDto dto)
         {
-            var field = new Field()
-            {
-                Name = dto.Name,
-                AreaHectares = dto.AreaHectares,
-                TerrainCoeff = dto.TerrainCoeff,
-                ShapeCoeff = dto.ShapeCoeff,
-                CropType = dto.CropType,
-            };
+            var field = FieldMappings.MapCreateFieldDtoToField(dto);
             await fieldRepository.CreateAsync(field);
         }
 
@@ -64,11 +59,14 @@ namespace Harvester.Application.Services
                 throw new NotFoundException("Field doesn't exist");
             }
 
-            field.Name = dto.Name;
+            field.IdentifierName = dto.IdentifierName;
+            field.CommonName = dto.CommonName;
             field.AreaHectares = dto.AreaHectares;
             field.TerrainCoeff = dto.TerrainCoeff;
             field.ShapeCoeff = dto.ShapeCoeff;
             field.CropType = dto.CropType;
+            field.CenterPoint = GeoJSONMappings.MapGeoPointDtoToPoint(dto.CenterPoint);
+            field.Boundary = GeoJSONMappings.MapMultiPolygonDtoToMultiPolygon(dto.Boundary);
 
             await fieldRepository.UpdateAsync(field);
         }

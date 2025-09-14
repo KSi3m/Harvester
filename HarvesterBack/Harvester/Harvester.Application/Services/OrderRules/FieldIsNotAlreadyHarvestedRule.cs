@@ -1,6 +1,6 @@
 ﻿using Harvester.Application.Dtos;
 using Harvester.Application.Interfaces.OrderRules;
-using Harvester.Domain.Models;
+using Harvester.Domain.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

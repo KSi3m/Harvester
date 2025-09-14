@@ -1,5 +1,5 @@
 export interface CreateOrderResponse {
-  Success: boolean;
-  RuleName?: string;
-  Details?: string;
+  success: boolean;
+  ruleName?: string;
+  details?: string;
 }

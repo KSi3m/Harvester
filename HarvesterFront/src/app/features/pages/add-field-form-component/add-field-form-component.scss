@@ -1,3 +1,5 @@
+@use  '../../../shared/styles/shared-styles.scss' as shared;
+
 :host {
   display: flex;
   justify-content: center; 
@@ -6,23 +8,8 @@
   background: #f5f6fa;
   padding: 2rem;
 }
-
+@include shared.card-form-styles;
 p-card {
-  width: 100%;
-  max-width: 800px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 1rem;
-  background: #fff;
-
-  .p-card-header {
-    text-align: center;   
-    font-size: 1.5rem;
-    font-weight: 600;
-    padding: 1rem;
-    border-bottom: 1px solid #eee;
-    color: #2c3e50;
-  }
-
   .inputs.area-field {
   display: flex;
   gap: 0.5rem;
@@ -38,6 +25,10 @@ p-card {
     height: 2.5rem; 
     padding: 0 2rem; 
   }
+  .field-id {
+      font-size: 1.1rem;
+      color: #444;
+    }
 }
 
   form {
@@ -71,4 +62,8 @@ p-card {
       padding-bottom: 0.4em;
     }
   }
+}
+.text-red-500 {
+  color: rgba(255, 0, 0, 0.596);
+  font-weight: bold;
 }

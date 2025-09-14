@@ -1,10 +1,11 @@
 export interface Combine {
-  Id: number;
-  Model: string;
-  BaseHaPerHour: number;
-  HeaderLength: number;
-  IsAvailable: boolean;
-  CropType: string;
-  AvailableWorkHours: number;
-  BaseEfficency: number;
+  id: number;
+  model: string;
+  baseHaPerHour: number;
+  headerLength: number;
+  isAvailable: boolean;
+  hasStrawChopper: boolean;
+  pricePerHectare: number;
+  availableWorkHours: number;
+  baseEfficency: number;
 }

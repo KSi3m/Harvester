@@ -6,17 +6,23 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import * as L from 'leaflet';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
+import { DialogModule } from 'primeng/dialog';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { SelectModule } from 'primeng/select';
+import { FieldDto } from '../../../core/models/dtos/field-dto';
+import { GeoMultiPolygonDto } from '../../../core/models/geoJson/geo-multiPolygon-dto';
+import { GeoPointDto } from '../../../core/models/geoJson/geo-point-dto';
 import { ErrorResponse } from '../../../core/models/responses/error-response';
+import { GeoJsonDataForFieldResponse } from '../../../core/models/responses/geoJson-data-for-field-response';
 import { FieldService } from '../../../core/services/fieldService/field-service';
-import { fieldIdentifierValidator } from '../../../shared/validators/field-validator';
-import { FieldDto } from '../../../core/models/dtos/FieldDto';
+import { fieldIdentifierValidator } from '../../../shared/validators/field-identifier-validator';
 
 @Component({
   selector: 'app-add-field-form-component',
@@ -28,6 +34,7 @@ import { FieldDto } from '../../../core/models/dtos/FieldDto';
     SelectModule,
     ButtonModule,
     MessageModule,
+    DialogModule,
   ],
   templateUrl: './add-field-form-component.html',
   styleUrl: './add-field-form-component.scss',
@@ -35,10 +42,20 @@ import { FieldDto } from '../../../core/models/dtos/FieldDto';
 export class AddFieldFormComponent implements OnInit {
   fieldService = inject(FieldService);
   messageService = inject(MessageService);
+  activatedRoute = inject(ActivatedRoute);
   fb = inject(FormBuilder);
-  isValid = false;
-
   form!: FormGroup;
+
+  idFromRoute!: number;
+  isEditing = false;
+  isValid = false;
+  formReady = false;
+  modalVisible = false;
+  hasError = false;
+  private map!: L.Map | null;
+
+  tempResponse: GeoJsonDataForFieldResponse | null = null;
+
   cropOptions = [
     { label: 'Corn', value: 'Corn' },
     { label: 'Wheat', value: 'Wheat' },
@@ -65,7 +82,7 @@ export class AddFieldFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      name: [
+      identifierName: [
         null,
         [
           Validators.required,
@@ -73,6 +90,7 @@ export class AddFieldFormComponent implements OnInit {
           fieldIdentifierValidator(),
         ],
       ],
+      commonName: [null, [Validators.maxLength(100)]],
       areaHectares: [
         null as number | null,
         [Validators.required, Validators.min(0.01)],
@@ -80,9 +98,50 @@ export class AddFieldFormComponent implements OnInit {
       terrainCoeff: [null, [Validators.required]],
       shapeCoeff: [null, [Validators.required]],
       cropType: [null, [Validators.required]],
+      centerPoint: [null],
+      boundary: [null],
     });
-    this.form!.get('name')?.valueChanges.subscribe(() => {
+
+    this.activatedRoute.paramMap.subscribe((res) => {
+      this.formReady = false;
+      const id = res.get('id');
+      if (id != null) {
+        this.isEditing = true;
+        this.idFromRoute = Number(id);
+        this.fieldService.getFieldById(this.idFromRoute).subscribe({
+          next: (res) => {
+            if (res != null) {
+              this.form.patchValue({
+                identifierName: res.identifierName,
+                commonName: res.commonName,
+                areaHectares: res.areaHectares,
+                terrainCoeff: res.terrainCoeff,
+                shapeCoeff: res.shapeCoeff,
+                cropType: res.cropType,
+                centerPoint: res.centerPoint,
+                boundary: res.boundary,
+              });
+            }
+            this.formReady = true;
+          },
+          error: (err) => {
+            console.log(err);
+            this.formReady = false;
+            this.hasError = true;
+            //this.route.navigate(['/'])
+          },
+        });
+      } else {
+        this.isEditing = false;
+        this.formReady = true;
+      }
+    });
+
+    this.form!.get('identifierName')?.valueChanges.subscribe(() => {
       this.form!.get('areaHectares')?.setValue(null, { emitEvent: false });
+      this.form!.get('centerPoint')?.setValue(null, { emitEvent: false });
+      this.form!.get('boundary')?.setValue(null, { emitEvent: false });
+      this.tempResponse = null;
     });
   }
   submit() {
@@ -90,45 +149,135 @@ export class AddFieldFormComponent implements OnInit {
       this.form!.markAllAsTouched();
       return;
     }
+
     const payload: FieldDto = {
-      name: this.f['name'].value!,
+      identifierName: this.f['identifierName'].value!,
+      commonName: this.f['commonName'].value!,
       areaHectares: Number(this.f['areaHectares'].value),
       terrainCoeff: Number(this.f['terrainCoeff'].value),
       shapeCoeff: Number(this.f['shapeCoeff'].value),
       cropType: this.f['cropType'].value!,
+      centerPoint: this.f['centerPoint'].value!,
+      boundary: this.f['boundary'].value!,
     };
-    this.isValid = true;
-    this.fieldService.createField(payload).subscribe({
-      next: () => {
-        this.form!.reset();
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Operation completed!',
-        });
-      },
-      error: (error: HttpErrorResponse) => {
-        const err = error.error as ErrorResponse;
+    //console.log(payload);
 
-        this.messageService.add({
-          severity: 'error',
-          summary: err.title,
-          detail: err.detail,
-        });
-      },
-      complete: () => (this.isValid = false),
-    });
+    this.isValid = true;
+    if (this.isEditing) {
+      this.fieldService.updateField(this.idFromRoute, payload).subscribe({
+        next: () => {
+          this.form!.reset();
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Operation completed!',
+          });
+        },
+        error: (error: HttpErrorResponse) => {
+          const err = error.error as ErrorResponse;
+
+          this.messageService.add({
+            severity: 'error',
+            summary: err.title,
+            detail: err.detail,
+          });
+        },
+        complete: () => (this.isValid = false),
+      });
+    } else {
+      this.fieldService.createField(payload).subscribe({
+        next: () => {
+          this.form!.reset();
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Operation completed!',
+          });
+        },
+        error: (error: HttpErrorResponse) => {
+          const err = error.error as ErrorResponse;
+
+          this.messageService.add({
+            severity: 'error',
+            summary: err.title,
+            detail: err.detail,
+          });
+        },
+        complete: () => (this.isValid = false),
+      });
+    }
   }
+
+  onDialogShow() {
+    const mapContainer = document.getElementById(`map`);
+    if (!mapContainer) return;
+    const centerPoint = this.tempResponse!.centerPoint;
+    const boundary = this.tempResponse!.boundary;
+    if (!this.map) {
+      const map = L.map(`map`, {
+        center: [centerPoint.coordinates[1], centerPoint.coordinates[0]],
+        zoom: 14,
+      });
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+      }).addTo(map);
+
+      const latLngs = boundary.coordinates.map((polygon) =>
+        polygon.map((ring) =>
+          ring.map(([lng, lat]) => [lat, lng] as [number, number]),
+        ),
+      );
+
+      const polygon = L.polygon(latLngs);
+      polygon.addTo(map);
+
+      L.marker([centerPoint.coordinates[1], centerPoint.coordinates[0]]).addTo(
+        map,
+      );
+
+      this.map = map;
+    } else {
+      setTimeout(() => this.map!.invalidateSize(), 200);
+    }
+  }
+  onDialogHide() {
+    if (this.map) {
+      this.map.remove();
+      this.map = null;
+    }
+  }
+
+  showDialog() {
+    this.fillArea();
+  }
+
+  setGeoJsonData() {
+    const value = Number(this.tempResponse!.areaHectares);
+    const centerPoint = this.tempResponse!.centerPoint as GeoPointDto;
+    const boundary = this.tempResponse!.boundary as GeoMultiPolygonDto;
+    this.form!.get('areaHectares')?.setValue(value);
+    this.form!.get('centerPoint')?.setValue(centerPoint);
+    this.form!.get('boundary')?.setValue(boundary);
+    this.modalVisible = false;
+  }
+
   fillArea() {
-    const identifier = this.form!.get('name')?.value as unknown as string;
+    const identifier = this.form!.get('identifierName')
+      ?.value as unknown as string;
     if (!identifier) {
-      this.f['name'].markAsTouched();
+      this.f['identifierName'].markAsTouched();
       return;
     }
-    this.fieldService.getAreaForField(identifier).subscribe({
+    if (this.tempResponse) {
+      this.modalVisible = true;
+      return;
+    }
+
+    this.fieldService.getGeoJsonDataForField(identifier).subscribe({
       next: (res) => {
-        const value = Number(res.areaInHectares);
-        this.form!.get('areaHectares')?.setValue(value);
+        this.tempResponse = res;
+        this.modalVisible = true;
       },
       error: (error: HttpErrorResponse) => {
         const err = error.error as ErrorResponse;

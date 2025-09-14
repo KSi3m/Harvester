@@ -9,14 +9,13 @@ namespace Harvester.Application.Dtos
 {
     public class OrderInformationForCheckAvailDto
     {
-        //public int FieldId { get; set; }
         public Field? Field { get; set; }
-
-       // public int CombineId { get; set; }
         public Combine? Combine { get; set; }
 
         public DateOnly OrderDate { get; set; }
 
         public int EstimatedTime { get; set; }
+
+        public int? OrderId { get; set; }
     }
 }

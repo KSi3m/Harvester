@@ -16,6 +16,9 @@ namespace Harvester.Domain.Models
         public decimal HeaderLength { get; set; }
         public bool IsAvailable { get; set; }
         public decimal AvailableWorkHours { get; set; } //dopisać że 11 h
+        public bool HasStrawChopper { get; set; }
+
+        public int PricePerHectare { get; set; }
 
         public decimal BaseEfficency { get; set; } //0.75
 

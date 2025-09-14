@@ -1,6 +1,6 @@
 ﻿using Harvester.Application.Dtos;
 using Harvester.Application.Interfaces.OrderRules;
-using Harvester.Domain.Models;
+using Harvester.Domain.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +13,15 @@ namespace Harvester.Application.Services.OrderRules
     {
         public async Task<CheckRuleForOrderResponseDto> CheckRule(OrderInformationForCheckAvailDto dto)
         {
-            var orders = dto.Combine!.Orders!.Where(x => DateOnly.FromDateTime(x.ScheduledDate) == dto.OrderDate && x.Status == OrderStatus.ACCEPTED);
-
+            var orders = dto.Combine!.Orders!.Where(x => x.ScheduledDate.Year == dto.OrderDate.Year && x.Status == OrderStatus.ACCEPTED);
+            if(dto.OrderId != null && orders.Any(x => x.Id == dto.OrderId))
+            {
+                    return new CheckRuleForOrderResponseDto
+                    {
+                        Success = true,
+                    };
+            }
+            
             if (orders.Any(x => x.FieldId == dto.Field!.Id))
             {
                 return new CheckRuleForOrderResponseDto

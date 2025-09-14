@@ -44,14 +44,18 @@ namespace Harvester.Infrastructure.Persistence.Config
             .HasMaxLength(100);
 
             modelBuilder
+              .Property(c => c.HasStrawChopper)
+            .HasDefaultValue(true);
+
+            modelBuilder
                 .HasMany(c => c.Orders)
                 .WithOne(o => o.Combine)
                 .HasForeignKey(o => o.CombineId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.HasData(
-            new Combine { Id = 1, Model = "John Deere X1", BaseHaPerHour = 2.5m, HeaderLength = 6m, IsAvailable = true, AvailableWorkHours = 11m, BaseEfficency = 0.75m },
-            new Combine { Id = 2, Model = "Case IH 8230", BaseHaPerHour = 3.0m, HeaderLength = 7m, IsAvailable = true, AvailableWorkHours = 11m, BaseEfficency = 0.75m }
+            new Combine { Id = 1, Model = "John Deere X1", BaseHaPerHour = 2.5m, HeaderLength = 6m, IsAvailable = true, AvailableWorkHours = 11m, BaseEfficency = 0.75m, PricePerHectare = 600, },
+            new Combine { Id = 2, Model = "Case IH 8230", BaseHaPerHour = 3.0m, HeaderLength = 7m, IsAvailable = true, AvailableWorkHours = 11m, BaseEfficency = 0.75m, PricePerHectare = 550, }
         );
         }
     }

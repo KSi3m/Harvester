@@ -1,8 +1,14 @@
+import { GeoMultiPolygonDto } from './geoJson/geo-multiPolygon-dto';
+import { GeoPointDto } from './geoJson/geo-point-dto';
+
 export interface Field {
-  Id: number;
-  Name: string;
-  AreaHectares: number;
-  TerrainCoeff: number;
-  ShapeCoeff: number;
-  CropType: string;
+  id: number;
+  identifierName: string;
+  commonName: string;
+  areaHectares: number;
+  terrainCoeff: number;
+  shapeCoeff: number;
+  cropType: string;
+  centerPoint: GeoPointDto;
+  boundary: GeoMultiPolygonDto;
 }

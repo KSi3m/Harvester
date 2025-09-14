@@ -36,5 +36,23 @@ namespace Harvester.API.Controllers
             }
             return StatusCode(422, res);
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, CreateOrderDto dto)
+        {
+            var res = await orderService.UpdateAsync(id, dto);
+            if (res.Success)
+            {
+                return StatusCode(200, res);
+            }
+            return StatusCode(422, res);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await orderService.DeleteAsync(id);
+            return StatusCode(204);
+        }
     }
 }

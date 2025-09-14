@@ -18,14 +18,26 @@ namespace Harvester.Infrastructure.Repostories
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Order>> GetAll()
+        public async Task DeleteAsync(Order order)
         {
-            return await dbContext.Orders.AsNoTracking().ToListAsync();
+            dbContext.Orders.Remove(order);
+            await dbContext.SaveChangesAsync();
         }
 
-        public async Task<Order?> GetById(int id)
+        public async Task<IEnumerable<Order>> GetAllAsync()
         {
-            return await dbContext.Orders.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            return await dbContext.Orders.Include(x=>x.Combine).Include(x=>x.Field).AsNoTracking().ToListAsync();
+        }
+
+        public async Task<Order?> GetByIdAsync(int id)
+        {
+            return await dbContext.Orders.AsNoTracking().Include(x => x.Combine).Include(x => x.Field).FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task UpdateAsync(Order order)
+        {
+            dbContext.Update(order);
+            await dbContext.SaveChangesAsync();
         }
     }
 }

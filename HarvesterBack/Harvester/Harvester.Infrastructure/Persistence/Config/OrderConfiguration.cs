@@ -1,4 +1,5 @@
 ﻿using Harvester.Domain.Models;
+using Harvester.Domain.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -21,11 +22,15 @@ namespace Harvester.Infrastructure.Persistence.Config
             .HasConversion<string>();
 
             modelBuilder
-                .Property(o => o.PricePerHectare)
-            .HasPrecision(6, 2);
+                .Property(o => o.StrawProcessingMethod)
+            .HasConversion<string>();
 
             modelBuilder
                 .Property(o => o.TotalPrice)
+            .HasPrecision(6, 2);
+
+            modelBuilder
+                .Property(o => o.EstimatedPrice)
             .HasPrecision(6, 2);
 
             modelBuilder
@@ -43,8 +48,8 @@ namespace Harvester.Infrastructure.Persistence.Config
                 OrderDate = new DateTime(2025, 8, 15),
                 ScheduledDate = new DateTime(2025, 8, 20),
                 Status = OrderStatus.ACCEPTED,
-                PricePerHectare = 150m,
-                TotalPrice = 150m * 10.5m
+                TotalPrice = 150m * 10.5m,
+                StrawProcessingMethod = StrawProcessingMethod.LEAVE
             },
             new Order
             {
@@ -54,8 +59,8 @@ namespace Harvester.Infrastructure.Persistence.Config
                 OrderDate = new DateTime(2025, 8, 16),
                 ScheduledDate = new DateTime(2025, 8, 22),
                 Status = OrderStatus.PENDING,
-                PricePerHectare = 140m,
-                TotalPrice = 140m * 8.2m
+                TotalPrice = 140m * 8.2m,
+                StrawProcessingMethod = StrawProcessingMethod.CHOP
             }
         );
         }

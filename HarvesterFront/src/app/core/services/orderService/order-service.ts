@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { CreateOrderDto } from '../../models/dtos/CreateOrderDto';
+import { CreateOrderDto } from '../../models/dtos/create-order-dto';
+import { Order } from '../../models/Order';
 import { CreateOrderResponse } from '../../models/responses/create-order-response';
 
 @Injectable({
@@ -12,7 +13,25 @@ export class OrderService {
   http: HttpClient = inject(HttpClient);
   url = environment.apiUrl;
 
-  createField(dto: CreateOrderDto): Observable<CreateOrderResponse> {
+  createOrder(dto: CreateOrderDto): Observable<CreateOrderResponse> {
     return this.http.post<CreateOrderResponse>(`${this.url}/orders`, dto);
+  }
+
+  getAllOrders(): Observable<Order[]> {
+    return this.http.get<Order[]>(`${this.url}/orders`);
+  }
+
+  getOrderById(id: number): Observable<Order> {
+    return this.http.get<Order>(`${this.url}/orders/${id}`);
+  }
+  updateOrder(
+    id: number,
+    dto: CreateOrderDto,
+  ): Observable<CreateOrderResponse> {
+    return this.http.put<CreateOrderResponse>(`${this.url}/orders/${id}`, dto);
+  }
+
+  deleteOrder(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.url}/orders/${id}`);
   }
 }

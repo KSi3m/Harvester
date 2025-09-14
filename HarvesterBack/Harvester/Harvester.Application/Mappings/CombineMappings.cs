@@ -20,6 +20,8 @@ namespace Harvester.Application.Mappings
                 HeaderLength = combine.HeaderLength,
                 IsAvailable = combine.IsAvailable,
                 AvailableWorkHours = combine.AvailableWorkHours,
+                PricePerHectare = combine.PricePerHectare,
+                HasStrawChopper = combine.HasStrawChopper,
                 BaseEfficency = combine.BaseEfficency,
             };
             return combineDto;

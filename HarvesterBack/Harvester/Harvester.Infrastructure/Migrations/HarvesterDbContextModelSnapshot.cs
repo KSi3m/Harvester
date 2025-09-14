@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using NetTopologySuite.Geometries;
 
 #nullable disable
 
@@ -46,6 +47,11 @@ namespace Harvester.Infrastructure.Migrations
                         .HasColumnType("decimal(5,2)")
                         .HasDefaultValue(1m);
 
+                    b.Property<bool>("HasStrawChopper")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
                     b.Property<decimal>("HeaderLength")
                         .HasPrecision(5, 2)
                         .HasColumnType("decimal(5,2)");
@@ -60,6 +66,9 @@ namespace Harvester.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int>("PricePerHectare")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Combines");
@@ -71,9 +80,11 @@ namespace Harvester.Infrastructure.Migrations
                             AvailableWorkHours = 11m,
                             BaseEfficency = 0.75m,
                             BaseHaPerHour = 2.5m,
+                            HasStrawChopper = false,
                             HeaderLength = 6m,
                             IsAvailable = true,
-                            Model = "John Deere X1"
+                            Model = "John Deere X1",
+                            PricePerHectare = 600
                         },
                         new
                         {
@@ -81,9 +92,11 @@ namespace Harvester.Infrastructure.Migrations
                             AvailableWorkHours = 11m,
                             BaseEfficency = 0.75m,
                             BaseHaPerHour = 3.0m,
+                            HasStrawChopper = false,
                             HeaderLength = 7m,
                             IsAvailable = true,
-                            Model = "Case IH 8230"
+                            Model = "Case IH 8230",
+                            PricePerHectare = 550
                         });
                 });
 
@@ -99,12 +112,23 @@ namespace Harvester.Infrastructure.Migrations
                         .HasPrecision(5, 2)
                         .HasColumnType("decimal(5,2)");
 
+                    b.Property<MultiPolygon>("Boundary")
+                        .HasColumnType("geometry");
+
+                    b.Property<Point>("CenterPoint")
+                        .HasColumnType("geometry");
+
+                    b.Property<string>("CommonName")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
                     b.Property<string>("CropType")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("IdentifierName")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
@@ -130,7 +154,7 @@ namespace Harvester.Infrastructure.Migrations
                             Id = 1,
                             AreaHectares = 10.5m,
                             CropType = "Wheat",
-                            Name = "Pole A",
+                            IdentifierName = "Pole A",
                             ShapeCoeff = 1.0m,
                             TerrainCoeff = 1.0m
                         },
@@ -139,7 +163,7 @@ namespace Harvester.Infrastructure.Migrations
                             Id = 2,
                             AreaHectares = 8.2m,
                             CropType = "Corn",
-                            Name = "Pole B",
+                            IdentifierName = "Pole B",
                             ShapeCoeff = 1.0m,
                             TerrainCoeff = 0.9m
                         });
@@ -156,6 +180,10 @@ namespace Harvester.Infrastructure.Migrations
                     b.Property<int>("CombineId")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("EstimatedPrice")
+                        .HasPrecision(6, 2)
+                        .HasColumnType("decimal(6,2)");
+
                     b.Property<int>("EstimatedTime")
                         .HasColumnType("int");
 
@@ -165,14 +193,14 @@ namespace Harvester.Infrastructure.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("PricePerHectare")
-                        .HasPrecision(6, 2)
-                        .HasColumnType("decimal(6,2)");
-
                     b.Property<DateTime>("ScheduledDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StrawProcessingMethod")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -193,24 +221,26 @@ namespace Harvester.Infrastructure.Migrations
                         {
                             Id = 1,
                             CombineId = 1,
+                            EstimatedPrice = 0m,
                             EstimatedTime = 0,
                             FieldId = 1,
                             OrderDate = new DateTime(2025, 8, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PricePerHectare = 150m,
                             ScheduledDate = new DateTime(2025, 8, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = "ACCEPTED",
+                            StrawProcessingMethod = "LEAVE",
                             TotalPrice = 1575.0m
                         },
                         new
                         {
                             Id = 2,
                             CombineId = 2,
+                            EstimatedPrice = 0m,
                             EstimatedTime = 0,
                             FieldId = 2,
                             OrderDate = new DateTime(2025, 8, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PricePerHectare = 140m,
                             ScheduledDate = new DateTime(2025, 8, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = "PENDING",
+                            StrawProcessingMethod = "CHOP",
                             TotalPrice = 1148.0m
                         });
                 });

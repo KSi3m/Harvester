@@ -47,12 +47,12 @@ namespace Harvester.API.Controllers
             return StatusCode(204);
         }
 
-        [HttpGet("{nameIdentifier}/area")]
+        [HttpGet("{nameIdentifier}/geoJsonData")]
         [TypeFilter(typeof(AreaRouteParameterFilter))]
-        public async Task<IActionResult> GetArea(string nameIdentifier)
+        public async Task<IActionResult> GetGeoJsonData(string nameIdentifier)
         {
-            var area = await onGeoService.GetDataAsync(nameIdentifier);
-            return Ok(new { areaInHectares = area });
+            var response = await onGeoService.GetDataAsync(nameIdentifier);
+            return Ok(response);
         }
     }
 }
