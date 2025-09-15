@@ -45,9 +45,16 @@ export class App {
       ],
     },
     {
-      label: 'Add field',
+      label: 'Fields',
       icon: 'pi pi-expand',
-      routerLink: '/fields/add',
+      routerLink: '/fields',
+      items: [
+        {
+          label: 'Add field',
+          icon: 'pi pi-plus',
+          routerLink: '/fields/add',
+        },
+      ],
     },
   ];
 }

@@ -1,0 +1,65 @@
+@defer (when fields !== null) {
+  <p-confirmdialog />
+  <div class="fields-list">
+    @for (field of fields; track field.id) {
+      <p-card class="field-card">
+        <div class="field-row">
+          <div class="field-details">
+            <div class="field-header">
+              <span class="identifierName">{{ field.identifierName }}</span>
+            </div>
+
+            <div class="field-info">
+                @if (field.commonName !== null) {<div>
+                <strong>CommonName:</strong> {{ field.commonName }}
+              </div>}
+                
+              <div>
+                <strong>Area in hectares:</strong>
+                {{ field.areaHectares }} ha
+              </div>
+              <div>
+                <strong>Crop type:</strong>
+                {{ field.cropType }}
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <p-button (click)="showDialog(field.id)" label="Show map" />
+            <p-dialog header="Test" [modal]="true" [(visible)]="visibles[field.id]" (onHide)="onDialogHide(field)" (onShow)="onDialogShow(field.id)">
+              <div id="map-{{ field.id }}" style="height: 400px; width: 400px"></div>
+         </p-dialog>
+
+        <p-button
+          (click)="confirmDelete(field.id)"
+          severity="danger"
+          label="Delete"
+        />
+        <p-button
+          (click)="updateField(field.id)"
+          severity="info"
+          label="Edit"
+        />
+      </p-card>
+    } @empty {
+      <div class="empty-container">
+        <p-card class="empty-card">There are no fields.</p-card>
+      </div>
+    }
+  </div>
+} @loading (minimum 1s) {
+  <div class="empty-container">
+    <p-card class="empty-card">
+      Loading fields.
+      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i
+    ></p-card>
+  </div>
+} @placeholder {
+  <div class="empty-container">
+    <p-card class="empty-card">
+      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i
+    ></p-card>
+  </div>
+}
