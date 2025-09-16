@@ -5,8 +5,10 @@ import { CombineListComponent } from './features/pages/combine-list-component/co
 import { OrdersListComponent } from './features/pages/orders-list-component/orders-list-component';
 import { AddCombineFormComponent } from './features/pages/add-combine-form-component/add-combine-form-component';
 import { FieldsListComponent } from './features/pages/fields-list-component/fields-list-component';
+import { HomeComponent } from './features/pages/home-component/home-component';
 
 export const routes: Routes = [
+  { path: '', component: HomeComponent },
   { path: 'fields', component: FieldsListComponent },
   { path: 'fields/add', component: AddFieldFormComponent },
   { path: 'fields/:id/edit', component: AddFieldFormComponent },
