@@ -5,120 +5,128 @@
     "
   >
     <form [formGroup]="form" class="p-fluid grid">
-      <label for="selectedCombine" class="block mb-2">
-        Combine <span class="text-red-500">*</span>
-      </label>
-      <p-select
-        formControlName="selectedCombine"
-        [options]="combines"
-        optionLabel="model"
-        optionValue="id"
-        placeholder="Select a combine"
-        [invalid]="f['selectedCombine'].invalid && f['selectedCombine'].touched"
-      >
-        <ng-template let-combine pTemplate="options">
-          <div class="custom-option">
-            <div class="main-text">{{ combine.model }}</div>
-            <div class="sub-text">
-              {{ combine.baseHaPerHour }} ha/h || Price per ha:
-              {{ combine.pricePerHectare }}
+      <div class="inputs">
+        <label for="selectedCombine" class="block mb-2">
+          Combine <span class="text-red-500">*</span>
+        </label>
+        <p-select
+          formControlName="selectedCombine"
+          [options]="combines"
+          optionLabel="model"
+          optionValue="id"
+          placeholder="Select a combine"
+          [invalid]="
+            f['selectedCombine'].invalid && f['selectedCombine'].touched
+          "
+        >
+          <ng-template let-combine pTemplate="options">
+            <div class="custom-option">
+              <div class="main-text">{{ combine.model }}</div>
+              <div class="sub-text">
+                {{ combine.baseHaPerHour }} ha/h || Price per ha:
+                {{ combine.pricePerHectare }}
+              </div>
             </div>
-          </div>
-        </ng-template>
+          </ng-template>
 
-        <ng-template let-combine pTemplate="selectedItem">
-          <div class="custom-option">
-            <div class="main-text">{{ combine.model }}</div>
-            <div class="sub-text">
-              {{ combine.baseHaPerHour }} ha/h || Price per ha:
-              {{ combine.pricePerHectare }}
+          <ng-template let-combine pTemplate="selectedItem">
+            <div class="custom-option">
+              <div class="main-text">{{ combine.model }}</div>
+              <div class="sub-text">
+                {{ combine.baseHaPerHour }} ha/h || Price per ha:
+                {{ combine.pricePerHectare }}
+              </div>
             </div>
-          </div>
-        </ng-template>
-      </p-select>
-      @if (f["selectedCombine"].invalid && f["selectedCombine"].touched) {
-        <p-message severity="error" variant="simple" size="small">
-          @if (f["selectedCombine"].errors?.["required"]) {
-            Combine is required
-          }
-        </p-message>
-      }
-
-      <label for="selectedField" class="block mb-2">
-        Field <span class="text-red-500">*</span>
-      </label>
-      <p-select
-        [options]="fields"
-        formControlName="selectedField"
-        optionLabel="name"
-        optionValue="id"
-        [filter]="true"
-        filterBy="name"
-        [showClear]="true"
-        placeholder="Select a Field"
-        [invalid]="f['selectedField'].invalid && f['selectedField'].touched"
-      >
-        <ng-template #selectedItem let-selectedOption>
-          <div class="custom-option">
-            <div class="main-text">{{ selectedOption.identifierName }}</div>
-            <div class="sub-text">{{ selectedOption.areaHectares }} ha</div>
-          </div>
-        </ng-template>
-        <ng-template let-field #item>
-          <div class="custom-option">
-            <div class="main-text">{{ field.identifierName }}</div>
-            <div class="sub-text">{{ field.areaHectares }} ha</div>
-          </div>
-        </ng-template>
-      </p-select>
-      @if (f["selectedField"].invalid && f["selectedField"].touched) {
-        <p-message severity="error" variant="simple" size="small">
-          @if (f["selectedField"].errors?.["required"]) {
-            Field is required
-          }
-        </p-message>
-      }
-
-      <label for="selectedDate" class="block mb-2">
-        Date of order <span class="text-red-500">*</span>
-      </label>
-      <p-datepicker
-        formControlName="selectedDate"
-        [iconDisplay]="'input'"
-        [showIcon]="true"
-        inputId="icondisplay"
-        [minDate]="!isEditing ? minDate : null"
-        [maxDate]="maxDate"
-        [readonlyInput]="true"
-        [invalid]="f['selectedDate'].invalid && f['selectedDate'].touched"
-      />
-      @if (f["selectedDate"].invalid && f["selectedDate"].touched) {
-        <p-message severity="error" variant="simple" size="small">
-          @if (f["selectedDate"].errors?.["required"]) {
-            Date is required
-          } @else if (f["selectedDate"].errors?.["dateInPast"]) {
-            Date cannot be in the past
-          }
-        </p-message>
-      }
-
-      <label for="selectedStrawMethod" class="block mb-2">
-        Straw proccesing <span class="text-red-500">*</span>
-      </label>
-      <p-selectbutton
-        [options]="strawMethods"
-        formControlName="selectedStrawMethod"
-        optionLabel="label"
-        optionValue="value"
-        aria-labelledby="basic"
-        unselectable="true"
-      />
-      <div class="k">Estimated price: {{ this.estimatedPrice }}</div>
+          </ng-template>
+        </p-select>
+        @if (f["selectedCombine"].invalid && f["selectedCombine"].touched) {
+          <p-message severity="error" variant="simple" size="small">
+            @if (f["selectedCombine"].errors?.["required"]) {
+              Combine is required
+            }
+          </p-message>
+        }
+      </div>
+      <div class="inputs">
+        <label for="selectedField" class="block mb-2">
+          Field <span class="text-red-500">*</span>
+        </label>
+        <p-select
+          [options]="fields"
+          formControlName="selectedField"
+          optionLabel="name"
+          optionValue="id"
+          [filter]="true"
+          filterBy="name"
+          [showClear]="true"
+          placeholder="Select a Field"
+          [invalid]="f['selectedField'].invalid && f['selectedField'].touched"
+        >
+          <ng-template #selectedItem let-selectedOption>
+            <div class="custom-option">
+              <div class="main-text">{{ selectedOption.identifierName }}</div>
+              <div class="sub-text">{{ selectedOption.areaHectares }} ha</div>
+            </div>
+          </ng-template>
+          <ng-template let-field #item>
+            <div class="custom-option">
+              <div class="main-text">{{ field.identifierName }}</div>
+              <div class="sub-text">{{ field.areaHectares }} ha</div>
+            </div>
+          </ng-template>
+        </p-select>
+        @if (f["selectedField"].invalid && f["selectedField"].touched) {
+          <p-message severity="error" variant="simple" size="small">
+            @if (f["selectedField"].errors?.["required"]) {
+              Field is required
+            }
+          </p-message>
+        }
+      </div>
+      <div class="inputs">
+        <label for="selectedDate" class="block mb-2">
+          Date of order <span class="text-red-500">*</span>
+        </label>
+        <p-datepicker
+          formControlName="selectedDate"
+          [iconDisplay]="'input'"
+          [showIcon]="true"
+          inputId="icondisplay"
+          [minDate]="!isEditing ? minDate : null"
+          [maxDate]="maxDate"
+          [readonlyInput]="true"
+          [invalid]="f['selectedDate'].invalid && f['selectedDate'].touched"
+        />
+        @if (f["selectedDate"].invalid && f["selectedDate"].touched) {
+          <p-message severity="error" variant="simple" size="small">
+            @if (f["selectedDate"].errors?.["required"]) {
+              Date is required
+            } @else if (f["selectedDate"].errors?.["dateInPast"]) {
+              Date cannot be in the past
+            }
+          </p-message>
+        }
+      </div>
+      <div class="inputs">
+        <label for="selectedStrawMethod" class="block mb-2">
+          Straw proccesing <span class="text-red-500">*</span>
+        </label>
+        <p-selectbutton
+          [options]="strawMethods"
+          formControlName="selectedStrawMethod"
+          optionLabel="label"
+          optionValue="value"
+          aria-labelledby="basic"
+          unselectable="true"
+        />
+      </div>
+      <div class="price">Estimated price: {{ this.estimatedPrice }}</div>
 
       <div>
         <button
           pButton
           type="submit"
+          icon="pi pi-save"
           (click)="onSubmit()"
           [disabled]="form.invalid"
         >
@@ -130,19 +138,24 @@
 } @loading (minimum 1s) {
   <div class="empty-container">
     <p-card class="empty-card">
-      Loading order.
+      @if(isEditing)
+      {
+        Loading order
+      }
+      @else{
+        Loading form template
+      }
       <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i
     ></p-card>
   </div>
 } @placeholder {
   <div class="empty-container">
     <p-card class="empty-card">
-       @if(hasError)
-      {
-          <p>Failed to load field</p>
-      }
-      @else{
+      @if (hasError) {
+        <p>Failed to load field</p>
+      } @else {
         <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
-      }</p-card>
+      }
+    </p-card>
   </div>
-} 
+}

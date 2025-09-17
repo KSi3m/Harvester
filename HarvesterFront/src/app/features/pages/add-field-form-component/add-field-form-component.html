@@ -168,7 +168,13 @@
 } @loading (minimum 1s) {
   <div class="empty-container">
     <p-card class="empty-card">
-      Loading field
+      @if(isEditing)
+      {
+        Loading field
+      }
+      @else{
+        Loading form template
+      }
       <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i
     ></p-card>
   </div>

@@ -44,18 +44,23 @@
         />
       </p-card>
     } 
+    @empty {
+      <div class="empty-container">
+        <p-card class="empty-card">There are no items.</p-card>
+      </div>
+    }
   </div>
 } @loading (minimum 1s) {
   <div class="empty-container">
     <p-card class="empty-card">
       Loading fields.
-      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i
+      <i class="pi pi-spin pi-spinner"></i
     ></p-card>
   </div>
 } @placeholder {
   <div class="empty-container">
     <p-card class="empty-card">
-      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i
+      <i class="pi pi-spin pi-spinner"></i
     ></p-card>
   </div>
 }
