@@ -1,0 +1,28 @@
+@mixin empty-container-for-lists-styles {
+  .empty-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    min-width: 400px;
+    min-height: 150px;
+    background-color: #f5f6fa;
+  }
+
+  .empty-card {
+    text-align: center;
+    padding: 3rem;
+    font-size: 1.5rem;
+    min-width: 400px;
+    min-height: 150px;
+    color: #666;
+    background: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  .pi-spinner {
+    color: #2563eb;
+    font-size: 1.5rem;
+  }
+}
