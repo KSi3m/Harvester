@@ -29,6 +29,17 @@ namespace Harvester.Infrastructure.Repostories
             return await dbContext.Orders.Include(x=>x.Combine).Include(x=>x.Field).AsNoTracking().ToListAsync();
         }
 
+        public async Task<IEnumerable<Order>> GetAllFromGivenYearAsync(int year)
+        {
+            return await dbContext
+                .Orders
+                .Include(x => x.Combine)
+                .Include(x => x.Field)
+                .AsNoTracking()
+                .Where(x=>x.OrderDate.Year == year)
+                .ToListAsync();
+        }
+
         public async Task<Order?> GetByIdAsync(int id)
         {
             return await dbContext.Orders.AsNoTracking().Include(x => x.Combine).Include(x => x.Field).FirstOrDefaultAsync(x => x.Id == id);

@@ -28,7 +28,7 @@ namespace Harvester.Application.Services
             if(combine == null) { throw new NotFoundException("Combine doesn't exist"); }
             if(field == null) { throw new NotFoundException("Field doesn't exist"); }
             
-            var estimatedTime = (((field.AreaHectares / combine.BaseHaPerHour) / (field.ShapeCoeff * field.TerrainCoeff)) * 60); 
+            var estimatedTime = (((field.AreaHectares / combine.BaseHaPerHour) / (field.ShapeCoeff * field.TerrainCoeff)) * 60);
 
             var info = new OrderInformationForCheckAvailDto
             {
@@ -36,6 +36,7 @@ namespace Harvester.Application.Services
                 Combine = combine,
                 OrderDate = DateOnly.FromDateTime(dto.OrderDate),
                 EstimatedTime = (int)estimatedTime,
+                AllOrdersThisYear = await orderRepository.GetAllFromGivenYearAsync(dto.OrderDate.Year)
             };
 
             var res = await combineService.CheckAvailability(info);
