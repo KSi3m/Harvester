@@ -15,12 +15,15 @@
               <strong>Field:</strong> {{ order.field.identifierName }}
               <p-button (click)="showDialog(order.id)" label="Show" />
               <p-dialog
-                header="Test"
+                header="IdentifierName: {{order.field.identifierName}}"
                 [modal]="true"
                 [(visible)]="visibles[order.id]"
                 (onHide)="onDialogHide(order)"
                 (onShow)="onDialogShow(order.id)"
               >
+              <div><strong>CommonName:</strong> {{ order.field.commonName}}</div>
+              <div><strong>Area in hectares:</strong> {{ order.field.areaHectares}}</div>
+              <div><strong>Crop:</strong> {{ order.field.cropType}}</div>
                 <div
                   id="map-{{ order.id }}"
                   style="height: 400px; width: 400px"
