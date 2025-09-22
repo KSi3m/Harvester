@@ -14,18 +14,8 @@ using System.Threading.Tasks;
 
 namespace Harvester.Application.Services
 {
-    public class CombineService(ICombineRepository combineRepository, IEnumerable<IOrderRule> checkRules) : ICombineService
+    public class CombineService(ICombineRepository combineRepository) : ICombineService
     {
-        public async Task<CheckRuleForOrderResponseDto> CheckAvailability(OrderInformationForCheckAvailDto dto)
-        {
-            foreach(var rule in checkRules)
-            {
-                var res = await rule.CheckRule(dto);
-                if (!res.Success) return res;
-            }
-            return new CheckRuleForOrderResponseDto { Success = true };
-        }
-
         public async Task CreateAsync(CreateCombineDto dto)
         {
             var combine = new Combine

@@ -16,6 +16,6 @@ namespace Harvester.Application.Interfaces.Services
         Task UpdateAsync(int id, CreateCombineDto dto);
         Task DeleteAsync(int id);
 
-        Task<CheckRuleForOrderResponseDto> CheckAvailability(OrderInformationForCheckAvailDto dto);
+   
     }
 }

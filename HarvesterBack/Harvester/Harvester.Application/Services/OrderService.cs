@@ -1,5 +1,6 @@
 ﻿using Harvester.Application.Dtos;
 using Harvester.Application.Exceptions;
+using Harvester.Application.Interfaces.OrderRules;
 using Harvester.Application.Interfaces.Repositories;
 using Harvester.Application.Interfaces.Services;
 using Harvester.Application.Mappings;
@@ -16,7 +17,8 @@ namespace Harvester.Application.Services
     public class OrderService(IOrderRepository orderRepository, 
         ICombineService combineService,
         ICombineRepository combineRepository,
-        IFieldRepository fieldRepository
+        IFieldRepository fieldRepository,
+        IEnumerable<IOrderRule> checkRules
 
         ) : IOrderService
     {
@@ -39,7 +41,7 @@ namespace Harvester.Application.Services
                 AllOrdersThisYear = await orderRepository.GetAllFromGivenYearAsync(dto.OrderDate.Year)
             };
 
-            var res = await combineService.CheckAvailability(info);
+            var res = await this.CheckAvailability(info);
             if (res.Success)
             {
                 var priceForStrawProcessing = dto.StrawProcessingMethod == StrawProcessingMethod.CHOP ?  50 : 0;
@@ -118,7 +120,7 @@ namespace Harvester.Application.Services
                 OrderId = id
             };
 
-            var res = await combineService.CheckAvailability(info);
+            var res = await this.CheckAvailability(info);
             if (res.Success)
             {
                 var priceForStrawProcessing = dto.StrawProcessingMethod == StrawProcessingMethod.CHOP ? 50 : 0;
@@ -136,6 +138,16 @@ namespace Harvester.Application.Services
                 await orderRepository.UpdateAsync(order);
             }
             return res;
+        }
+
+        public async Task<CheckRuleForOrderResponseDto> CheckAvailability(OrderInformationForCheckAvailDto dto)
+        {
+            foreach (var rule in checkRules)
+            {
+                var res = await rule.CheckRule(dto);
+                if (!res.Success) return res;
+            }
+            return new CheckRuleForOrderResponseDto { Success = true };
         }
     }
 }
