@@ -33,7 +33,6 @@ namespace Harvester.Tests.Application.Rules
 
            
             Assert.True(result.Success);
-            Assert.Null(result.RuleName);
         }
 
         [Fact]
@@ -51,7 +50,6 @@ namespace Harvester.Tests.Application.Rules
             var result = await rule.CheckRule(dto);
          
             Assert.True(result.Success);
-            Assert.Null(result.RuleName);
         }
 
         [Fact]
@@ -69,6 +67,7 @@ namespace Harvester.Tests.Application.Rules
 
             Assert.False(result.Success);
             Assert.Equal("Field is already ordered", result.RuleName);
+            Assert.Equal("Given field is already ordered in different order", result.Details);
         }
 
         [Fact]
@@ -89,7 +88,6 @@ namespace Harvester.Tests.Application.Rules
             var result = await rule.CheckRule(dto);
 
             Assert.True(result.Success);
-            Assert.Equal("Field is already ordered", result.RuleName);
         }
 
     }

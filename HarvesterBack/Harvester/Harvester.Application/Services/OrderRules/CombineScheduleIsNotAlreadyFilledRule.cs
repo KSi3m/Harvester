@@ -1,6 +1,7 @@
 ﻿using Harvester.Application.Dtos;
 using Harvester.Application.Interfaces.OrderRules;
 using Harvester.Domain.Models.Enums;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,17 @@ namespace Harvester.Application.Services.OrderRules
         public async Task<CheckRuleForOrderResponseDto> CheckRule(OrderInformationForCheckAvailDto dto)
         {
             var orders = dto.Combine!.Orders!.Where(x => DateOnly.FromDateTime(x.ScheduledDate) == dto.OrderDate && x.Status == OrderStatus.ACCEPTED);
+            if(orders.IsNullOrEmpty())
+            {
+                return new CheckRuleForOrderResponseDto
+                {
+                    Success = true,
+                };
+            }
             int alreadyAcceptedMinutes = 0;
             if(dto.OrderId != null)
             {
-                alreadyAcceptedMinutes = orders.Where(x=>x.Id != dto.OrderId).Sum(x => x.EstimatedTime) + (orders.Count()-1 * 15);
+                alreadyAcceptedMinutes = orders.Where(x=>x.Id != dto.OrderId).Sum(x => x.EstimatedTime) + ((orders.Count()-1) * 15);
             }
             else
             {
