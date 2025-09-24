@@ -15,7 +15,6 @@ using System.Threading.Tasks;
 namespace Harvester.Application.Services
 {
     public class OrderService(IOrderRepository orderRepository, 
-        ICombineService combineService,
         ICombineRepository combineRepository,
         IFieldRepository fieldRepository,
         IEnumerable<IOrderRule> checkRules
