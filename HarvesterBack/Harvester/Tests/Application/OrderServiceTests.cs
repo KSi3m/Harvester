@@ -24,16 +24,7 @@ namespace Harvester.Tests.Application
             var combineRepoMock = new Mock<ICombineRepository>();
             var fieldRepoMock = new Mock<IFieldRepository>();
  
-
-            var ruleMock1 = new Mock<IOrderRule>();
-            ruleMock1.Setup(r => r.CheckRule(It.IsAny<OrderInformationForCheckAvailDto>()))
-                .ReturnsAsync(new CheckRuleForOrderResponseDto { Success = true });
-
-            var ruleMock2 = new Mock<IOrderRule>();
-            ruleMock2.Setup(r => r.CheckRule(It.IsAny<OrderInformationForCheckAvailDto>()))
-                .ReturnsAsync(new CheckRuleForOrderResponseDto { Success = true });
-
-            var rules = new List<IOrderRule> { ruleMock1.Object, ruleMock2.Object }; 
+            var rules = new List<IOrderRule> { }; 
   
             var dto = new CreateOrderDto { CombineId = 1, FieldId = 1, OrderDate = DateTime.Today };
             combineRepoMock.Setup(r => r.GetByIdAsync(dto.CombineId)).ReturnsAsync((Combine?)null);
@@ -45,9 +36,9 @@ namespace Harvester.Tests.Application
             var exception = await Assert.ThrowsAsync<NotFoundException>(() => service.CreateAsync(dto));
 
         
-            Assert.Equal("Combine doesn't exist", exception.Message);
+            Assert.Equal($"Combine with id: {dto.CombineId} doesn't exist", exception.Message);
             combineRepoMock.Verify(r => r.GetByIdAsync(dto.CombineId), Times.Once);
-            fieldRepoMock.Verify(r => r.GetByIdAsync(dto.FieldId), Times.Once); 
+            fieldRepoMock.Verify(r => r.GetByIdAsync(dto.FieldId), Times.Never); 
             orderRepoMock.Verify(r => r.CreateAsync(It.IsAny<Order>()), Times.Never);
         }
 
@@ -59,15 +50,7 @@ namespace Harvester.Tests.Application
             var fieldRepoMock = new Mock<IFieldRepository>();
 
 
-            var ruleMock1 = new Mock<IOrderRule>();
-            ruleMock1.Setup(r => r.CheckRule(It.IsAny<OrderInformationForCheckAvailDto>()))
-                .ReturnsAsync(new CheckRuleForOrderResponseDto { Success = true });
-
-            var ruleMock2 = new Mock<IOrderRule>();
-            ruleMock2.Setup(r => r.CheckRule(It.IsAny<OrderInformationForCheckAvailDto>()))
-                .ReturnsAsync(new CheckRuleForOrderResponseDto { Success = true });
-
-            var rules = new List<IOrderRule> { ruleMock1.Object, ruleMock2.Object };
+            var rules = new List<IOrderRule> {};
 
             var dto = new CreateOrderDto { CombineId = 1, FieldId = 1, OrderDate = DateTime.Today };
             combineRepoMock.Setup(r => r.GetByIdAsync(dto.CombineId)).ReturnsAsync(new Combine());
@@ -79,7 +62,7 @@ namespace Harvester.Tests.Application
             var exception = await Assert.ThrowsAsync<NotFoundException>(() => service.CreateAsync(dto));
 
 
-            Assert.Equal("Field doesn't exist", exception.Message);
+            Assert.Equal($"Field with id: {dto.FieldId} doesn't exist", exception.Message);
             combineRepoMock.Verify(r => r.GetByIdAsync(dto.CombineId), Times.Once);
             fieldRepoMock.Verify(r => r.GetByIdAsync(dto.FieldId), Times.Once);
             orderRepoMock.Verify(r => r.CreateAsync(It.IsAny<Order>()), Times.Never);
@@ -134,6 +117,248 @@ namespace Harvester.Tests.Application
             )), Times.Once);
         }
 
+        [Fact]
+        public async Task CreateAsync_ReturnsFalse_WhenOneOfTheRulesIsFalse()
+        {
+
+            var orderRepoMock = new Mock<IOrderRepository>();
+            var combineRepoMock = new Mock<ICombineRepository>();
+            var fieldRepoMock = new Mock<IFieldRepository>();
+
+
+            var ruleMock1 = new Mock<IOrderRule>();
+            ruleMock1.Setup(r => r.CheckRule(It.IsAny<OrderInformationForCheckAvailDto>()))
+                .ReturnsAsync(new CheckRuleForOrderResponseDto { Success = false });
+
+            var ruleMock2 = new Mock<IOrderRule>();
+            ruleMock2.Setup(r => r.CheckRule(It.IsAny<OrderInformationForCheckAvailDto>()))
+                .ReturnsAsync(new CheckRuleForOrderResponseDto { Success = true });
+
+            var rules = new List<IOrderRule> { ruleMock1.Object, ruleMock2.Object };
+
+            var dto = new CreateOrderDto
+            {
+                CombineId = 1,
+                FieldId = 2,
+                OrderDate = DateTime.Today,
+                StrawProcessingMethod = StrawProcessingMethod.CHOP
+            };
+
+            var combine = new Combine { Id = 1, BaseHaPerHour = 5, PricePerHectare = 100 };
+            var field = new Field { Id = 2, AreaHectares = 10, ShapeCoeff = 1, TerrainCoeff = 1 };
+
+            combineRepoMock.Setup(r => r.GetByIdAsync(dto.CombineId)).ReturnsAsync(combine);
+            fieldRepoMock.Setup(r => r.GetByIdAsync(dto.FieldId)).ReturnsAsync(field);
+            orderRepoMock.Setup(r => r.GetAllFromGivenYearAsync(dto.OrderDate.Year)).ReturnsAsync(new List<Order>());
+
+            var service = new OrderService(orderRepoMock.Object,
+               combineRepoMock.Object, fieldRepoMock.Object, rules);
+
+
+            var result = await service.CreateAsync(dto);
+
+
+            Assert.False(result.Success);
+            combineRepoMock.Verify(r => r.GetByIdAsync(dto.CombineId), Times.Once);
+            fieldRepoMock.Verify(r => r.GetByIdAsync(dto.FieldId), Times.Once);
+            orderRepoMock.Verify(r => r.CreateAsync(It.IsAny<Order>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task UpdateAsync_ThrowsException_WhenOrderNotFound()
+        {
+            var orderRepoMock = new Mock<IOrderRepository>();
+            var combineRepoMock = new Mock<ICombineRepository>();
+            var fieldRepoMock = new Mock<IFieldRepository>();
+            var orderId = 1;
+
+            var rules = new List<IOrderRule> { };
+
+            var dto = new CreateOrderDto { CombineId = 1, FieldId = 1, OrderDate = DateTime.Today };
+            orderRepoMock.Setup(r => r.GetByIdAsync(orderId)).ReturnsAsync((Order?)null);
+            combineRepoMock.Setup(r => r.GetByIdAsync(dto.CombineId)).ReturnsAsync(new Combine());
+            fieldRepoMock.Setup(r => r.GetByIdAsync(dto.FieldId)).ReturnsAsync(new Field());
+
+            var service = new OrderService(orderRepoMock.Object,
+                combineRepoMock.Object, fieldRepoMock.Object, rules);
+
+            var exception = await Assert.ThrowsAsync<NotFoundException>(() => service.UpdateAsync(orderId, dto));
+
+
+            Assert.Equal($"Order with id: {orderId} doesn't exist", exception.Message);
+            orderRepoMock.Verify(r => r.GetByIdAsync(orderId), Times.Once);
+            combineRepoMock.Verify(r => r.GetByIdAsync(dto.CombineId), Times.Never);
+            fieldRepoMock.Verify(r => r.GetByIdAsync(dto.FieldId), Times.Never);
+            orderRepoMock.Verify(r => r.CreateAsync(It.IsAny<Order>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task UpdateAsync_ThrowsException_WhenCombineNotFound()
+        {
+            var orderRepoMock = new Mock<IOrderRepository>();
+            var combineRepoMock = new Mock<ICombineRepository>();
+            var fieldRepoMock = new Mock<IFieldRepository>();
+            var orderId = 1;
+
+            var rules = new List<IOrderRule> { };
+
+            var dto = new CreateOrderDto { CombineId = 1, FieldId = 1, OrderDate = DateTime.Today };
+            orderRepoMock.Setup(r => r.GetByIdAsync(orderId)).ReturnsAsync(new Order());
+            combineRepoMock.Setup(r => r.GetByIdAsync(dto.CombineId)).ReturnsAsync((Combine?)null);
+            fieldRepoMock.Setup(r => r.GetByIdAsync(dto.FieldId)).ReturnsAsync(new Field());
+
+            var service = new OrderService(orderRepoMock.Object,
+                combineRepoMock.Object, fieldRepoMock.Object, rules);
+
+            var exception = await Assert.ThrowsAsync<NotFoundException>(() => service.UpdateAsync(orderId, dto));
+
+
+            Assert.Equal($"Combine with id: {dto.CombineId} doesn't exist", exception.Message);
+            orderRepoMock.Verify(r => r.GetByIdAsync(orderId), Times.Once);
+            combineRepoMock.Verify(r => r.GetByIdAsync(dto.CombineId), Times.Once);
+            fieldRepoMock.Verify(r => r.GetByIdAsync(dto.FieldId), Times.Never);
+            orderRepoMock.Verify(r => r.CreateAsync(It.IsAny<Order>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task UpdateAsync_ThrowsException_WhenFieldNotFound()
+        {
+            var orderRepoMock = new Mock<IOrderRepository>();
+            var combineRepoMock = new Mock<ICombineRepository>();
+            var fieldRepoMock = new Mock<IFieldRepository>();
+            var orderId = 1;
+
+            var rules = new List<IOrderRule> { };
+
+            var dto = new CreateOrderDto { CombineId = 1, FieldId = 1, OrderDate = DateTime.Today };
+            orderRepoMock.Setup(r => r.GetByIdAsync(orderId)).ReturnsAsync(new Order());
+            combineRepoMock.Setup(r => r.GetByIdAsync(dto.CombineId)).ReturnsAsync(new Combine());
+            fieldRepoMock.Setup(r => r.GetByIdAsync(dto.FieldId)).ReturnsAsync((Field?)null);
+
+            var service = new OrderService(orderRepoMock.Object,
+                combineRepoMock.Object, fieldRepoMock.Object, rules);
+
+            var exception = await Assert.ThrowsAsync<NotFoundException>(() => service.UpdateAsync(orderId, dto));
+
+
+            Assert.Equal($"Field with id: {dto.FieldId} doesn't exist", exception.Message);
+            orderRepoMock.Verify(r => r.GetByIdAsync(orderId), Times.Once);
+            combineRepoMock.Verify(r => r.GetByIdAsync(dto.CombineId), Times.Once);
+            fieldRepoMock.Verify(r => r.GetByIdAsync(dto.FieldId), Times.Once);
+            orderRepoMock.Verify(r => r.CreateAsync(It.IsAny<Order>()), Times.Never);
+        }
+
+
+        [Fact]
+        public async Task UpdateAsync_UpdatesOrder_WhenAvailabilityIsTrue()
+        {
+
+            var orderRepoMock = new Mock<IOrderRepository>();
+            var combineRepoMock = new Mock<ICombineRepository>();
+            var fieldRepoMock = new Mock<IFieldRepository>();
+            var orderId = 1;
+
+            var ruleMock1 = new Mock<IOrderRule>();
+            ruleMock1.Setup(r => r.CheckRule(It.IsAny<OrderInformationForCheckAvailDto>()))
+                .ReturnsAsync(new CheckRuleForOrderResponseDto { Success = true });
+
+            var ruleMock2 = new Mock<IOrderRule>();
+            ruleMock2.Setup(r => r.CheckRule(It.IsAny<OrderInformationForCheckAvailDto>()))
+                .ReturnsAsync(new CheckRuleForOrderResponseDto { Success = true });
+
+            var rules = new List<IOrderRule> { ruleMock1.Object, ruleMock2.Object };
+
+            var dto = new CreateOrderDto
+            {
+                CombineId = 1,
+                FieldId = 2,
+                OrderDate = DateTime.Today,
+                StrawProcessingMethod = StrawProcessingMethod.CHOP
+            };
+
+            var combine = new Combine { Id = 1, BaseHaPerHour = 5, PricePerHectare = 100 };
+            var field = new Field { Id = 2, AreaHectares = 10, ShapeCoeff = 1, TerrainCoeff = 1 };
+
+            orderRepoMock.Setup(r => r.GetByIdAsync(orderId)).ReturnsAsync(new Order 
+            {
+                Id = 1,
+                CombineId = 1,
+                FieldId = 1,
+                StrawProcessingMethod = StrawProcessingMethod.LEAVE
+            });
+            combineRepoMock.Setup(r => r.GetByIdAsync(dto.CombineId)).ReturnsAsync(combine);
+            fieldRepoMock.Setup(r => r.GetByIdAsync(dto.FieldId)).ReturnsAsync(field);
+            orderRepoMock.Setup(r => r.GetAllFromGivenYearAsync(dto.OrderDate.Year)).ReturnsAsync(new List<Order>());
+
+            var service = new OrderService(orderRepoMock.Object,
+               combineRepoMock.Object, fieldRepoMock.Object, rules);
+
+
+            var result = await service.UpdateAsync(orderId, dto);
+
+
+            Assert.True(result.Success);
+            orderRepoMock.Verify(r => r.UpdateAsync(It.Is<Order>(o =>
+                o.CombineId == dto.CombineId &&
+                o.FieldId == dto.FieldId &&
+                o.StrawProcessingMethod == dto.StrawProcessingMethod &&
+                o.EstimatedPrice > 0
+            )), Times.Once);
+        }
+        [Fact]
+        public async Task UpdateAsync_ReturnsFalse_WhenOneOfTheRulesIsFalse()
+        {
+
+            var orderRepoMock = new Mock<IOrderRepository>();
+            var combineRepoMock = new Mock<ICombineRepository>();
+            var fieldRepoMock = new Mock<IFieldRepository>();
+            var orderId = 1;
+
+            var ruleMock1 = new Mock<IOrderRule>();
+            ruleMock1.Setup(r => r.CheckRule(It.IsAny<OrderInformationForCheckAvailDto>()))
+                .ReturnsAsync(new CheckRuleForOrderResponseDto { Success = true });
+
+            var ruleMock2 = new Mock<IOrderRule>();
+            ruleMock2.Setup(r => r.CheckRule(It.IsAny<OrderInformationForCheckAvailDto>()))
+                .ReturnsAsync(new CheckRuleForOrderResponseDto { Success = false });
+
+            var rules = new List<IOrderRule> { ruleMock1.Object, ruleMock2.Object };
+
+            var dto = new CreateOrderDto
+            {
+                CombineId = 1,
+                FieldId = 2,
+                OrderDate = DateTime.Today,
+                StrawProcessingMethod = StrawProcessingMethod.CHOP
+            };
+
+            var combine = new Combine { Id = 1, BaseHaPerHour = 5, PricePerHectare = 100 };
+            var field = new Field { Id = 2, AreaHectares = 10, ShapeCoeff = 1, TerrainCoeff = 1 };
+
+            orderRepoMock.Setup(r => r.GetByIdAsync(orderId)).ReturnsAsync(new Order
+            {
+                Id = 1,
+                CombineId = 1,
+                FieldId = 1,
+                StrawProcessingMethod = StrawProcessingMethod.LEAVE
+            });
+            combineRepoMock.Setup(r => r.GetByIdAsync(dto.CombineId)).ReturnsAsync(combine);
+            fieldRepoMock.Setup(r => r.GetByIdAsync(dto.FieldId)).ReturnsAsync(field);
+            orderRepoMock.Setup(r => r.GetAllFromGivenYearAsync(dto.OrderDate.Year)).ReturnsAsync(new List<Order>());
+
+            var service = new OrderService(orderRepoMock.Object,
+               combineRepoMock.Object, fieldRepoMock.Object, rules);
+
+
+            var result = await service.UpdateAsync(orderId, dto);
+
+
+            Assert.False(result.Success);
+            orderRepoMock.Verify(r => r.GetByIdAsync(orderId), Times.Once);
+            combineRepoMock.Verify(r => r.GetByIdAsync(dto.CombineId), Times.Once);
+            fieldRepoMock.Verify(r => r.GetByIdAsync(dto.FieldId), Times.Once);
+            orderRepoMock.Verify(r => r.UpdateAsync(It.IsAny<Order>()), Times.Never);
+        }
 
     }
 }

@@ -24,11 +24,17 @@ namespace Harvester.Application.Services
         public async Task<CheckRuleForOrderResponseDto> CreateAsync(CreateOrderDto dto)
         {
             var combine = await combineRepository.GetByIdAsync(dto.CombineId);
-            var field = await fieldRepository.GetByIdAsync(dto.FieldId);
+            if (combine == null)
+            {
+                throw new NotFoundException($"Combine with id: {dto.CombineId} doesn't exist");
+            }
 
-            if(combine == null) { throw new NotFoundException("Combine doesn't exist"); }
-            if(field == null) { throw new NotFoundException("Field doesn't exist"); }
-            
+            var field = await fieldRepository.GetByIdAsync(dto.FieldId);
+            if (field == null)
+            {
+                throw new NotFoundException($"Field with id: {dto.FieldId} doesn't exist");
+            }
+
             var estimatedTime = (((field.AreaHectares / combine.BaseHaPerHour) / (field.ShapeCoeff * field.TerrainCoeff)) * 60);
 
             var info = new OrderInformationForCheckAvailDto
