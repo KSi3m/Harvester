@@ -23,9 +23,9 @@ namespace Harvester.Application.Services
                 Model = dto.Model,
                 BaseHaPerHour = dto.BaseHaPerHour,
                 HeaderLength = dto.HeaderLength,
-                IsAvailable = dto.IsAvailable,
+                IsAvailable = dto.IsAvailable ?? false,
                 PricePerHectare = dto.PricePerHectare,
-                HasStrawChopper = dto.HasStrawChopper,
+                HasStrawChopper = dto.HasStrawChopper ?? false,
                 AvailableWorkHours = dto.AvailableWorkHours,
                 BaseEfficency = dto.BaseEfficency,
             };
@@ -70,11 +70,11 @@ namespace Harvester.Application.Services
             combine.Model = dto.Model;
             combine.BaseHaPerHour = dto.BaseHaPerHour;
             combine.HeaderLength = dto.HeaderLength;
-            combine.IsAvailable = dto.IsAvailable;
+            combine.IsAvailable = dto.IsAvailable ?? false;
             combine.AvailableWorkHours = dto.AvailableWorkHours;
             combine.BaseEfficency = dto.BaseEfficency;
             combine.PricePerHectare = dto.PricePerHectare;
-            combine.HasStrawChopper = dto.HasStrawChopper;
+            combine.HasStrawChopper = dto.HasStrawChopper ?? false;
 
             await combineRepository.UpdateAsync(combine);
         }

@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using FluentValidation.Validators;
 using Harvester.Application.Dtos;
 
 namespace Harvester.Application.Validators
@@ -26,14 +27,25 @@ namespace Harvester.Application.Validators
                 .GreaterThan(0.01m)
                      .WithMessage("AreaHectares must greater than 0.01");
 
-            RuleFor(x => x.TerrainCoeff).NotEmpty()
-                .WithMessage("Terrain Coeff must not be empty");
+            RuleFor(x => x.TerrainCoeff)
+                .NotEmpty()
+                    .WithMessage("Terrain Coeff must not be empty")
+                .GreaterThan(0m)
+                     .WithMessage("TerrainCoeff must greater than 0")
+                .LessThanOrEqualTo(1m)
+                     .WithMessage("TerrainCoeff must be less than 1");
 
-            RuleFor(x => x.ShapeCoeff).NotEmpty()
-                .WithMessage("Shape Coeff must not be empty");
+            RuleFor(x => x.ShapeCoeff)
+                .NotEmpty()
+                    .WithMessage("Shape Coeff must not be empty")
+                .GreaterThan(0m)
+                     .WithMessage("ShapeCoeff must greater than 0")
+                .LessThanOrEqualTo(1m)
+                     .WithMessage("ShapeCoeff must be less than 1");
 
-            RuleFor(x => x.CropType).NotEmpty()
-                .WithMessage("Crop type must not be empty");
+            RuleFor(x => x.CropType)
+                .NotEmpty()
+                    .WithMessage("Crop type must not be empty");
 
             RuleFor(x => x.CenterPoint)
                 .NotNull()
