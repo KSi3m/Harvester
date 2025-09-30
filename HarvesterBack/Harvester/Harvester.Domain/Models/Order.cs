@@ -24,8 +24,8 @@ namespace Harvester.Domain.Models
 
         public int EstimatedTime { get; set; }
         public decimal EstimatedPrice { get; set; }
-
         public decimal TotalPrice { get; set; }
         public ICollection<Payment>? Payments { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

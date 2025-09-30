@@ -23,5 +23,7 @@ namespace Harvester.Domain.Models
         public decimal BaseEfficency { get; set; } //0.75
 
         public ICollection<Order>? Orders { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

@@ -48,6 +48,10 @@ namespace Harvester.Infrastructure.Persistence.Config
             .HasDefaultValue(true);
 
             modelBuilder
+              .Property(c => c.IsDeleted)
+            .HasDefaultValue(false);
+
+            modelBuilder
                 .HasMany(c => c.Orders)
                 .WithOne(o => o.Combine)
                 .HasForeignKey(o => o.CombineId)
