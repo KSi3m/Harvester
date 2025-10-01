@@ -22,5 +22,7 @@ namespace Harvester.Application.Dtos
         public int EstimatedTime { get; set; }
         public decimal EstimatedPrice { get; set; }
         public decimal TotalPrice { get; set; }
+
+        public bool IsArchived { get; set; }
     }
 }

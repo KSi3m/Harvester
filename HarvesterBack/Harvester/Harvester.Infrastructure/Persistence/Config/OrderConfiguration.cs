@@ -44,6 +44,10 @@ namespace Harvester.Infrastructure.Persistence.Config
                 .Property(c => c.IsDeleted)
             .HasDefaultValue(false);
 
+            modelBuilder
+                .Property(c => c.IsArchived)
+            .HasDefaultValue(false);
+
             modelBuilder.HasData(
             new Order
             {

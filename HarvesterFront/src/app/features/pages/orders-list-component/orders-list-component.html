@@ -2,9 +2,14 @@
   @if (orders!.length > 0) {
     <div class="orders-list">
       @for (order of orders; track order.id) {
-        <p-card class="order-card">
+        <p-card class="order-card" 
+        [style]="order.isArchived ? { 'background-color': '#b1afaf' } : {}"
+       >
           <div class="order-header">
-            <span class="order-id">#{{ order.id }}</span>
+            <span class="order-id">
+              #{{ order.id }} - {{ order.isArchived ? 'ARCHIVED' : '' }}
+            </span>
+
             <span class="order-status status-{{ order.status }}">
               {{ order.status }}
             </span>
@@ -52,16 +57,18 @@
             </div>
             <!-- <div><strong>Total Price:</strong> {{ order.totalPrice }}</div> -->
           </div>
-          <p-button
-            (click)="deleteOrder(order.id)"
-            severity="danger"
-            label="Delete"
-          />
-          <p-button
-            (click)="updateOrder(order.id)"
-            severity="info"
-            label="Edit"
-          />
+          @if(!order.isArchived){
+            <p-button
+              (click)="deleteOrder(order.id)"
+              severity="danger"
+              label="Delete"
+            />
+            <p-button
+              (click)="updateOrder(order.id)"
+              severity="info"
+              label="Edit"
+            />
+          }
         </p-card>
       }
     </div>

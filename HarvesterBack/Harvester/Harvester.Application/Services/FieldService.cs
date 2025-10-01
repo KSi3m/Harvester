@@ -25,7 +25,7 @@ namespace Harvester.Application.Services
 
         public async Task DeleteAsync(int id)
         {
-            var field = await fieldRepository.GetByIdAsync(id);
+            var field = await fieldRepository.GetByIdAsync(id,true);
             if (field == null)
             {
                 throw new NotFoundException("Field doesn't exist");

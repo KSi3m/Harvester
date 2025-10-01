@@ -34,7 +34,7 @@ namespace Harvester.Application.Services
 
         public async Task DeleteAsync(int id)
         {
-            var combine = await combineRepository.GetByIdAsync(id);
+            var combine = await combineRepository.GetByIdAsync(id,true);
             if(combine == null)
             {
                 throw new NotFoundException("Combine doesn't exist");

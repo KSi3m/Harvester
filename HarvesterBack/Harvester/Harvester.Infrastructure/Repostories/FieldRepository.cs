@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Harvester.Infrastructure.Repostories
 {
@@ -21,18 +22,38 @@ namespace Harvester.Infrastructure.Repostories
 
         public async Task DeleteAsync(Field field)
         {
-            dbContext.Fields.Remove(field);
+            dbContext.Fields.Attach(field);
+            field.IsDeleted = true;
+            var orders = field.Orders;
+            foreach(var order in orders)
+            {
+                order.IsArchived = true;
+            }
             await dbContext.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Field>> GetAllAsync()
         {
-            return await dbContext.Fields.AsNoTracking().ToListAsync();
+            return await dbContext
+                .Fields
+                .AsNoTracking()
+                .Where(x=> x.IsDeleted == false)
+                .ToListAsync();
         }
 
-        public async Task<Field?> GetByIdAsync(int id)
+        public async Task<Field?> GetByIdAsync(int id, bool includeOrders = false)
         {
-            return await dbContext.Fields.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            var query = dbContext
+                .Fields
+                .AsNoTracking();
+
+            if(includeOrders)
+            {
+                query = query.Include(x => x.Orders);
+            }
+                
+            return await query
+                .FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false);
         }
 
         public async Task UpdateAsync(Field field)

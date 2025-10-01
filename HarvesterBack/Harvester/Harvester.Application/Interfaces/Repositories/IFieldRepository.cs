@@ -10,7 +10,7 @@ namespace Harvester.Application.Interfaces.Repositories
     public interface IFieldRepository
     {
         Task<IEnumerable<Field>> GetAllAsync();
-        Task<Field?> GetByIdAsync(int id);
+        Task<Field?> GetByIdAsync(int id, bool includeOrders = false);
         Task CreateAsync(Field field);
         Task UpdateAsync(Field field);
 

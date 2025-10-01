@@ -14,4 +14,5 @@ export interface Order {
   estimatedTime: number;
   estimatedPrice: number;
   totalPrice: number;
+  isArchived: boolean;
 }

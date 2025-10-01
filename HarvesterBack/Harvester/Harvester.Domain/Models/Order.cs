@@ -27,5 +27,7 @@ namespace Harvester.Domain.Models
         public decimal TotalPrice { get; set; }
         public ICollection<Payment>? Payments { get; set; }
         public bool IsDeleted { get; set; }
+
+        public bool IsArchived { get; set; }
     }
 }
