@@ -23,13 +23,13 @@ namespace Harvester.Application.Services
     {
         public async Task<CheckRuleForOrderResponseDto> CreateAsync(CreateOrderDto dto)
         {
-            var combine = await combineRepository.GetByIdAsync(dto.CombineId);
+            var combine = await combineRepository.GetByIdAsync(dto.CombineId,true);
             if (combine == null)
             {
                 throw new NotFoundException($"Combine with id: {dto.CombineId} doesn't exist");
             }
 
-            var field = await fieldRepository.GetByIdAsync(dto.FieldId);
+            var field = await fieldRepository.GetByIdAsync(dto.FieldId, true);
             if (field == null)
             {
                 throw new NotFoundException($"Field with id: {dto.FieldId} doesn't exist");
@@ -102,13 +102,13 @@ namespace Harvester.Application.Services
                 throw new NotFoundException($"Order with id: {id} doesn't exist");
             }
 
-            var combine = await combineRepository.GetByIdAsync(dto.CombineId);
+            var combine = await combineRepository.GetByIdAsync(dto.CombineId,true);
             if (combine == null)
             {
                 throw new NotFoundException($"Combine with id: {id} doesn't exist");
             }
 
-            var field = await fieldRepository.GetByIdAsync(dto.FieldId);
+            var field = await fieldRepository.GetByIdAsync(dto.FieldId, true);
             if (field == null)
             {
                 throw new NotFoundException($"Field with id: {id} doesn't exist");
