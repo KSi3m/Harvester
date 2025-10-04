@@ -47,5 +47,35 @@ namespace Harvester.Tests.Application
 
             combineRepoMock.Verify(r => r.DeleteAsync(combine), Times.Once);
         }
+        [Fact]
+        public async Task GetByIdAsync_ThrowsException_WhenCombineDoesntExist()
+        {
+            var combineRepoMock = new Mock<ICombineRepository>();
+
+            var service = new CombineService(combineRepoMock.Object);
+
+            combineRepoMock
+                .Setup(r => r.GetByIdAsync(1, false))
+                .ReturnsAsync((Combine?)null);
+
+            await Assert.ThrowsAsync<NotFoundException>(() => service.GetByIdAsync(1));
+        }
+
+        [Fact]
+        public async Task GetByIdAsync_ReturnsCombine_WhenCombineExists()
+        {
+            var combineRepoMock = new Mock<ICombineRepository>();
+
+            var service = new CombineService(combineRepoMock.Object);
+
+            var combine = new Combine { Id = 1 };
+            combineRepoMock
+                .Setup(r => r.GetByIdAsync(combine.Id, false))
+                .ReturnsAsync(combine);
+
+            var combineResponse = await service.GetByIdAsync(combine.Id);
+
+            Assert.Equal(combine.Id, combineResponse.Id);
+        }
     }
 }

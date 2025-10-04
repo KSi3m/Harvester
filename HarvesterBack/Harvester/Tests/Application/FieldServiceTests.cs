@@ -45,5 +45,36 @@ namespace Harvester.Tests.Application
 
             fieldRepoMock.Verify(r => r.DeleteAsync(field), Times.Once);  
         }
+
+        [Fact]
+        public async Task GetByIdAsync_ThrowsException_WhenFieldDoesntExist()
+        {
+            var fieldRepoMock = new Mock<IFieldRepository>();
+
+            var service = new FieldService(fieldRepoMock.Object);
+
+            fieldRepoMock
+                .Setup(r => r.GetByIdAsync(1, true))
+                .ReturnsAsync((Field?)null);
+
+            await Assert.ThrowsAsync<NotFoundException>(() => service.GetByIdAsync(1));
+        }
+
+        [Fact]
+        public async Task GetByIdAsync_ReturnsField_WhenFieldExists()
+        {
+            var fieldRepoMock = new Mock<IFieldRepository>();
+
+            var service = new FieldService(fieldRepoMock.Object);
+
+            var field = new Field { Id = 1 };
+            fieldRepoMock
+                .Setup(r => r.GetByIdAsync(field.Id,false))
+                .ReturnsAsync(field);
+
+            var fieldResponse = await service.GetByIdAsync(field.Id);
+
+            Assert.Equal(field.Id, fieldResponse.Id);
+        }
     }
 }
