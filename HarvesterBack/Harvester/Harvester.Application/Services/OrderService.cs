@@ -77,13 +77,13 @@ namespace Harvester.Application.Services
             await orderRepository.DeleteAsync(order);
         }
 
-        public async Task<IEnumerable<OrderDto>> GetAll()
+        public async Task<IEnumerable<OrderDto>> GetAllAsync()
         {
             var ordersDto = OrderMapppings.MapOrdersToOrderDtos(await orderRepository.GetAllAsync());
             return ordersDto;
         }
 
-        public async Task<OrderDto?> GetById(int id)
+        public async Task<OrderDto?> GetByIdAsync(int id)
         {
             var order = await orderRepository.GetByIdAsync(id);
             if(order == null)

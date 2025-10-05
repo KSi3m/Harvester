@@ -1,5 +1,7 @@
-﻿using Harvester.Application.Exceptions;
+﻿using Harvester.Application.Dtos;
+using Harvester.Application.Exceptions;
 using Harvester.Application.Interfaces.Repositories;
+using Harvester.Application.Mappings;
 using Harvester.Application.Services;
 using Harvester.Domain.Models;
 using Moq;
@@ -75,6 +77,31 @@ namespace Harvester.Tests.Application
             var fieldResponse = await service.GetByIdAsync(field.Id);
 
             Assert.Equal(field.Id, fieldResponse.Id);
+        }
+
+        [Fact]
+        public async Task CreateAsync_CreatesField_WhenDataIsValid()
+        {
+            var mockRepository = new Mock<IFieldRepository>();
+
+            var service = new FieldService(mockRepository.Object);
+
+            var dto = new CreateFieldDto
+            {
+                IdentifierName = "123456_1.2024.1",
+                CommonName = "Example"
+            };
+            var expectedField = FieldMappings.MapCreateFieldDtoToField(dto);
+
+            await service.CreateAsync(dto);
+
+            mockRepository.Verify(
+                repo => repo.CreateAsync(It.Is<Field>(f =>
+                    f.IdentifierName == expectedField.IdentifierName &&
+                    f.CommonName == expectedField.CommonName
+                )),
+                Times.Once
+            );
         }
     }
 }

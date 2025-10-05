@@ -1,6 +1,8 @@
-﻿using Harvester.Application.Exceptions;
+﻿using Harvester.Application.Dtos;
+using Harvester.Application.Exceptions;
 using Harvester.Application.Interfaces.OrderRules;
 using Harvester.Application.Interfaces.Repositories;
+using Harvester.Application.Mappings;
 using Harvester.Application.Services;
 using Harvester.Domain.Models;
 using Moq;
@@ -76,6 +78,31 @@ namespace Harvester.Tests.Application
             var combineResponse = await service.GetByIdAsync(combine.Id);
 
             Assert.Equal(combine.Id, combineResponse.Id);
+        }
+
+        [Fact]
+        public async Task CreateAsync_CreatesCombine_WhenDataIsValid()
+        {
+            var mockRepository = new Mock<ICombineRepository>();
+
+            var service = new CombineService(mockRepository.Object);
+
+            var dto = new CreateCombineDto
+            {
+                HeaderLength = 4.5m,
+                PricePerHectare = 400
+            };
+            var expectedCombine = CombineMappings.MapCreateCombineDtoToCombine(dto);
+
+            await service.CreateAsync(dto);
+
+            mockRepository.Verify(
+                repo => repo.CreateAsync(It.Is<Combine>(c =>
+                    c.HeaderLength == expectedCombine.HeaderLength &&
+                    c.PricePerHectare == expectedCombine.PricePerHectare
+                )),
+                Times.Once
+            );
         }
     }
 }

@@ -18,17 +18,7 @@ namespace Harvester.Application.Services
     {
         public async Task CreateAsync(CreateCombineDto dto)
         {
-            var combine = new Combine
-            {
-                Model = dto.Model,
-                BaseHaPerHour = dto.BaseHaPerHour,
-                HeaderLength = dto.HeaderLength,
-                IsAvailable = dto.IsAvailable ?? false,
-                PricePerHectare = dto.PricePerHectare,
-                HasStrawChopper = dto.HasStrawChopper ?? false,
-                AvailableWorkHours = dto.AvailableWorkHours,
-                BaseEfficency = dto.BaseEfficency,
-            };
+            var combine = CombineMappings.MapCreateCombineDtoToCombine(dto);
             await combineRepository.CreateAsync(combine);
         }
 

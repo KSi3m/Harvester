@@ -30,5 +30,20 @@ namespace Harvester.Application.Mappings
         {
             return combines.Select(MapCombineToCombineDto);
         }
+        public static Combine MapCreateCombineDtoToCombine(CreateCombineDto dto)
+        {
+            var combine = new Combine
+            {
+                Model = dto.Model,
+                BaseHaPerHour = dto.BaseHaPerHour,
+                HeaderLength = dto.HeaderLength,
+                IsAvailable = dto.IsAvailable ?? false,
+                PricePerHectare = dto.PricePerHectare,
+                HasStrawChopper = dto.HasStrawChopper ?? false,
+                AvailableWorkHours = dto.AvailableWorkHours,
+                BaseEfficency = dto.BaseEfficency,
+            };
+            return combine;
+        }
     }
 }

@@ -10,8 +10,8 @@ namespace Harvester.Application.Interfaces.Services
 {
     public interface IOrderService
     {
-        Task<IEnumerable<OrderDto>> GetAll();
-        Task<OrderDto?> GetById(int id);
+        Task<IEnumerable<OrderDto>> GetAllAsync();
+        Task<OrderDto?> GetByIdAsync(int id);
 
         Task<CheckRuleForOrderResponseDto> CreateAsync(CreateOrderDto dto);
 

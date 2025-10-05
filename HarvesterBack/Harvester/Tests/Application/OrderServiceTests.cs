@@ -403,5 +403,44 @@ namespace Harvester.Tests.Application
             orderRepoMock.Verify(r => r.DeleteAsync(order), Times.Once);
         }
 
+        [Fact]
+        public async Task GetByIdAsync_ThrowsException_WhenOrderDoesntExist()
+        {
+            var orderRepoMock = new Mock<IOrderRepository>();
+            var combineRepoMock = new Mock<ICombineRepository>();
+            var fieldRepoMock = new Mock<IFieldRepository>();
+            var rules = new List<IOrderRule> { };
+
+            var service = new OrderService(orderRepoMock.Object,
+                combineRepoMock.Object, fieldRepoMock.Object, rules);
+
+            orderRepoMock
+                .Setup(r => r.GetByIdAsync(1))
+                .ReturnsAsync((Order?)null);
+
+            await Assert.ThrowsAsync<NotFoundException>(() => service.GetByIdAsync(1));
+        }
+
+       /* [Fact]
+        public async Task GetByIdAsync_ReturnsOrder_WhenOrderExists()
+        {
+            var orderRepoMock = new Mock<IOrderRepository>();
+            var combineRepoMock = new Mock<ICombineRepository>();
+            var fieldRepoMock = new Mock<IFieldRepository>();
+            var rules = new List<IOrderRule> { };
+
+            var service = new OrderService(orderRepoMock.Object,
+                combineRepoMock.Object, fieldRepoMock.Object, rules);
+
+            var order = new Order { Id = 1 };
+            orderRepoMock
+                .Setup(r => r.GetByIdAsync(order.Id))
+                .ReturnsAsync(order);
+
+            var orderReponse = await service.GetByIdAsync(order.Id);
+
+            Assert.Equal(order.Id, orderReponse.Id);
+        }*/
+
     }
 }
