@@ -421,7 +421,7 @@ namespace Harvester.Tests.Application
             await Assert.ThrowsAsync<NotFoundException>(() => service.GetByIdAsync(1));
         }
 
-       /* [Fact]
+        [Fact]
         public async Task GetByIdAsync_ReturnsOrder_WhenOrderExists()
         {
             var orderRepoMock = new Mock<IOrderRepository>();
@@ -432,7 +432,7 @@ namespace Harvester.Tests.Application
             var service = new OrderService(orderRepoMock.Object,
                 combineRepoMock.Object, fieldRepoMock.Object, rules);
 
-            var order = new Order { Id = 1 };
+            var order = new Order { Id = 1, Combine = new Combine { Id = 1}, Field = new Field { Id = 1 } };
             orderRepoMock
                 .Setup(r => r.GetByIdAsync(order.Id))
                 .ReturnsAsync(order);
@@ -440,7 +440,7 @@ namespace Harvester.Tests.Application
             var orderReponse = await service.GetByIdAsync(order.Id);
 
             Assert.Equal(order.Id, orderReponse.Id);
-        }*/
+        }
 
     }
 }

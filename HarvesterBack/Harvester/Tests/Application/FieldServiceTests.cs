@@ -103,5 +103,54 @@ namespace Harvester.Tests.Application
                 Times.Once
             );
         }
+
+        [Fact]
+        public async Task UpdateAsync_ThrowsException_WhenFieldDoesntExist()
+        {
+            var mockRepository = new Mock<IFieldRepository>();
+
+            var service = new FieldService(mockRepository.Object);
+            var fieldId = 2;
+            var dto = new CreateFieldDto
+            {
+                IdentifierName = "123456_1.2024.1/1",
+                CommonName = "Example"
+            };
+
+            mockRepository
+                .Setup(r => r.GetByIdAsync(fieldId, false))
+                .ReturnsAsync((Field?)null);
+
+            await Assert.ThrowsAsync<NotFoundException>(() => service.UpdateAsync(fieldId,dto));
+        }
+
+        [Fact]
+        public async Task UpdateAsync_UpdatesField_WhenDataIsValid()
+        {
+            var mockRepository = new Mock<IFieldRepository>();
+
+            var service = new FieldService(mockRepository.Object);
+            var fieldId = 1;
+            var dto = new CreateFieldDto
+            {
+                IdentifierName = "123456_1.2024.1/1",
+                CommonName = "Example"
+            };
+
+            var field = new Field { Id = 1, IdentifierName = "123456_1.2024.1", CommonName = "test" };
+            mockRepository
+                .Setup(r => r.GetByIdAsync(fieldId, false))
+                .ReturnsAsync(field);
+
+            await service.UpdateAsync(fieldId, dto);
+
+            mockRepository.Verify(
+                repo => repo.UpdateAsync(It.Is<Field>(f =>
+                    f.IdentifierName == "123456_1.2024.1/1" &&
+                    f.CommonName == "Example"
+                )),
+                Times.Once
+            );
+        }
     }
 }

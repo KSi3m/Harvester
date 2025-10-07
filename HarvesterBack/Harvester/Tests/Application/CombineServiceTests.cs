@@ -104,5 +104,66 @@ namespace Harvester.Tests.Application
                 Times.Once
             );
         }
+
+        [Fact]
+        public async Task UpdateAsync_ThrowsException_WhenCombineDoesntExist()
+        {
+            var mockRepository = new Mock<ICombineRepository>();
+
+            var service = new CombineService(mockRepository.Object);
+            var combineId = 2;
+            var dto = new CreateCombineDto
+            {
+                HeaderLength = 4.5m,
+                PricePerHectare = 400
+            };
+
+            var combine = new Combine
+            {
+                Id = 1,
+                HeaderLength = 4.0m,
+                PricePerHectare = 600
+            };
+
+            mockRepository
+                .Setup(r => r.GetByIdAsync(combineId, false))
+                .ReturnsAsync((Combine?)null);
+
+            await Assert.ThrowsAsync<NotFoundException>(() => service.UpdateAsync(combineId, dto));
+        }
+
+        [Fact]
+        public async Task UpdateAsync_UpdatesCombine_WhenDataIsValid()
+        {
+            var mockRepository = new Mock<ICombineRepository>();
+
+            var service = new CombineService(mockRepository.Object);
+            var combineId = 1;
+            var dto = new CreateCombineDto
+            {
+                HeaderLength = 4.5m,
+                PricePerHectare = 400
+            };
+
+            var combine = new Combine { 
+                Id = 1,
+                HeaderLength = 4.0m,
+                PricePerHectare = 600
+            };
+
+            mockRepository
+                .Setup(r => r.GetByIdAsync(combineId, false))
+                .ReturnsAsync(combine);
+
+            await service.UpdateAsync(combineId,dto);
+
+            mockRepository.Verify(
+                repo => repo.UpdateAsync(It.Is<Combine>(c =>
+                    c.HeaderLength == 4.5m &&
+                    c.PricePerHectare == 400
+                )),
+                Times.Once
+            );
+        }
     }
 }
