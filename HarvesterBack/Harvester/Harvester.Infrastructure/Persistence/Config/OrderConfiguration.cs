@@ -39,6 +39,15 @@ namespace Harvester.Infrastructure.Persistence.Config
                 .HasForeignKey(p => p.OrderId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+
+            modelBuilder
+                .Property(c => c.IsDeleted)
+            .HasDefaultValue(false);
+
+            modelBuilder
+                .Property(c => c.IsArchived)
+            .HasDefaultValue(false);
+
             modelBuilder.HasData(
             new Order
             {

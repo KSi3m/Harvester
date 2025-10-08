@@ -1,3 +1,5 @@
+@use "../../../shared/styles/empty-container-for-lists-styles.scss" as shared;
+@include shared.empty-container-for-lists-styles;
 :host {
   background: #f5f6fa;
   min-height: 100vh;
@@ -54,19 +56,5 @@
   object-fit: cover; 
   border-radius: 6px;
 }
-.empty-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem;
-}
 
-.empty-card {
-  text-align: center;
-  font-size: 1rem;
-  color: #666;
-  padding: 2rem;
-  max-width: 600px; 
-  width: 100%;
-}
 

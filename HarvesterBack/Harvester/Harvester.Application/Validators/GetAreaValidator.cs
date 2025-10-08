@@ -12,8 +12,10 @@ namespace Harvester.Application.Validators
         public GetAreaValidator()
         {
             RuleFor(x => x)
-                .NotEmpty().WithMessage("NameIdentifier is required")
-                .Matches(@"^\d{6}_\d\.\d{4}\.\d+(\/\d+)?$").WithMessage("NameIdentifier format is invalid. Please supply it in WWPPGG_R.XXXX.NDZ format");
+                .NotEmpty()
+                    .WithMessage("NameIdentifier is required")
+                .Matches(@"^\d{6}_\d\.\d{4}\.\d+(\/\d+)?$")
+                    .WithMessage("NameIdentifier format is invalid. Please supply it in WWPPGG_R.XXXX.NDZ format");
         }
     }
 }

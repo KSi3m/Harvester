@@ -6,7 +6,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as L from 'leaflet';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -43,6 +43,7 @@ export class AddFieldFormComponent implements OnInit {
   fieldService = inject(FieldService);
   messageService = inject(MessageService);
   activatedRoute = inject(ActivatedRoute);
+  router = inject(Router);
   fb = inject(FormBuilder);
   form!: FormGroup;
 
@@ -122,6 +123,11 @@ export class AddFieldFormComponent implements OnInit {
                 boundary: res.boundary,
               });
             }
+            this.tempResponse = {
+              areaHectares: res.areaHectares,
+              centerPoint: res.centerPoint,
+              boundary: res.boundary,
+            };
             this.formReady = true;
           },
           error: (err) => {
@@ -172,6 +178,7 @@ export class AddFieldFormComponent implements OnInit {
             summary: 'Success',
             detail: 'Operation completed!',
           });
+          this.router.navigate(['/fields']);
         },
         error: (error: HttpErrorResponse) => {
           const err = error.error as ErrorResponse;
@@ -193,6 +200,7 @@ export class AddFieldFormComponent implements OnInit {
             summary: 'Success',
             detail: 'Operation completed!',
           });
+          this.router.navigate(['/fields']);
         },
         error: (error: HttpErrorResponse) => {
           const err = error.error as ErrorResponse;

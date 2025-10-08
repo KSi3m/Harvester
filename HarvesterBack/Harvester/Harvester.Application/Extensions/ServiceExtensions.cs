@@ -34,7 +34,7 @@ namespace Harvester.Application.Extensions
         {
             services.AddScoped<IOrderRule, CombineScheduleIsNotAlreadyFilledRule>();
             services.AddScoped<IOrderRule, FieldIsNotAlreadyOrderedRule>();
-            services.AddScoped<IOrderRule, FieldIsNotAlreadyHarvestedRule>();
+           // services.AddScoped<IOrderRule, FieldIsNotAlreadyHarvestedRule>();
         }
     }
 }

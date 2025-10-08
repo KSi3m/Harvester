@@ -17,5 +17,6 @@ namespace Harvester.Application.Dtos
         public int EstimatedTime { get; set; }
 
         public int? OrderId { get; set; }
+        public IEnumerable<Order>? AllOrdersThisYear { get; set; }
     }
 }

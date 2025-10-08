@@ -25,6 +25,7 @@ namespace Harvester.Application.Mappings
                 EstimatedTime = order.EstimatedTime,
                 EstimatedPrice = order.EstimatedPrice,
                 TotalPrice = order.TotalPrice,
+                IsArchived = order.IsArchived
             };
             return orderDto;
         }

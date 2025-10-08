@@ -11,7 +11,7 @@ namespace Harvester.Application.Interfaces.Repositories
     public interface ICombineRepository
     {
         Task<IEnumerable<Combine>> GetAllAsync();
-        Task<Combine?> GetByIdAsync(int id);
+        Task<Combine?> GetByIdAsync(int id, bool includeOrders = false);
         Task CreateAsync(Combine combine);
         Task UpdateAsync(Combine combine);
 

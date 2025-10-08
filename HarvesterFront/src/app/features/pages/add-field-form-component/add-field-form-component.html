@@ -49,7 +49,7 @@
         Get data for field
       </button>
 
-      <p-dialog header="Test" [modal]="true" [(visible)]="modalVisible" (onHide)="onDialogHide()" (onShow)="onDialogShow()">
+      <p-dialog [header]="f['identifierName'].value" [modal]="true" [(visible)]="modalVisible" (onHide)="onDialogHide()" (onShow)="onDialogShow()">
         <p>Is this the right field?</p>      
         <div id="map" style="height: 400px; width: 400px"></div>
               <button
@@ -168,7 +168,13 @@
 } @loading (minimum 1s) {
   <div class="empty-container">
     <p-card class="empty-card">
-      Loading field
+      @if(isEditing)
+      {
+        Loading field
+      }
+      @else{
+        Loading form template
+      }
       <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i
     ></p-card>
   </div>

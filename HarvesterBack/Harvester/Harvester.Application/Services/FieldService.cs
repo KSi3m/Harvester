@@ -25,7 +25,7 @@ namespace Harvester.Application.Services
 
         public async Task DeleteAsync(int id)
         {
-            var field = await fieldRepository.GetByIdAsync(id);
+            var field = await fieldRepository.GetByIdAsync(id,true);
             if (field == null)
             {
                 throw new NotFoundException("Field doesn't exist");
@@ -62,8 +62,8 @@ namespace Harvester.Application.Services
             field.IdentifierName = dto.IdentifierName;
             field.CommonName = dto.CommonName;
             field.AreaHectares = dto.AreaHectares;
-            field.TerrainCoeff = dto.TerrainCoeff;
-            field.ShapeCoeff = dto.ShapeCoeff;
+            field.TerrainCoeff = dto.TerrainCoeff ?? 1;
+            field.ShapeCoeff = dto.ShapeCoeff ?? 1;
             field.CropType = dto.CropType;
             field.CenterPoint = GeoJSONMappings.MapGeoPointDtoToPoint(dto.CenterPoint);
             field.Boundary = GeoJSONMappings.MapMultiPolygonDtoToMultiPolygon(dto.Boundary);

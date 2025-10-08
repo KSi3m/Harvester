@@ -1,73 +1,74 @@
 @defer (when combines !== null) {
-  <div class="combines-list">
-    <p-confirmdialog />
-    @for (combine of combines; track combine.id) {
-      <p-card class="combine-card">
-        <div class="combine-row">
-          <div class="combine-details">
-            <div class="combine-header">
-              <span class="model">{{ combine.model }}</span>
+  @if (combines!.length > 0) {
+    <div class="combines-list">
+      <p-confirmdialog />
+      @for (combine of combines; track combine.id) {
+        <p-card class="combine-card">
+          <div class="combine-row">
+            <div class="combine-details">
+              <div class="combine-header">
+                <span class="model">{{ combine.model }}</span>
+              </div>
+
+              <div class="combine-info">
+                <div>
+                  <strong>BaseHaPerHour:</strong>
+                  {{ combine.baseHaPerHour }} ha/h
+                </div>
+                <div>
+                  <strong>Header Length:</strong>
+                  {{ combine.headerLength }} meters
+                </div>
+                <div>
+                  <strong>Has Straw Chopper:</strong>
+                  {{ combine.hasStrawChopper }}
+                </div>
+                <div>
+                  <strong>Price per Hectare:</strong>
+                  {{ combine.pricePerHectare }} PLN
+                </div>
+                <div>
+                  <strong>Available Work Hours:</strong>
+                  {{ combine.availableWorkHours }} hours
+                </div>
+              </div>
             </div>
 
-            <div class="combine-info">
-              <div>
-                <strong>BaseHaPerHour:</strong> {{ combine.baseHaPerHour }} ha/h
-              </div>
-              <div>
-                <strong>Header Length:</strong>
-                {{ combine.headerLength }} meters
-              </div>
-              <div>
-                <strong>Has Straw Chopper:</strong>
-                {{ combine.hasStrawChopper }}
-              </div>
-              <div>
-                <strong>Price per Hectare:</strong>
-                {{ combine.pricePerHectare }} PLN
-              </div>
-              <div>
-                <strong>Available Work Hours:</strong>
-                {{ combine.availableWorkHours }} hours
-              </div>
+            <div class="combine-image" aria-hidden="true">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Corn_combine_harvest_with_grain_cart-4.jpg/1200px-Corn_combine_harvest_with_grain_cart-4.jpg"
+                alt="Combine image"
+              />
             </div>
           </div>
 
-          <div class="combine-image" aria-hidden="true">
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Corn_combine_harvest_with_grain_cart-4.jpg/1200px-Corn_combine_harvest_with_grain_cart-4.jpg"
-              alt="Combine image"
-            />
-          </div>
-        </div>
-
-        <p-button
-          (click)="confirmDelete(combine.id)"
-          severity="danger"
-          label="Delete"
-        />
-        <p-button
-          (click)="updateCombine(combine.id)"
-          severity="info"
-          label="Edit"
-        />
-      </p-card>
-    } @empty {
-      <div class="empty-container">
-        <p-card class="empty-card">There are no items.</p-card>
-      </div>
-    }
-  </div>
+          <p-button
+            (click)="confirmDelete(combine.id)"
+            severity="danger"
+            label="Delete"
+          />
+          <p-button
+            (click)="updateCombine(combine.id)"
+            severity="info"
+            label="Edit"
+          />
+        </p-card>
+      }
+    </div>
+  } @else {
+    <div class="empty-container">
+      <p-card class="empty-card">There are no items.</p-card>
+    </div>
+  }
 } @loading (minimum 1s) {
   <div class="empty-container">
     <p-card class="empty-card">
       Loading items.
-      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i
+      <i class="pi pi-spin pi-spinner"></i
     ></p-card>
   </div>
 } @placeholder {
   <div class="empty-container">
-    <p-card class="empty-card">
-      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i
-    ></p-card>
+    <p-card class="empty-card"> <i class="pi pi-spin pi-spinner"></i></p-card>
   </div>
 }

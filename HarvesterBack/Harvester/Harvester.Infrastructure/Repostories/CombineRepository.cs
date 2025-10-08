@@ -15,12 +15,25 @@ namespace Harvester.Infrastructure.Repostories
     {
         public async Task<IEnumerable<Combine>> GetAllAsync()
         {
-            return await dbContext.Combines.AsNoTracking().ToListAsync();
+            return await dbContext
+                .Combines
+                .AsNoTracking()
+                .Where(x => x.IsDeleted == false)
+                .ToListAsync();
         }
 
-        public async Task<Combine?> GetByIdAsync(int id)
+        public async Task<Combine?> GetByIdAsync(int id, bool includeOrders = false)
         {
-            return await dbContext.Combines.AsNoTracking().Include(x => x.Orders).FirstOrDefaultAsync(x => x.Id == id);
+            var query = dbContext
+                .Combines
+                .AsNoTracking();
+
+            if (includeOrders)
+            {
+                query = query.Include(x => x.Orders);
+            }
+            return await query
+                .FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false);
         }
 
         public async Task CreateAsync(Combine combine)
@@ -31,7 +44,13 @@ namespace Harvester.Infrastructure.Repostories
 
         public async Task DeleteAsync(Combine combine)
         {
-            dbContext.Combines.Remove(combine);
+            dbContext.Combines.Attach(combine);
+            combine.IsDeleted = true;
+            var orders = combine.Orders;
+            foreach (var order in orders)
+            {
+                order.IsArchived = true;
+            }
             await dbContext.SaveChangesAsync();
         }
 

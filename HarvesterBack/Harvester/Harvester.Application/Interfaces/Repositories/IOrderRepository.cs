@@ -10,6 +10,7 @@ namespace Harvester.Application.Interfaces.Repositories
     public interface IOrderRepository
     {
         Task<IEnumerable<Order>> GetAllAsync();
+        Task<IEnumerable<Order>> GetAllFromGivenYearAsync(int year);
         Task<Order?> GetByIdAsync(int id);
         Task CreateAsync(Order order);
         Task UpdateAsync(Order order);

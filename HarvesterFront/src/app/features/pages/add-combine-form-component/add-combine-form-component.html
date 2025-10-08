@@ -194,9 +194,15 @@
 } @loading (minimum 1s) {
   <div class="empty-container">
     <p-card class="empty-card">
-      Loading combine
-      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i
-    ></p-card>
+      @if(isEditing)
+      {
+        Loading combine
+      }
+      @else{
+        Loading form template
+      }
+      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+    </p-card>
   </div>
 } @placeholder {
   <div class="empty-container">

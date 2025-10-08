@@ -27,6 +27,8 @@ namespace Harvester.Domain.Models
 
         public ICollection<Order>? Orders { get; set; }
 
-      
+        public bool IsDeleted { get; set; }
+
+
     }
 }

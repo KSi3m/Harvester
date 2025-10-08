@@ -14,14 +14,14 @@ namespace Harvester.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var orders = await orderService.GetAll();
+            var orders = await orderService.GetAllAsync();
             return Ok(orders);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var order = await orderService.GetById(id);
+            var order = await orderService.GetByIdAsync(id);
             if (order == null) return NotFound();
             return Ok(order);
         }

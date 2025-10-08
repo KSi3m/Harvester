@@ -1,0 +1,58 @@
+@mixin card-form-styles {
+  p-card {
+    width: 100%;
+    max-width: 800px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 1rem;
+    background: #fff;
+
+    .p-card-header {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 600;
+      padding: 1rem;
+      border-bottom: 1px solid #eee;
+      color: #2c3e50;
+    }
+
+    form {
+      padding: 1.5rem;
+
+      label {
+        font-weight: 500;
+        margin-top: 0.5rem;
+        margin-bottom: 0.1rem;
+        display: block;
+        color: #34495e;
+      }
+      .inputs {
+        padding-top: 0.2em;
+        padding-bottom: 0.2em;
+      }
+
+      .p-select,
+      .p-inputtext,
+      .p-inputnumber,
+      .p-dropdown,
+      .p-datepicker {
+        width: 100% !important;
+        border-radius: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      button[pButton] {
+        display: block;
+        width: 100% !important;
+        margin-top: 1rem;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        border-radius: 0.5rem;
+      }
+    }
+
+    .text-red-500 {
+      color: rgba(255, 0, 0, 0.596);
+      font-weight: bold;
+    }
+  }
+}

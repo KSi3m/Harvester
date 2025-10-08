@@ -61,6 +61,11 @@ namespace Harvester.Infrastructure.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
 
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
                     b.Property<string>("Model")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -83,6 +88,7 @@ namespace Harvester.Infrastructure.Migrations
                             HasStrawChopper = false,
                             HeaderLength = 6m,
                             IsAvailable = true,
+                            IsDeleted = false,
                             Model = "John Deere X1",
                             PricePerHectare = 600
                         },
@@ -95,6 +101,7 @@ namespace Harvester.Infrastructure.Migrations
                             HasStrawChopper = false,
                             HeaderLength = 7m,
                             IsAvailable = true,
+                            IsDeleted = false,
                             Model = "Case IH 8230",
                             PricePerHectare = 550
                         });
@@ -132,6 +139,11 @@ namespace Harvester.Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
                     b.Property<decimal>("ShapeCoeff")
                         .ValueGeneratedOnAdd()
                         .HasPrecision(4, 2)
@@ -155,6 +167,7 @@ namespace Harvester.Infrastructure.Migrations
                             AreaHectares = 10.5m,
                             CropType = "Wheat",
                             IdentifierName = "Pole A",
+                            IsDeleted = false,
                             ShapeCoeff = 1.0m,
                             TerrainCoeff = 1.0m
                         },
@@ -164,6 +177,7 @@ namespace Harvester.Infrastructure.Migrations
                             AreaHectares = 8.2m,
                             CropType = "Corn",
                             IdentifierName = "Pole B",
+                            IsDeleted = false,
                             ShapeCoeff = 1.0m,
                             TerrainCoeff = 0.9m
                         });
@@ -189,6 +203,16 @@ namespace Harvester.Infrastructure.Migrations
 
                     b.Property<int>("FieldId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsArchived")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
@@ -224,6 +248,8 @@ namespace Harvester.Infrastructure.Migrations
                             EstimatedPrice = 0m,
                             EstimatedTime = 0,
                             FieldId = 1,
+                            IsArchived = false,
+                            IsDeleted = false,
                             OrderDate = new DateTime(2025, 8, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ScheduledDate = new DateTime(2025, 8, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = "ACCEPTED",
@@ -237,6 +263,8 @@ namespace Harvester.Infrastructure.Migrations
                             EstimatedPrice = 0m,
                             EstimatedTime = 0,
                             FieldId = 2,
+                            IsArchived = false,
+                            IsDeleted = false,
                             OrderDate = new DateTime(2025, 8, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ScheduledDate = new DateTime(2025, 8, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Status = "PENDING",

@@ -35,4 +35,8 @@ export class FieldService {
   updateField(id: number, dto: FieldDto): Observable<void> {
     return this.http.put<void>(`${this.url}/fields/${id}`, dto);
   }
+
+  deleteField(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.url}/fields/${id}`);
+  }
 }

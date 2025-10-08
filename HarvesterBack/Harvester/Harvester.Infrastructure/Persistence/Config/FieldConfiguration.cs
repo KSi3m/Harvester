@@ -41,7 +41,11 @@ namespace Harvester.Infrastructure.Persistence.Config
             modelBuilder
                .Property(f => f.Boundary)
            .HasColumnType("geometry");
-           
+
+
+            modelBuilder
+              .Property(c => c.IsDeleted)
+            .HasDefaultValue(false);
 
             modelBuilder
                 .Property(c => c.TerrainCoeff)

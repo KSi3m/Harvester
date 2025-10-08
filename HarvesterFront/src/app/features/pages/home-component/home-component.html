@@ -1,0 +1,31 @@
+<div class="home-container">
+  <h1>Welcome to Harvester</h1>
+  <p class="subtitle">
+    Your central hub for managing fields, orders, and combines. Simplify
+    planning and order processing with our application.
+  </p>
+
+  <div class="features">
+    <button class="feature" (click)="goTo('/fields')">
+      <i class="pi pi-expand"></i>
+      <h3>Fields</h3>
+      <p>Add and edit fields to better plan your production.</p>
+    </button>
+
+    <button class="feature" (click)="goTo('/orders')">
+      <i class="pi pi-shopping-cart"></i>
+      <h3>Orders</h3>
+      <p>Create and manage orders.</p>
+    </button>
+
+    <button class="feature" (click)="goTo('/combines')">
+      <i class="pi pi-cog"></i>
+      <h3>Combines</h3>
+      <p>Get information about available combines.</p>
+    </button>
+  </div>
+
+  <p class="footer-note">
+    Use the menu above to navigate to a specific section of the application.
+  </p>
+</div>

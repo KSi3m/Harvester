@@ -1,23 +1,34 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import * as L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { Order } from '../../../core/models/Order';
 import { OrderService } from '../../../core/services/orderService/order-service';
 import { DateFormatPipe } from '../../../shared/pipes/dateFormat/date-format-pipe';
-import { Router } from '@angular/router';
-//import { latLng, map, marker, tileLayer } from 'leaflet';
-import * as L from 'leaflet';
 
 @Component({
   selector: 'app-orders-list-component',
-  imports: [CardModule, DateFormatPipe, DialogModule, ButtonModule],
+  imports: [
+    CardModule,
+    DateFormatPipe,
+    DialogModule,
+    ButtonModule,
+    ConfirmDialogModule,
+  ],
   templateUrl: './orders-list-component.html',
   styleUrl: './orders-list-component.scss',
+  providers: [ConfirmationService],
 })
 export class OrdersListComponent implements OnInit {
   ordersService = inject(OrderService);
+  confirmationService = inject(ConfirmationService);
+  messageService = inject(MessageService);
+
   orders: Order[] | null = null;
   visible = false;
   private map!: L.Map;
@@ -99,13 +110,52 @@ export class OrdersListComponent implements OnInit {
     }
   }
 
+  confirmDelete(orderId: number) {
+    this.confirmationService.confirm({
+      message: 'Do you want to delete this order?',
+      header: 'Danger Zone',
+      icon: 'pi pi-info-circle',
+      rejectLabel: 'Cancel',
+      rejectButtonProps: {
+        label: 'Cancel',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptButtonProps: {
+        label: 'Delete',
+        severity: 'danger',
+      },
+
+      accept: () => {
+        this.deleteOrder(orderId);
+      },
+      reject: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Rejected',
+          detail: 'You have rejected',
+        });
+      },
+    });
+  }
+
   deleteOrder(id: number) {
     this.ordersService.deleteOrder(id).subscribe({
       next: () => {
         this.orders = this.orders?.filter((x) => x.id !== id) as Order[];
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Confirmed',
+          detail: 'Order deleted',
+        });
       },
       error: (err) => {
         console.log(err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to delete order',
+        });
       },
     });
   }

@@ -14,37 +14,17 @@ using System.Threading.Tasks;
 
 namespace Harvester.Application.Services
 {
-    public class CombineService(ICombineRepository combineRepository, IEnumerable<IOrderRule> checkRules) : ICombineService
+    public class CombineService(ICombineRepository combineRepository) : ICombineService
     {
-        public async Task<CheckRuleForOrderResponseDto> CheckAvailability(OrderInformationForCheckAvailDto dto)
-        {
-            foreach(var rule in checkRules)
-            {
-                var res = await rule.CheckRule(dto);
-                if (!res.Success) return res;
-            }
-            return new CheckRuleForOrderResponseDto { Success = true };
-        }
-
         public async Task CreateAsync(CreateCombineDto dto)
         {
-            var combine = new Combine
-            {
-                Model = dto.Model,
-                BaseHaPerHour = dto.BaseHaPerHour,
-                HeaderLength = dto.HeaderLength,
-                IsAvailable = dto.IsAvailable,
-                PricePerHectare = dto.PricePerHectare,
-                HasStrawChopper = dto.HasStrawChopper,
-                AvailableWorkHours = dto.AvailableWorkHours,
-                BaseEfficency = dto.BaseEfficency,
-            };
+            var combine = CombineMappings.MapCreateCombineDtoToCombine(dto);
             await combineRepository.CreateAsync(combine);
         }
 
         public async Task DeleteAsync(int id)
         {
-            var combine = await combineRepository.GetByIdAsync(id);
+            var combine = await combineRepository.GetByIdAsync(id,true);
             if(combine == null)
             {
                 throw new NotFoundException("Combine doesn't exist");
@@ -80,11 +60,11 @@ namespace Harvester.Application.Services
             combine.Model = dto.Model;
             combine.BaseHaPerHour = dto.BaseHaPerHour;
             combine.HeaderLength = dto.HeaderLength;
-            combine.IsAvailable = dto.IsAvailable;
+            combine.IsAvailable = dto.IsAvailable ?? false;
             combine.AvailableWorkHours = dto.AvailableWorkHours;
             combine.BaseEfficency = dto.BaseEfficency;
             combine.PricePerHectare = dto.PricePerHectare;
-            combine.HasStrawChopper = dto.HasStrawChopper;
+            combine.HasStrawChopper = dto.HasStrawChopper ?? false;
 
             await combineRepository.UpdateAsync(combine);
         }

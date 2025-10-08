@@ -22,7 +22,7 @@ export class App {
     },
     {
       label: 'Orders',
-      icon: 'pi pi-star',
+      icon: 'pi pi-shopping-cart',
       routerLink: '/orders',
       items: [
         {
@@ -34,7 +34,7 @@ export class App {
     },
     {
       label: 'Combines',
-      icon: 'pi pi-home',
+      icon: 'pi pi-cog',
       routerLink: '/combines',
       items: [
         {
@@ -45,9 +45,16 @@ export class App {
       ],
     },
     {
-      label: 'Add field',
+      label: 'Fields',
       icon: 'pi pi-expand',
-      routerLink: '/fields/add',
+      routerLink: '/fields',
+      items: [
+        {
+          label: 'Add field',
+          icon: 'pi pi-plus',
+          routerLink: '/fields/add',
+        },
+      ],
     },
   ];
 }
